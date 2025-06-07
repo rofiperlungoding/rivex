@@ -43,21 +43,21 @@ export const useNews = (category?: string): UseNewsReturn => {
       // Create articles with unique IDs
       const articlesWithIds = response.articles.map((article, index) => ({
         ...article,
-        id: `${article.url}-${index}-${Date.now()}` // More unique ID generation
+        id: `global-${article.url}-${index}-${Date.now()}` // More unique ID generation
       }));
       
       setArticles(articlesWithIds);
       
       // Log success for debugging
-      console.log(`Successfully fetched ${articlesWithIds.length} articles for category: ${category || 'all'}`);
+      console.log(`Successfully fetched ${articlesWithIds.length} global articles for category: ${category || 'all'}`);
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch news';
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch global news';
       setError(errorMessage);
       setArticles([]);
       
       // Log error for debugging
-      console.error('News fetch error:', {
+      console.error('Global news fetch error:', {
         category,
         error: errorMessage,
         timestamp: new Date().toISOString()
@@ -89,13 +89,6 @@ export const useIndonesianNews = (category?: string): UseNewsReturn => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchNews = async () => {
-    // Check if API is properly configured
-    if (!validateNewsApiConfig()) {
-      setError('News API is not properly configured. Please check your API key.');
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     setError(null);
     
@@ -111,7 +104,7 @@ export const useIndonesianNews = (category?: string): UseNewsReturn => {
       setArticles(articlesWithIds);
       
       // Log success for debugging
-      console.log(`Successfully fetched ${articlesWithIds.length} Indonesian articles for category: ${category || 'all'}`);
+      console.log(`Successfully fetched ${articlesWithIds.length} Indonesian articles for category: ${category || 'general'}`);
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Indonesian news';

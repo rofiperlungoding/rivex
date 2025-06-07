@@ -9,6 +9,9 @@ const getBaseUrl = () => {
   return import.meta.env.VITE_NEWS_API_URL || 'https://newsapi.org/v2';
 };
 
+// Indonesian News API base URL
+const INDONESIAN_NEWS_BASE_URL = 'https://berita-indo-api-next.vercel.app/api';
+
 interface NewsArticle {
   title: string;
   description: string;
@@ -25,6 +28,24 @@ interface NewsResponse {
   articles: NewsArticle[];
   totalResults: number;
   status: string;
+}
+
+interface IndonesianNewsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    link: string;
+    description: string;
+    title: string;
+    image: string;
+    posts: Array<{
+      link: string;
+      title: string;
+      pubDate: string;
+      description: string;
+      thumbnail: string;
+    }>;
+  };
 }
 
 // Helper function to create request headers
@@ -75,7 +96,36 @@ const handleResponse = async (response: Response): Promise<NewsResponse> => {
   return data;
 };
 
-// Main function to fetch top headlines
+// Helper function to handle Indonesian News API responses
+const handleIndonesianResponse = async (response: Response): Promise<IndonesianNewsResponse> => {
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Indonesian News API Response Error:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: errorText
+    });
+    
+    switch (response.status) {
+      case 429:
+        throw new Error('API rate limit exceeded. Please try again later.');
+      case 500:
+        throw new Error('Indonesian News API server error. Please try again later.');
+      default:
+        throw new Error(`Indonesian News API request failed with status ${response.status}: ${response.statusText}`);
+    }
+  }
+
+  const data = await response.json();
+  
+  if (!data.success) {
+    throw new Error(data.message || 'Indonesian News API returned an error');
+  }
+
+  return data;
+};
+
+// Main function to fetch top headlines (Global News)
 export const fetchTopHeadlines = async (category?: string, searchQuery?: string): Promise<NewsResponse> => {
   try {
     const baseUrl = getBaseUrl();
@@ -112,7 +162,7 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
       params.set('from', oneWeekAgo.toISOString().split('T')[0]);
     }
 
-    console.log('Fetching news from:', `${endpoint}?${params.toString()}`);
+    console.log('Fetching global news from:', `${endpoint}?${params.toString()}`);
 
     const response = await fetch(`${endpoint}?${params.toString()}`, {
       method: 'GET',
@@ -139,7 +189,7 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     };
 
   } catch (error) {
-    console.error('Error fetching news:', error);
+    console.error('Error fetching global news:', error);
     
     // Handle specific error types
     if (error instanceof TypeError && error.message.includes('fetch')) {
@@ -156,54 +206,67 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     }
     
     // Fallback error message
-    throw new Error('Failed to fetch news. Please try again later.');
+    throw new Error('Failed to fetch global news. Please try again later.');
   }
 };
 
 // Function to fetch Indonesian news specifically
 export const fetchIndonesianNews = async (category?: string): Promise<NewsResponse> => {
   try {
-    const baseUrl = getBaseUrl();
-    const endpoint = `${baseUrl}/top-headlines`;
-    
-    const params = new URLSearchParams({
-      country: 'id', // Indonesia country code
-      pageSize: '20'
-    });
+    // Map categories to Indonesian news API endpoints
+    const categoryMap: Record<string, string> = {
+      'general': 'tempo-news/nasional',
+      'business': 'tempo-news/bisnis',
+      'technology': 'tempo-news/tekno',
+      'sports': 'tempo-news/bola',
+      'entertainment': 'tempo-news/seleb',
+      'health': 'tempo-news/gaya',
+      'science': 'tempo-news/sains'
+    };
 
-    // Add API key to params in development (for proxy)
-    if (isDevelopment) {
-      params.append('apiKey', API_KEY);
-    }
+    // Default to national news if category not found
+    const endpoint = categoryMap[category || 'general'] || 'tempo-news/nasional';
+    const url = `${INDONESIAN_NEWS_BASE_URL}/${endpoint}`;
 
-    // Add category if specified
-    if (category && category !== 'general') {
-      params.append('category', category);
-    }
+    console.log('Fetching Indonesian news from:', url);
 
-    console.log('Fetching Indonesian news from:', `${endpoint}?${params.toString()}`);
-
-    const response = await fetch(`${endpoint}?${params.toString()}`, {
+    const response = await fetch(url, {
       method: 'GET',
-      headers: getHeaders(),
-      signal: AbortSignal.timeout(10000)
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      signal: AbortSignal.timeout(15000) // 15 second timeout
     });
 
-    const data = await handleResponse(response);
+    const data = await handleIndonesianResponse(response);
     
-    // Filter out removed articles and articles without essential content
-    const filteredArticles = data.articles.filter(article => 
+    // Transform Indonesian news data to match our NewsArticle interface
+    const transformedArticles: NewsArticle[] = data.data.posts.map((post, index) => ({
+      title: post.title || 'No Title',
+      description: post.description || post.title || 'No Description',
+      url: post.link || '#',
+      urlToImage: post.thumbnail || '',
+      publishedAt: post.pubDate || new Date().toISOString(),
+      source: {
+        name: 'Tempo.co'
+      },
+      author: 'Tempo.co'
+    }));
+
+    // Filter out articles without essential content
+    const filteredArticles = transformedArticles.filter(article => 
       article.title && 
       article.description && 
-      article.title !== '[Removed]' &&
-      article.description !== '[Removed]' &&
-      article.url &&
-      article.source?.name
+      article.title.length > 5 &&
+      article.description.length > 10 &&
+      article.url !== '#'
     );
 
     return {
-      ...data,
-      articles: filteredArticles
+      articles: filteredArticles,
+      totalResults: filteredArticles.length,
+      status: 'ok'
     };
 
   } catch (error) {
@@ -211,11 +274,11 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
     
     // Handle specific error types
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error('Network error: Unable to connect to news service. Please check your internet connection.');
+      throw new Error('Network error: Unable to connect to Indonesian news service. Please check your internet connection.');
     }
     
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Request timeout: News service is taking too long to respond.');
+      throw new Error('Request timeout: Indonesian news service is taking too long to respond.');
     }
     
     // Re-throw the error if it's already a handled API error
@@ -304,6 +367,7 @@ export const validateNewsApiConfig = (): boolean => {
 const getNewsApiConfig = () => ({
   apiKey: API_KEY ? `${API_KEY.substring(0, 8)}...` : 'Not configured',
   baseUrl: getBaseUrl(),
+  indonesianNewsBaseUrl: INDONESIAN_NEWS_BASE_URL,
   isDevelopment,
   isConfigured: validateNewsApiConfig()
 });
