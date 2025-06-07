@@ -55,10 +55,10 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Full Screen Image */}
+      {/* Hero Section with Fade Gradient */}
       <section className="bg-white pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-700 rounded-3xl overflow-hidden relative h-80">
+          <div className="rounded-3xl overflow-hidden relative h-80">
             {/* Full Background Image */}
             <div className="absolute inset-0">
               <img
@@ -66,20 +66,26 @@ const Home: React.FC = () => {
                 alt="Team achievement"
                 className="w-full h-full object-cover"
               />
-              {/* Gradient Overlay for better text readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/80 via-orange-500/60 to-amber-700/80"></div>
+              
+              {/* Multi-layer Fade Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-transparent to-orange-900/30"></div>
+              
+              {/* Subtle vignette effect */}
+              <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/20"></div>
             </div>
             
             {/* Content Overlay */}
             <div className="relative z-10 flex items-center justify-between h-full p-8">
               {/* Top right logo */}
-              <div className="absolute top-8 right-8 text-white font-bold text-lg">
+              <div className="absolute top-8 right-8 text-white font-bold text-lg drop-shadow-lg">
                 rivex
               </div>
               
               {/* Bottom right text */}
               <div className="absolute bottom-8 right-8 text-right">
-                <h1 className="text-white text-4xl font-light leading-tight">
+                <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
                   grow anywhere,
                   <br />
                   <span className="italic">anytime,</span>
