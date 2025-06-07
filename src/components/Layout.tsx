@@ -19,7 +19,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { mode } = useTheme();
 
   const navigationItems = [
-    { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'News', path: '/news' },
     { name: 'Timeline', path: '/timeline' },
@@ -45,110 +44,165 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return item?.name || 'Home';
   };
 
-  // Check if we're on the new home page
+  // Check if we're on the home page
   const isHomePage = location.pathname === '/';
+
+  // Theme-aware classes
+  const getThemeClasses = () => {
+    switch (mode) {
+      case 'dark':
+        return {
+          background: 'bg-gray-900',
+          headerBg: 'bg-gray-900',
+          text: 'text-white',
+          secondaryText: 'text-gray-300',
+          cardBg: 'bg-gray-800',
+          border: 'border-gray-700',
+          footerBg: 'bg-gray-800'
+        };
+      case 'reader':
+        return {
+          background: 'bg-white',
+          headerBg: 'bg-white',
+          text: 'text-gray-900',
+          secondaryText: 'text-gray-600',
+          cardBg: 'bg-white',
+          border: 'border-gray-200',
+          footerBg: 'bg-gray-50'
+        };
+      case 'debug':
+        return {
+          background: 'bg-gray-900',
+          headerBg: 'bg-gray-900',
+          text: 'text-green-400',
+          secondaryText: 'text-cyan-400',
+          cardBg: 'bg-gray-800',
+          border: 'border-green-500',
+          footerBg: 'bg-gray-800'
+        };
+      default: // light
+        return {
+          background: 'bg-white',
+          headerBg: 'bg-white',
+          text: 'text-black',
+          secondaryText: 'text-gray-600',
+          cardBg: 'bg-white',
+          border: 'border-gray-100',
+          footerBg: 'bg-gray-50'
+        };
+    }
+  };
+
+  const themeClasses = getThemeClasses();
 
   // Hide certain elements in reader mode
   const readerHideClass = mode === 'reader' ? 'reader-hide' : '';
 
   return (
-    <div className="min-h-screen bg-themed-secondary transition-theme">
+    <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Now shows on ALL pages */}
+      {/* Modern Clock - Shows on ALL pages */}
       <ModernClock />
 
       {/* Right Navigation - Only show on non-home pages */}
       {!isHomePage && <RightNavigation />}
 
-      {/* Navigation Header - Only show on non-home pages */}
+      {/* Theme Toggle - Positioned lower for all pages */}
       {!isHomePage && (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${readerHideClass} ${
-          isScrolled ? 'bg-themed-primary/95 backdrop-blur-sm shadow-sm' : 'bg-themed-primary'
-        }`}>
-          <nav className="container-custom">
-            <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <Link to="/" className="flex items-center space-x-3 text-xl font-semibold text-themed-primary">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-primary-600">
-                  <img
-                    src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
-                    alt="Rofi Darmawan"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span>Rofi Darmawan</span>
-              </Link>
-
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-8">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`text-sm font-medium transition-colors duration-200 ${
-                      location.pathname === item.path
-                        ? 'text-primary-600'
-                        : 'text-themed-secondary hover:text-themed-primary'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                
-                {/* Theme Toggle */}
-                <ThemeToggle />
-              </div>
-
-              {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center space-x-2">
-                <ThemeToggle />
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="p-2 rounded-lg text-themed-secondary hover:text-themed-primary hover:bg-themed-tertiary transition-colors duration-200"
-                  aria-label="Toggle menu"
-                >
-                  {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Navigation */}
-            {isMenuOpen && (
-              <div className="md:hidden py-4 border-t border-themed-primary bg-themed-primary">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`block px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                      location.pathname === item.path
-                        ? 'text-primary-600 bg-primary-50'
-                        : 'text-themed-secondary hover:text-themed-primary hover:bg-themed-secondary'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </nav>
-        </header>
+        <div className="fixed top-20 right-4 z-50">
+          <ThemeToggle />
+        </div>
       )}
+
+      {/* Navigation Header - Consistent design across all pages */}
+      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 ${
+        isScrolled && !isHomePage ? 'shadow-sm' : ''
+      }`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/Untitled design (1).png" 
+                alt="rivex" 
+                className="h-8 w-auto"
+              />
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`font-medium transition-colors duration-200 ${
+                    location.pathname === item.path
+                      ? mode === 'debug' 
+                        ? 'text-green-400' 
+                        : mode === 'dark'
+                        ? 'text-white'
+                        : 'text-black'
+                      : `${themeClasses.secondaryText} hover:${themeClasses.text}`
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              {isHomePage && <ThemeToggle />}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`p-2 rounded-lg ${themeClasses.secondaryText} hover:${themeClasses.text} transition-colors duration-200`}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className={`md:hidden py-4 border-t ${themeClasses.border} ${themeClasses.headerBg} transition-colors duration-300`}>
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                    location.pathname === item.path
+                      ? mode === 'debug'
+                        ? 'text-green-400 bg-green-900/20'
+                        : mode === 'dark'
+                        ? 'text-white bg-gray-700'
+                        : 'text-black bg-gray-100'
+                      : `${themeClasses.secondaryText} hover:${themeClasses.text} hover:${themeClasses.cardBg}`
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </header>
 
       {/* Breadcrumbs - Only show on non-home pages and not in reader mode */}
       {!isHomePage && mode !== 'reader' && (
-        <div className="pt-16 bg-themed-primary border-b border-themed-primary">
-          <div className="container-custom py-4">
-            <nav className="text-sm text-themed-tertiary">
-              <Link to="/" className="hover:text-themed-secondary transition-colors duration-200">
+        <div className={`${themeClasses.headerBg} ${themeClasses.border} border-b transition-colors duration-300`}>
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <nav className={`text-sm ${themeClasses.secondaryText} transition-colors duration-300`}>
+              <Link to="/" className={`hover:${themeClasses.text} transition-colors duration-200`}>
                 Home
               </Link>
               {location.pathname !== '/' && (
                 <>
                   <span className="mx-2">/</span>
-                  <span className="text-themed-primary">{getPageName(location.pathname)}</span>
+                  <span className={themeClasses.text}>{getPageName(location.pathname)}</span>
                 </>
               )}
             </nav>
@@ -174,10 +228,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Footer - Only show on non-home pages and not in reader mode */}
       {!isHomePage && mode !== 'reader' && (
-        <footer className="bg-themed-tertiary text-themed-primary">
-          <div className="container-custom py-12">
+        <footer className={`${themeClasses.footerBg} ${themeClasses.text} transition-colors duration-300`}>
+          <div className="max-w-7xl mx-auto px-6 py-12">
             <div className="text-center">
-              <p className="text-themed-tertiary">
+              <p className={themeClasses.secondaryText}>
                 © 2024 Rofi Darmawan. Built with React, TypeScript, and Tailwind CSS.
               </p>
             </div>
