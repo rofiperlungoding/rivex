@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Mail, Github, Instagram, ArrowRight, Clock } from 'lucide-react';
+import { ChevronDown, Mail, Github, Instagram, ArrowRight, Clock, TrendingUp } from 'lucide-react';
 import { useNews } from '../hooks/useNews';
 
 const Home: React.FC = () => {
@@ -182,100 +182,115 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* News Section */}
-      <section className="py-16 bg-gray-50">
+      {/* News Section with Modern Cards */}
+      <section className="py-20 bg-gray-50">
         <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             {/* Section Header */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-light text-gray-900 tracking-wide">
-                Latest News
-              </h2>
+            <div className="flex items-center justify-between mb-12">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-primary-100 rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-primary-600" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    Latest News
+                  </h2>
+                  <p className="text-gray-600">Stay updated with current events</p>
+                </div>
+              </div>
               <a
                 href="/news"
-                className="group flex items-center space-x-2 text-primary-600 hover:text-primary-700 transition-colors duration-300"
+                className="group flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               >
-                <span className="font-light">View all</span>
+                <span className="font-medium">View all</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
             </div>
 
             {/* News Articles */}
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-lg p-6 animate-pulse">
-                    <div className="flex space-x-4 mb-4">
-                      <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                      <div className="flex-1">
-                        <div className="h-3 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                  <div key={i} className="bg-white rounded-2xl p-6 shadow-sm animate-pulse">
+                    <div className="w-full h-48 bg-gray-200 rounded-xl mb-6"></div>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 h-5 bg-gray-200 rounded-full"></div>
+                        <div className="w-20 h-4 bg-gray-200 rounded"></div>
                       </div>
+                      <div className="h-6 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                     </div>
-                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                    <div className="h-3 bg-gray-200 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-3/4"></div>
                   </div>
                 ))}
               </div>
             ) : error ? (
-              <div className="text-center py-8">
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-red-500" />
+                </div>
                 <p className="text-gray-500 font-light">Unable to load news at the moment</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {featuredArticles.map((article) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredArticles.map((article, index) => (
                   <a
                     key={article.id}
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group bg-white rounded-lg p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-gray-100"
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    {/* Article Header with Thumbnail */}
-                    <div className="flex space-x-4 mb-4">
-                      {/* Mini Thumbnail */}
-                      {article.urlToImage ? (
-                        <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                          <img
-                            src={article.urlToImage}
-                            alt=""
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            loading="lazy"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center"><div class="w-6 h-6 bg-primary-400 rounded"></div></div>';
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-16 h-16 flex-shrink-0 rounded-lg bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                          <div className="w-6 h-6 bg-primary-400 rounded"></div>
-                        </div>
-                      )}
-                      
-                      {/* Meta Information */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded truncate">
+                    {/* Article Image */}
+                    {article.urlToImage ? (
+                      <div className="relative overflow-hidden h-48">
+                        <img
+                          src={article.urlToImage}
+                          alt=""
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center"><div class="w-12 h-12 bg-primary-400 rounded-lg"></div></div>';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        
+                        {/* Source Badge */}
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-xs font-semibold">
                             {article.source.name}
                           </span>
                         </div>
-                        <div className="flex items-center text-gray-400 text-xs">
-                          <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
-                          <span>{getTimeAgo(article.publishedAt)}</span>
-                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-primary-400 rounded-lg"></div>
+                      </div>
+                    )}
                     
                     {/* Article Content */}
-                    <h3 className="text-gray-900 font-medium mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 leading-snug">
-                      {article.title}
-                    </h3>
-                    
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 font-light">
-                      {article.description}
-                    </p>
+                    <div className="p-6">
+                      {/* Meta Information */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center text-gray-400 text-xs">
+                          <Clock className="h-3 w-3 mr-1" />
+                          <span>{getTimeAgo(article.publishedAt)}</span>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                      </div>
+                      
+                      <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 leading-tight">
+                        {article.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 font-light">
+                        {article.description}
+                      </p>
+                    </div>
                   </a>
                 ))}
               </div>
@@ -283,7 +298,10 @@ const Home: React.FC = () => {
 
             {/* Empty State */}
             {!loading && !error && featuredArticles.length === 0 && (
-              <div className="text-center py-8">
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-gray-400" />
+                </div>
                 <p className="text-gray-500 font-light">No news articles available</p>
               </div>
             )}
