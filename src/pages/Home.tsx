@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useNews, useIndonesianNews } from '../hooks/useNews';
+import { useIndonesianNews, useNews } from '../hooks/useNews';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 import RightNavigation from '../components/RightNavigation';
-import { AlertTriangle, TrendingUp, Calendar, ExternalLink, Globe, MapPin } from 'lucide-react';
+import { AlertTriangle, TrendingUp, Calendar, ExternalLink, Globe, MapPin, Clock } from 'lucide-react';
 
 const Home: React.FC = () => {
-  const { articles, loading, error } = useNews();
-  const { mode } = useTheme();
-  
-  // Fetch Indonesian news specifically
+  // Indonesian news is now the primary focus
   const { 
     articles: indonesianArticles, 
     loading: indonesianLoading, 
     error: indonesianError 
   } = useIndonesianNews();
 
+  // Global news for the world news column
+  const { 
+    articles: globalArticles, 
+    loading: globalLoading, 
+    error: globalError 
+  } = useNews();
+
+  const { mode } = useTheme();
+  
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -36,23 +42,13 @@ const Home: React.FC = () => {
         setCurrentImageIndex((prevIndex) => 
           prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
         );
-      }, 5000); // Change image every 5 seconds
+      }, 5000);
 
       return () => clearInterval(interval);
     }
   }, [isHovered, heroImages.length]);
 
-  // Filter and limit articles for featured stories
-  const featuredArticles = articles
-    .filter(article => 
-      article.title && 
-      article.description && 
-      article.title !== '[Removed]' &&
-      article.description !== '[Removed]'
-    )
-    .slice(0, 20);
-
-  // Filter Indonesian articles
+  // Filter Indonesian articles (main content)
   const filteredIndonesianArticles = indonesianArticles
     .filter(article => 
       article.title && 
@@ -60,7 +56,17 @@ const Home: React.FC = () => {
       article.title !== '[Removed]' &&
       article.description !== '[Removed]'
     )
-    .slice(0, 6);
+    .slice(0, 12); // Show more Indonesian articles
+
+  // Filter global articles for world news column
+  const filteredGlobalArticles = globalArticles
+    .filter(article => 
+      article.title && 
+      article.description && 
+      article.title !== '[Removed]' &&
+      article.description !== '[Removed]'
+    )
+    .slice(0, 6); // Fewer global articles in sidebar
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -93,9 +99,9 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-700',
           border: 'border-gray-700',
           accent: 'text-orange-400',
-          indonesiaBg: 'bg-gradient-to-br from-red-900 to-red-800',
-          indonesiaBorder: 'border-red-600',
-          indonesiaText: 'text-red-200'
+          worldNewsBg: 'bg-gradient-to-br from-blue-900 to-indigo-900',
+          worldNewsBorder: 'border-blue-600',
+          worldNewsText: 'text-blue-200'
         };
       case 'reader':
         return {
@@ -107,9 +113,9 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-50',
           border: 'border-gray-200',
           accent: 'text-orange-600',
-          indonesiaBg: 'bg-gradient-to-br from-red-50 to-red-100',
-          indonesiaBorder: 'border-red-200',
-          indonesiaText: 'text-red-800'
+          worldNewsBg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
+          worldNewsBorder: 'border-blue-200',
+          worldNewsText: 'text-blue-800'
         };
       case 'debug':
         return {
@@ -121,9 +127,9 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-700',
           border: 'border-green-500',
           accent: 'text-yellow-400',
-          indonesiaBg: 'bg-gradient-to-br from-red-900 to-yellow-900',
-          indonesiaBorder: 'border-red-500',
-          indonesiaText: 'text-red-300'
+          worldNewsBg: 'bg-gradient-to-br from-blue-900 to-cyan-900',
+          worldNewsBorder: 'border-blue-500',
+          worldNewsText: 'text-blue-300'
         };
       default: // light
         return {
@@ -135,9 +141,9 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-50',
           border: 'border-gray-100',
           accent: 'text-orange-500',
-          indonesiaBg: 'bg-gradient-to-br from-red-600 to-red-700',
-          indonesiaBorder: 'border-red-500',
-          indonesiaText: 'text-white'
+          worldNewsBg: 'bg-gradient-to-br from-blue-600 to-indigo-700',
+          worldNewsBorder: 'border-blue-500',
+          worldNewsText: 'text-white'
         };
     }
   };
@@ -248,10 +254,10 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Latest News Section - Indonesian Focus */}
+      {/* Main News Section - Two Column Layout */}
       <section className={`${themeClasses.background} py-16 transition-colors duration-300`}>
-        <div className="max-w-6xl mx-auto px-6">
-          {/* Latest News Header */}
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section Header */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <AlertTriangle className="h-6 w-6 text-red-500 animate-pulse" />
@@ -262,208 +268,186 @@ const Home: React.FC = () => {
             </div>
             <div className={`w-24 h-1 bg-red-500 mx-auto mb-6`}></div>
             <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
-              Indonesian News & Updates
+              Indonesian News & Global Updates
             </p>
           </div>
 
-          {/* Indonesian News Section */}
-          <div className={`${themeClasses.indonesiaBg} rounded-2xl p-8 ${themeClasses.indonesiaBorder} border-2 shadow-2xl transition-colors duration-300 mb-12`}>
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
-                <MapPin className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">Indonesia</h3>
-                <p className="text-white/80 text-lg">Latest News from Indonesia</p>
-              </div>
-            </div>
-
-            {indonesianLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white/10 rounded-lg p-6 animate-pulse">
-                    <div className="h-32 bg-white/20 rounded mb-4"></div>
-                    <div className="h-4 bg-white/20 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-white/20 rounded w-1/2 mb-2"></div>
-                    <div className="h-3 bg-white/20 rounded w-2/3"></div>
-                  </div>
-                ))}
-              </div>
-            ) : indonesianError || filteredIndonesianArticles.length === 0 ? (
-              <div className="text-center py-12">
-                <Globe className="h-16 w-16 text-white/50 mx-auto mb-6" />
-                <h4 className="text-xl font-semibold text-white mb-2">No Indonesian News Available</h4>
-                <p className="text-white/80 text-lg">Unable to load Indonesian news at the moment</p>
-                {indonesianError && (
-                  <p className="text-white/60 text-sm mt-2">{indonesianError}</p>
-                )}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredIndonesianArticles.map((article, index) => (
-                  <a
-                    key={article.id}
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-white/10 hover:bg-white/20 rounded-lg p-6 transition-all duration-300 hover:scale-105 backdrop-blur-sm group"
-                  >
-                    {/* Article Image */}
-                    {article.urlToImage && (
-                      <div className="w-full h-32 rounded-lg overflow-hidden mb-4">
-                        <img
-                          src={article.urlToImage}
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Article Content */}
-                    <div>
-                      <h4 className="font-bold text-white leading-tight mb-3 line-clamp-2 group-hover:text-white/90 transition-colors duration-300">
-                        {article.title}
-                      </h4>
-                      
-                      <p className="text-white/80 text-sm leading-relaxed mb-4 line-clamp-3">
-                        {article.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between text-xs text-white/70">
-                        <span className="font-medium">{article.source.name}</span>
-                        <span>{getTimeAgo(article.publishedAt)}</span>
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
-
-            {/* View More Indonesian News */}
-            <div className="text-center mt-8">
-              <a
-                href="/news"
-                className="inline-flex items-center px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors duration-300 backdrop-blur-sm"
-              >
-                View More Indonesian News
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Global News Section */}
-      <section className={`${themeClasses.background} py-12 transition-colors duration-300`}>
-        <div className="max-w-6xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className={`text-3xl font-bold ${themeClasses.text} mb-2 transition-colors duration-300`}>
-              GLOBAL NEWS
-            </h2>
-            <div className={`w-24 h-1 ${themeClasses.accent} mx-auto mb-6`}></div>
-            <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
-              Stay updated with the latest global news and developments
-            </p>
-          </div>
-
-          {/* News Grid */}
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((i) => (
-                <div key={i} className={`${themeClasses.cardBg} rounded-lg overflow-hidden animate-pulse transition-colors duration-300`}>
-                  <div className={`h-40 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-                  <div className="p-4 space-y-3">
-                    <div className={`h-4 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4`}></div>
-                    <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2`}></div>
-                    <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-2/3`}></div>
-                  </div>
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            {/* Main Content - Indonesian News (3/4 width) */}
+            <div className="lg:col-span-3">
+              <div className="flex items-center space-x-3 mb-8">
+                <div className="p-3 bg-red-600 rounded-lg">
+                  <MapPin className="h-8 w-8 text-white" />
                 </div>
-              ))}
-            </div>
-          ) : error ? (
-            <div className="text-center py-12">
-              <div className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Unable to load news articles</div>
-              <p className={`${themeClasses.secondaryText} opacity-70 mt-2 transition-colors duration-300`}>Please try again later</p>
-              {error && (
-                <p className={`${themeClasses.secondaryText} opacity-60 text-sm mt-2 transition-colors duration-300`}>{error}</p>
-              )}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredArticles.map((article, index) => (
-                <div key={article.id} className="group">
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`block ${themeClasses.cardBg} rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${themeClasses.border} border`}
-                  >
-                    <div className="relative h-40">
-                      {article.urlToImage ? (
-                        <img
-                          src={article.urlToImage}
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.parentElement!.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center"><div class="w-12 h-12 ${themeClasses.accent} rounded-lg"></div></div>`;
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                          <div className={`w-12 h-12 ${themeClasses.accent} rounded-lg`}></div>
+                <div>
+                  <h3 className={`text-2xl font-bold ${themeClasses.text} transition-colors duration-300`}>Indonesia</h3>
+                  <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Latest News from Indonesia</p>
+                </div>
+              </div>
+
+              {indonesianLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                    <div key={i} className={`${themeClasses.cardBg} rounded-lg p-6 animate-pulse transition-colors duration-300`}>
+                      <div className={`h-32 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded mb-4`}></div>
+                      <div className={`h-4 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4 mb-2`}></div>
+                      <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2 mb-2`}></div>
+                      <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-2/3`}></div>
+                    </div>
+                  ))}
+                </div>
+              ) : indonesianError || filteredIndonesianArticles.length === 0 ? (
+                <div className="text-center py-12">
+                  <Globe className={`h-16 w-16 ${themeClasses.secondaryText} mx-auto mb-6 transition-colors duration-300`} />
+                  <h4 className={`text-xl font-semibold ${themeClasses.text} mb-2 transition-colors duration-300`}>No Indonesian News Available</h4>
+                  <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Unable to load Indonesian news at the moment</p>
+                  {indonesianError && (
+                    <p className={`${themeClasses.secondaryText} opacity-60 text-sm mt-2 transition-colors duration-300`}>{indonesianError}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredIndonesianArticles.map((article, index) => (
+                    <a
+                      key={article.id}
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`block ${themeClasses.cardBg} rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${themeClasses.border} border group`}
+                    >
+                      {/* Article Image */}
+                      {article.urlToImage && (
+                        <div className="relative h-40">
+                          <img
+                            src={article.urlToImage}
+                            alt={article.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                          
+                          {/* Category Badge */}
+                          <div className="absolute top-3 left-3">
+                            <span className="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+                              {article.source.name}
+                            </span>
+                          </div>
                         </div>
                       )}
                       
-                      {/* Category Badge */}
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2 py-1 bg-black/70 text-white text-xs font-medium rounded-full backdrop-blur-sm">
-                          {article.source.name}
-                        </span>
+                      {/* Article Content */}
+                      <div className="p-4">
+                        <h4 className={`font-bold text-sm ${themeClasses.text} leading-tight line-clamp-3 mb-3 group-hover:${themeClasses.accent} transition-colors`}>
+                          {article.title}
+                        </h4>
+                        
+                        <p className={`${themeClasses.secondaryText} text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-300`}>
+                          {article.description}
+                        </p>
+                        
+                        <div className={`flex items-center justify-between text-xs ${themeClasses.secondaryText} transition-colors duration-300`}>
+                          <span className="font-medium">{article.source.name}</span>
+                          <span>{getTimeAgo(article.publishedAt)}</span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="p-4">
-                      <h3 className={`font-bold text-sm ${themeClasses.text} leading-tight line-clamp-3 mb-3 group-hover:${themeClasses.accent} transition-colors`}>
-                        {article.title}
-                      </h3>
-                      
-                      <p className={`${themeClasses.secondaryText} text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-300`}>
-                        {article.description}
-                      </p>
-                      
-                      <div className={`flex items-center justify-between text-xs ${themeClasses.secondaryText} transition-colors duration-300`}>
-                        <span className="font-medium">{article.source.name}</span>
-                        <span>{getTimeAgo(article.publishedAt)}</span>
-                      </div>
-                    </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* View More Indonesian News */}
+              {!indonesianLoading && !indonesianError && filteredIndonesianArticles.length > 0 && (
+                <div className="text-center mt-8">
+                  <a
+                    href="/news"
+                    className={`inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-300`}
+                  >
+                    View More Indonesian News
+                    <ExternalLink className="ml-2 h-4 w-4" />
                   </a>
                 </div>
-              ))}
+              )}
             </div>
-          )}
 
-          {/* View More Button */}
-          {!loading && !error && featuredArticles.length > 0 && (
-            <div className="text-center mt-12">
-              <a
-                href="/news"
-                className={`inline-flex items-center px-8 py-3 ${themeClasses.accent} ${mode === 'dark' ? 'bg-orange-600 hover:bg-orange-700' : 'bg-orange-500 hover:bg-orange-600'} text-white font-medium rounded-lg transition-colors duration-300`}
-              >
-                View All News
-                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+            {/* Sidebar - World News Column (1/4 width) */}
+            <div className="lg:col-span-1">
+              <div className={`${themeClasses.worldNewsBg} rounded-2xl p-6 ${themeClasses.worldNewsBorder} border-2 shadow-2xl transition-colors duration-300 sticky top-8`}>
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                    <Globe className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">World News</h3>
+                    <p className="text-white/80">Global Updates</p>
+                  </div>
+                </div>
+
+                {globalLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} className="bg-white/10 rounded-lg p-4 animate-pulse">
+                        <div className="h-3 bg-white/20 rounded w-3/4 mb-2"></div>
+                        <div className="h-2 bg-white/20 rounded w-1/2 mb-2"></div>
+                        <div className="h-2 bg-white/20 rounded w-2/3"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : globalError || filteredGlobalArticles.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Globe className="h-12 w-12 text-white/50 mx-auto mb-4" />
+                    <h4 className="text-lg font-semibold text-white mb-2">No Global News Available</h4>
+                    <p className="text-white/80 text-sm">Unable to load global news at the moment</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {filteredGlobalArticles.map((article, index) => (
+                      <a
+                        key={article.id}
+                        href={article.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block bg-white/10 hover:bg-white/20 rounded-lg p-4 transition-all duration-300 hover:scale-105 backdrop-blur-sm group"
+                      >
+                        <h4 className="font-bold text-white text-sm leading-tight mb-2 line-clamp-2 group-hover:text-white/90 transition-colors duration-300">
+                          {article.title}
+                        </h4>
+                        
+                        <p className="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
+                          {article.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between text-xs text-white/70">
+                          <span className="font-medium">{article.source.name}</span>
+                          <div className="flex items-center space-x-1">
+                            <Clock className="h-3 w-3" />
+                            <span>{getTimeAgo(article.publishedAt)}</span>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {/* View More Global News */}
+                {!globalLoading && !globalError && filteredGlobalArticles.length > 0 && (
+                  <div className="text-center mt-6">
+                    <a
+                      href="/news"
+                      className="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors duration-300 backdrop-blur-sm text-sm"
+                    >
+                      View More Global News
+                      <ExternalLink className="ml-2 h-3 w-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
     </div>

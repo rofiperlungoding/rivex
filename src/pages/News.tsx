@@ -11,7 +11,7 @@ const News: React.FC = () => {
   const [selectedGlobalCategory, setSelectedGlobalCategory] = useState('general');
   const [selectedIndonesianCategory, setSelectedIndonesianCategory] = useState('general');
   const [isSearchMode, setIsSearchMode] = useState(false);
-  const [activeTab, setActiveTab] = useState<'global' | 'indonesian'>('global');
+  const [activeTab, setActiveTab] = useState<'indonesian' | 'global'>('indonesian'); // Default to Indonesian
   const { mode } = useTheme();
 
   // Global news categories
@@ -36,6 +36,14 @@ const News: React.FC = () => {
     { value: 'technology', label: 'Technology', icon: <Cpu className="h-4 w-4" />, color: 'bg-green-100 text-green-700' },
   ];
 
+  // Fetch Indonesian news based on category (default)
+  const { 
+    articles: indonesianArticles, 
+    loading: indonesianLoading, 
+    error: indonesianError, 
+    refetch: refetchIndonesian 
+  } = useIndonesianNews(selectedIndonesianCategory === 'general' ? undefined : selectedIndonesianCategory);
+
   // Fetch global news based on category
   const { 
     articles: globalArticles, 
@@ -43,14 +51,6 @@ const News: React.FC = () => {
     error: globalError, 
     refetch: refetchGlobal 
   } = useNews(selectedGlobalCategory === 'general' ? undefined : selectedGlobalCategory);
-
-  // Fetch Indonesian news based on category
-  const { 
-    articles: indonesianArticles, 
-    loading: indonesianLoading, 
-    error: indonesianError, 
-    refetch: refetchIndonesian 
-  } = useIndonesianNews(selectedIndonesianCategory === 'general' ? undefined : selectedIndonesianCategory);
 
   // Search news
   const { 
@@ -63,27 +63,27 @@ const News: React.FC = () => {
   // Determine which articles to show
   const articles = isSearchMode 
     ? searchArticles 
-    : activeTab === 'global' 
-    ? globalArticles 
-    : indonesianArticles;
+    : activeTab === 'indonesian' 
+    ? indonesianArticles 
+    : globalArticles;
   
   const loading = isSearchMode 
     ? searchLoading 
-    : activeTab === 'global' 
-    ? globalLoading 
-    : indonesianLoading;
+    : activeTab === 'indonesian' 
+    ? indonesianLoading 
+    : globalLoading;
   
   const error = isSearchMode 
     ? searchError 
-    : activeTab === 'global' 
-    ? globalError 
-    : indonesianError;
+    : activeTab === 'indonesian' 
+    ? indonesianError 
+    : globalError;
   
   const refetch = isSearchMode 
     ? refetchSearch 
-    : activeTab === 'global' 
-    ? refetchGlobal 
-    : refetchIndonesian;
+    : activeTab === 'indonesian' 
+    ? refetchIndonesian 
+    : refetchGlobal;
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
@@ -123,10 +123,10 @@ const News: React.FC = () => {
   }, [articles]);
 
   const getCurrentCategory = () => {
-    if (activeTab === 'global') {
-      return globalCategories.find(cat => cat.value === selectedGlobalCategory) || globalCategories[0];
-    } else {
+    if (activeTab === 'indonesian') {
       return indonesianCategories.find(cat => cat.value === selectedIndonesianCategory) || indonesianCategories[0];
+    } else {
+      return globalCategories.find(cat => cat.value === selectedGlobalCategory) || globalCategories[0];
     }
   };
 
@@ -142,7 +142,9 @@ const News: React.FC = () => {
           border: 'border-gray-700',
           inputBg: 'bg-gray-800',
           tabBg: 'bg-gray-800',
-          tabActiveBg: 'bg-gray-700'
+          tabActiveBg: 'bg-gray-700',
+          indonesianTabBg: 'bg-red-700',
+          globalTabBg: 'bg-blue-700'
         };
       case 'reader':
         return {
@@ -153,7 +155,9 @@ const News: React.FC = () => {
           border: 'border-gray-200',
           inputBg: 'bg-white',
           tabBg: 'bg-gray-50',
-          tabActiveBg: 'bg-white'
+          tabActiveBg: 'bg-white',
+          indonesianTabBg: 'bg-red-600',
+          globalTabBg: 'bg-blue-600'
         };
       case 'debug':
         return {
@@ -164,7 +168,9 @@ const News: React.FC = () => {
           border: 'border-green-500',
           inputBg: 'bg-gray-800',
           tabBg: 'bg-gray-800',
-          tabActiveBg: 'bg-gray-700'
+          tabActiveBg: 'bg-gray-700',
+          indonesianTabBg: 'bg-red-700',
+          globalTabBg: 'bg-blue-700'
         };
       default:
         return {
@@ -175,7 +181,9 @@ const News: React.FC = () => {
           border: 'border-gray-200',
           inputBg: 'bg-white',
           tabBg: 'bg-gray-50',
-          tabActiveBg: 'bg-white'
+          tabActiveBg: 'bg-white',
+          indonesianTabBg: 'bg-red-600',
+          globalTabBg: 'bg-blue-600'
         };
     }
   };
@@ -246,26 +254,26 @@ const News: React.FC = () => {
             <div className={`${themeClasses.tabBg} rounded-lg p-1 transition-colors duration-300`}>
               <div className="flex">
                 <button
-                  onClick={() => setActiveTab('global')}
-                  className={`flex-1 flex items-center justify-center space-x-2 px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    activeTab === 'global'
-                      ? `${themeClasses.tabActiveBg} ${themeClasses.text} shadow-sm`
-                      : `${themeClasses.secondaryText} hover:${themeClasses.text}`
-                  }`}
-                >
-                  <Globe className="h-4 w-4" />
-                  <span>Global News</span>
-                </button>
-                <button
                   onClick={() => setActiveTab('indonesian')}
                   className={`flex-1 flex items-center justify-center space-x-2 px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
                     activeTab === 'indonesian'
-                      ? `${themeClasses.tabActiveBg} ${themeClasses.text} shadow-sm`
+                      ? `${themeClasses.indonesianTabBg} text-white shadow-sm`
                       : `${themeClasses.secondaryText} hover:${themeClasses.text}`
                   }`}
                 >
                   <MapPin className="h-4 w-4" />
                   <span>Indonesian News</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('global')}
+                  className={`flex-1 flex items-center justify-center space-x-2 px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 ${
+                    activeTab === 'global'
+                      ? `${themeClasses.globalTabBg} text-white shadow-sm`
+                      : `${themeClasses.secondaryText} hover:${themeClasses.text}`
+                  }`}
+                >
+                  <Globe className="h-4 w-4" />
+                  <span>Global News</span>
                 </button>
               </div>
             </div>
@@ -276,19 +284,21 @@ const News: React.FC = () => {
         {mode !== 'reader' && !isSearchMode && (
           <div className="max-w-6xl mx-auto mb-12">
             <div className="flex flex-wrap justify-center gap-3">
-              {(activeTab === 'global' ? globalCategories : indonesianCategories).map((category) => (
+              {(activeTab === 'indonesian' ? indonesianCategories : globalCategories).map((category) => (
                 <button
                   key={category.value}
                   onClick={() => {
-                    if (activeTab === 'global') {
-                      setSelectedGlobalCategory(category.value);
-                    } else {
+                    if (activeTab === 'indonesian') {
                       setSelectedIndonesianCategory(category.value);
+                    } else {
+                      setSelectedGlobalCategory(category.value);
                     }
                   }}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-105 ${
-                    (activeTab === 'global' ? selectedGlobalCategory : selectedIndonesianCategory) === category.value
-                      ? 'bg-primary-600 text-white shadow-lg'
+                    (activeTab === 'indonesian' ? selectedIndonesianCategory : selectedGlobalCategory) === category.value
+                      ? activeTab === 'indonesian' 
+                        ? 'bg-red-600 text-white shadow-lg'
+                        : 'bg-blue-600 text-white shadow-lg'
                       : `${category.color} hover:shadow-md`
                   }`}
                 >
@@ -306,12 +316,12 @@ const News: React.FC = () => {
             <LoadingSpinner size="lg" />
             <div className="mt-4 text-center">
               <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
-                Loading {isSearchMode ? 'search results' : activeTab === 'global' ? 'global news' : 'Indonesian news'}...
+                Loading {isSearchMode ? 'search results' : activeTab === 'indonesian' ? 'Indonesian news' : 'global news'}...
               </p>
               <div className="flex items-center justify-center space-x-2 mt-2">
-                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className={`w-2 h-2 ${activeTab === 'indonesian' ? 'bg-red-600' : 'bg-blue-600'} rounded-full animate-bounce`} style={{ animationDelay: '0ms' }}></div>
+                <div className={`w-2 h-2 ${activeTab === 'indonesian' ? 'bg-red-600' : 'bg-blue-600'} rounded-full animate-bounce`} style={{ animationDelay: '150ms' }}></div>
+                <div className={`w-2 h-2 ${activeTab === 'indonesian' ? 'bg-red-600' : 'bg-blue-600'} rounded-full animate-bounce`} style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           </div>
@@ -338,7 +348,7 @@ const News: React.FC = () => {
                       </div>
                       <div>
                         <h2 className={`text-2xl font-bold ${themeClasses.text} transition-colors duration-300`}>
-                          {activeTab === 'global' ? 'Global' : 'Indonesian'} {getCurrentCategory().label}
+                          {activeTab === 'indonesian' ? 'Indonesian' : 'Global'} {getCurrentCategory().label}
                         </h2>
                         <p className={`${themeClasses.secondaryText} transition-colors duration-300`}>
                           {filteredArticles.length} articles found
@@ -378,7 +388,11 @@ const News: React.FC = () => {
                           
                           {/* Category Badge */}
                           <div className="absolute top-3 left-3">
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getCurrentCategory().color} backdrop-blur-sm`}>
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              activeTab === 'indonesian' 
+                                ? 'bg-red-600 text-white' 
+                                : 'bg-blue-600 text-white'
+                            } backdrop-blur-sm`}>
                               {article.source.name}
                             </span>
                           </div>
@@ -396,7 +410,9 @@ const News: React.FC = () => {
                           <ExternalLink className={`h-4 w-4 ${themeClasses.secondaryText} opacity-0 group-hover:opacity-100 transition-opacity duration-200`} />
                         </div>
                         
-                        <h3 className={`text-lg font-bold ${themeClasses.text} mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-200`}>
+                        <h3 className={`text-lg font-bold ${themeClasses.text} mb-3 line-clamp-2 group-hover:${
+                          activeTab === 'indonesian' ? 'text-red-600' : 'text-blue-600'
+                        } transition-colors duration-200`}>
                           {article.title}
                         </h3>
                         
@@ -425,7 +441,7 @@ const News: React.FC = () => {
                 <p className={`${themeClasses.secondaryText} text-lg mb-6 transition-colors duration-300`}>
                   {isSearchMode 
                     ? 'Try adjusting your search terms or browse by category.' 
-                    : `No ${activeTab === 'global' ? 'global' : 'Indonesian'} news articles available at the moment.`
+                    : `No ${activeTab === 'indonesian' ? 'Indonesian' : 'global'} news articles available at the moment.`
                   }
                 </p>
                 {isSearchMode && mode !== 'reader' && (
