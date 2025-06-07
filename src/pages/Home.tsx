@@ -59,7 +59,7 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Fade Gradient */}
+      {/* Hero Section with Localized Gradient */}
       <section className="bg-white pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="rounded-3xl overflow-hidden relative h-80">
@@ -70,19 +70,11 @@ const Home: React.FC = () => {
                 alt="Team achievement"
                 className="w-full h-full object-cover"
               />
-              
-              {/* Multi-layer Fade Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-transparent to-orange-900/30"></div>
-              
-              {/* Subtle vignette effect */}
-              <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/20"></div>
             </div>
             
             {/* Content Overlay */}
             <div className="relative z-10 flex items-center justify-between h-full p-8">
-              {/* Top right logo - Using white logo for dark overlay */}
+              {/* Top right logo - Clean area, no gradient needed */}
               <div className="absolute top-8 right-8">
                 <img 
                   src="/Untitled design (2).png" 
@@ -91,15 +83,22 @@ const Home: React.FC = () => {
                 />
               </div>
               
-              {/* Bottom right text */}
+              {/* Bottom right text with localized gradient */}
               <div className="absolute bottom-8 right-8 text-right">
-                <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
-                  grow anywhere,
-                  <br />
-                  <span className="italic">anytime,</span>
-                  <br />
-                  <span className="italic">anyone.</span>
-                </h1>
+                {/* Localized gradient overlay only behind text */}
+                <div className="absolute inset-0 -inset-x-8 -inset-y-4 bg-gradient-to-l from-black/60 via-black/40 to-transparent rounded-2xl"></div>
+                <div className="absolute inset-0 -inset-x-8 -inset-y-4 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
+                
+                {/* Text content */}
+                <div className="relative z-10">
+                  <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
+                    grow anywhere,
+                    <br />
+                    <span className="italic">anytime,</span>
+                    <br />
+                    <span className="italic">anyone.</span>
+                  </h1>
+                </div>
               </div>
             </div>
           </div>
