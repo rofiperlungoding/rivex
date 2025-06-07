@@ -20,7 +20,7 @@ const ModernClock: React.FC = () => {
 
   // Weather API configuration
   const WEATHER_API_KEY = '2434caae723b409ca2b10726250706';
-  const WEATHER_BASE_URL = 'https://api.weatherapi.com/v1';
+  const WEATHER_BASE_URL = '/api/weather';
 
   // Update time every minute
   useEffect(() => {

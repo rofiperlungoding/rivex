@@ -16,6 +16,14 @@ export default defineConfig({
         headers: {
           'User-Agent': 'Portfolio-Website/1.0'
         }
+      },
+      '/api/weather': {
+        target: 'https://api.weatherapi.com/v1',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/weather/, ''),
+        headers: {
+          'User-Agent': 'Portfolio-Website/1.0'
+        }
       }
     }
   }
