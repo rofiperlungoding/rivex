@@ -58,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Always visible */}
+      {/* Modern Clock - Always visible with improved positioning */}
       <ModernClock />
 
       {/* Right Navigation */}
@@ -139,9 +139,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
       )}
 
-      {/* Theme Toggle for Home Page */}
+      {/* Theme Toggle for Home Page - Positioned to avoid clock conflict */}
       {isHomePage && (
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed top-6 right-6 z-50">
           <ThemeToggle />
         </div>
       )}
@@ -170,11 +170,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      {/* Back to Top Button */}
+      {/* Back to Top Button - Positioned to avoid conflicts */}
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-8 right-8 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
+          className={`fixed bottom-6 right-6 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
           aria-label="Back to top"
         >
           <ChevronUp className="h-5 w-5" />

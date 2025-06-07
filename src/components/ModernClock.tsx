@@ -236,11 +236,13 @@ const ModernClock: React.FC = () => {
         textClasses = "text-gray-700";
     }
 
-    // Position based on page
+    // Improved positioning logic to avoid conflicts
     if (isHomePage) {
-      position = "bottom-4 left-4";
+      // On home page, position at bottom left but with more spacing
+      position = "bottom-6 left-6";
     } else {
-      position = "top-20 left-4";
+      // On other pages, position at top left but below header and with proper spacing
+      position = "top-24 left-6";
     }
 
     return {
@@ -254,32 +256,32 @@ const ModernClock: React.FC = () => {
 
   return (
     <div className={styles.baseClasses}>
-      <div className={`${styles.containerClasses} rounded-lg px-3 py-2`}>
+      <div className={`${styles.containerClasses} rounded-xl px-4 py-3 shadow-lg`}>
         <div className="flex items-center space-x-4">
           {/* Time */}
           <div>
-            <div className={`${styles.textClasses} font-mono text-lg font-semibold leading-none`}>
+            <div className={`${styles.textClasses} font-mono text-xl font-semibold leading-none`}>
               {formatTime(time)}
             </div>
-            <div className={`${styles.textClasses} opacity-70 text-xs mt-0.5 leading-none`}>
+            <div className={`${styles.textClasses} opacity-70 text-sm mt-1 leading-none`}>
               {formatDate(time)}
             </div>
           </div>
 
           {/* Weather - Minimalist */}
-          <div className="flex items-center space-x-2 border-l border-opacity-20 pl-4">
+          <div className="flex items-center space-x-3 border-l border-opacity-20 pl-4">
             {weatherLoading ? (
-              <div className={`w-4 h-4 rounded-full bg-blue-500 animate-pulse`} />
+              <div className={`w-5 h-5 rounded-full bg-blue-500 animate-pulse`} />
             ) : weatherError ? (
-              <div className={`${styles.textClasses} opacity-50 text-xs`}>--</div>
+              <div className={`${styles.textClasses} opacity-50 text-sm`}>--</div>
             ) : weather ? (
               <>
                 {getWeatherIcon(weather.condition)}
                 <div className="text-right">
-                  <div className={`${styles.textClasses} text-sm font-semibold leading-none`}>
+                  <div className={`${styles.textClasses} text-lg font-semibold leading-none`}>
                     {weather.temperature}°
                   </div>
-                  <div className={`${styles.textClasses} opacity-70 text-xs leading-none`}>
+                  <div className={`${styles.textClasses} opacity-70 text-xs leading-none mt-0.5`}>
                     {weather.location}
                   </div>
                 </div>
