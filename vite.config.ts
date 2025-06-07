@@ -29,6 +29,25 @@ export default defineConfig(({ mode }) => ({
           });
         },
       },
+      '/api/indonesian-news': {
+        target: 'https://berita-indo-api-next.vercel.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/indonesian-news/, '/api'),
+        headers: {
+          'User-Agent': 'Portfolio-Website/1.0'
+        },
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('Indonesian News API proxy error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('Indonesian News API request:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('Indonesian News API response:', proxyRes.statusCode, req.url);
+          });
+        },
+      },
       '/api/weather': {
         target: 'https://api.weatherapi.com/v1',
         changeOrigin: true,

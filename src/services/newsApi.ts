@@ -9,8 +9,13 @@ const getBaseUrl = () => {
   return import.meta.env.VITE_NEWS_API_URL || 'https://newsapi.org/v2';
 };
 
-// Indonesian News API base URL
-const INDONESIAN_NEWS_BASE_URL = 'https://berita-indo-api-next.vercel.app/api';
+// Indonesian News API base URL - use proxy in development
+const getIndonesianBaseUrl = () => {
+  if (isDevelopment) {
+    return '/api/indonesian-news';
+  }
+  return 'https://berita-indo-api-next.vercel.app/api';
+};
 
 interface NewsArticle {
   title: string;
@@ -226,7 +231,8 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
 
     // Default to national news if category not found
     const endpoint = categoryMap[category || 'general'] || 'tempo-news/nasional';
-    const url = `${INDONESIAN_NEWS_BASE_URL}/${endpoint}`;
+    const baseUrl = getIndonesianBaseUrl();
+    const url = `${baseUrl}/${endpoint}`;
 
     console.log('Fetching Indonesian news from:', url);
 
@@ -367,7 +373,7 @@ export const validateNewsApiConfig = (): boolean => {
 const getNewsApiConfig = () => ({
   apiKey: API_KEY ? `${API_KEY.substring(0, 8)}...` : 'Not configured',
   baseUrl: getBaseUrl(),
-  indonesianNewsBaseUrl: INDONESIAN_NEWS_BASE_URL,
+  indonesianNewsBaseUrl: getIndonesianBaseUrl(),
   isDevelopment,
   isConfigured: validateNewsApiConfig()
 });
