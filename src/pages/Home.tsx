@@ -60,11 +60,11 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-700 rounded-3xl overflow-hidden relative">
             <div className="flex items-center justify-between p-8">
-              {/* Left side - Image */}
+              {/* Left side - Full Image */}
               <div className="flex-1">
                 <img
-                  src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
-                  alt="Team collaboration"
+                  src="/image copy copy.png"
+                  alt="Team achievement"
                   className="w-full h-64 object-cover rounded-2xl"
                 />
               </div>
