@@ -109,105 +109,105 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Right Navigation - Only show on non-home pages */}
       {!isHomePage && <RightNavigation />}
 
-      {/* Theme Toggle - Positioned lower for all pages */}
+      {/* Theme Toggle - Positioned lower for non-home pages only */}
       {!isHomePage && (
         <div className="fixed top-20 right-4 z-50">
           <ThemeToggle />
         </div>
       )}
 
-      {/* Navigation Header - Consistent design across all pages */}
-      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 ${
-        isScrolled && !isHomePage ? 'shadow-sm' : ''
-      }`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <img 
-                src="/Untitled design (1).png" 
-                alt="rivex" 
-                className="h-8 w-auto"
-              />
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`font-medium transition-colors duration-200 ${
-                    location.pathname === item.path
-                      ? mode === 'debug' 
-                        ? 'text-green-400' 
-                        : mode === 'dark'
-                        ? 'text-white'
-                        : 'text-black'
-                      : `${themeClasses.secondaryText} hover:${themeClasses.text}`
-                  }`}
-                >
-                  {item.name}
+      {/* Navigation Header - Only show on NON-HOME pages */}
+      {!isHomePage && (
+        <>
+          <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 ${
+            isScrolled ? 'shadow-sm' : ''
+          }`}>
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="flex items-center justify-between h-16">
+                {/* Logo */}
+                <Link to="/" className="flex items-center">
+                  <img 
+                    src="/Untitled design (1).png" 
+                    alt="rivex" 
+                    className="h-8 w-auto"
+                  />
                 </Link>
-              ))}
-            </nav>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center space-x-2">
-              {isHomePage && <ThemeToggle />}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`p-2 rounded-lg ${themeClasses.secondaryText} hover:${themeClasses.text} transition-colors duration-200`}
-                aria-label="Toggle menu"
-              >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex items-center space-x-8">
+                  {navigationItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`font-medium transition-colors duration-200 ${
+                        location.pathname === item.path
+                          ? mode === 'debug' 
+                            ? 'text-green-400' 
+                            : mode === 'dark'
+                            ? 'text-white'
+                            : 'text-black'
+                          : `${themeClasses.secondaryText} hover:${themeClasses.text}`
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden flex items-center space-x-2">
+                  <ThemeToggle />
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className={`p-2 rounded-lg ${themeClasses.secondaryText} hover:${themeClasses.text} transition-colors duration-200`}
+                    aria-label="Toggle menu"
+                  >
+                    {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile Navigation */}
+              {isMenuOpen && (
+                <div className={`md:hidden py-4 border-t ${themeClasses.border} ${themeClasses.headerBg} transition-colors duration-300`}>
+                  {navigationItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-4 py-2 font-medium transition-colors duration-200 ${
+                        location.pathname === item.path
+                          ? mode === 'debug'
+                            ? 'text-green-400 bg-green-900/20'
+                            : mode === 'dark'
+                            ? 'text-white bg-gray-700'
+                            : 'text-black bg-gray-100'
+                          : `${themeClasses.secondaryText} hover:${themeClasses.text} hover:${themeClasses.cardBg}`
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          </header>
 
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className={`md:hidden py-4 border-t ${themeClasses.border} ${themeClasses.headerBg} transition-colors duration-300`}>
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-4 py-2 font-medium transition-colors duration-200 ${
-                    location.pathname === item.path
-                      ? mode === 'debug'
-                        ? 'text-green-400 bg-green-900/20'
-                        : mode === 'dark'
-                        ? 'text-white bg-gray-700'
-                        : 'text-black bg-gray-100'
-                      : `${themeClasses.secondaryText} hover:${themeClasses.text} hover:${themeClasses.cardBg}`
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </header>
-
-      {/* Breadcrumbs - Only show on non-home pages and not in reader mode */}
-      {!isHomePage && mode !== 'reader' && (
-        <div className={`${themeClasses.headerBg} ${themeClasses.border} border-b transition-colors duration-300`}>
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <nav className={`text-sm ${themeClasses.secondaryText} transition-colors duration-300`}>
-              <Link to="/" className={`hover:${themeClasses.text} transition-colors duration-200`}>
-                Home
-              </Link>
-              {location.pathname !== '/' && (
-                <>
+          {/* Breadcrumbs - Only show on non-home pages and not in reader mode */}
+          {mode !== 'reader' && (
+            <div className={`${themeClasses.headerBg} ${themeClasses.border} border-b transition-colors duration-300`}>
+              <div className="max-w-7xl mx-auto px-6 py-4">
+                <nav className={`text-sm ${themeClasses.secondaryText} transition-colors duration-300`}>
+                  <Link to="/" className={`hover:${themeClasses.text} transition-colors duration-200`}>
+                    Home
+                  </Link>
                   <span className="mx-2">/</span>
                   <span className={themeClasses.text}>{getPageName(location.pathname)}</span>
-                </>
-              )}
-            </nav>
-          </div>
-        </div>
+                </nav>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* Main Content */}
