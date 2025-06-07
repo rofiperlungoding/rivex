@@ -2,14 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
   // Remove proxy configuration for production builds
   server: {
-    proxy: import.meta.env.DEV ? {
+    proxy: mode === 'development' ? {
       '/api/news': {
         target: 'https://newsapi.org/v2',
         changeOrigin: true,
@@ -39,4 +39,4 @@ export default defineConfig({
       }
     }
   }
-});
+}));
