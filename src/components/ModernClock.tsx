@@ -24,7 +24,7 @@ const ModernClock: React.FC = () => {
 
   // Weather API configuration
   const WEATHER_API_KEY = '2434caae723b409ca2b10726250706';
-  const WEATHER_BASE_URL = 'https://api.openweathermap.org/data/2.5';
+  const WEATHER_BASE_URL = 'https://api.weatherapi.com/v1';
 
   // Update time every minute (since we removed seconds)
   useEffect(() => {
