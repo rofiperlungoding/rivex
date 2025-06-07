@@ -13,13 +13,11 @@
     line-height: 1.6;
     font-weight: 400;
     transition: background-color 0.3s ease, color 0.3s ease;
-    background-color: #ffffff;
-    color: #111827;
   }
   
   h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
-    font-weight: 600;
+    font-weight: 300;
   }
 
   /* Theme Variables */
@@ -115,11 +113,17 @@
   }
   
   .btn-primary {
-    @apply bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
   }
   
   .btn-secondary {
-    @apply bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--border-secondary);
   }
 
   .line-clamp-2 {
@@ -255,37 +259,6 @@
   /* Smooth theme transitions */
   * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-  }
-
-  /* Custom animations for the new design */
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Gradient text effect */
-  .gradient-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
 
