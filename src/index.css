@@ -431,67 +431,6 @@
   .border-themed-secondary {
     border-color: var(--border-secondary);
   }
-
-  /* Custom Gradient Effects for Hero */
-  .bg-radial-gradient {
-    background: radial-gradient(circle at center, var(--tw-gradient-stops));
-  }
-
-  .fade-gradient-overlay {
-    background: linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.6) 0%,
-      rgba(0, 0, 0, 0.4) 25%,
-      rgba(0, 0, 0, 0.2) 50%,
-      rgba(0, 0, 0, 0.1) 75%,
-      transparent 100%
-    );
-  }
-
-  .cinematic-gradient {
-    background: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.8) 0%,
-      rgba(0, 0, 0, 0.6) 20%,
-      rgba(0, 0, 0, 0.3) 40%,
-      rgba(0, 0, 0, 0.1) 60%,
-      transparent 80%,
-      transparent 100%
-    );
-  }
-
-  /* Advanced Gradient System for Seamless Transitions */
-  .bg-gradient-radial {
-    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
-  }
-
-  .bg-seamless-hero {
-    background: 
-      /* Ambient warmth matching image tones */
-      linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(251, 146, 60, 0.1) 25%, rgba(252, 211, 77, 0.05) 50%, transparent 75%),
-      /* Cinematic depth */
-      radial-gradient(ellipse 120% 80% at 50% 100%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 70%),
-      /* Edge softening */
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 0%, transparent 15%, transparent 85%, rgba(255, 255, 255, 0.03) 100%);
-  }
-
-  .bg-text-readability {
-    background: 
-      /* Primary text contrast */
-      linear-gradient(315deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.65) 30%, rgba(0, 0, 0, 0.4) 60%, transparent 100%),
-      /* Secondary depth layer */
-      linear-gradient(270deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 40%, rgba(0, 0, 0, 0.2) 70%, transparent 100%),
-      /* Warm accent matching image */
-      linear-gradient(225deg, rgba(217, 119, 6, 0.25) 0%, rgba(251, 146, 60, 0.15) 50%, transparent 100%);
-  }
-
-  .bg-logo-backdrop {
-    background: 
-      /* Subtle contrast for logo visibility */
-      radial-gradient(ellipse 150% 100% at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 50%, transparent 100%),
-      /* Edge definition */
-      linear-gradient(225deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 100%);
-  }
 }
 
 @layer utilities {
@@ -570,49 +509,6 @@
   .font-sf-black {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 900;
-  }
-
-  /* Advanced Gradient Utilities for Seamless Transitions */
-  .bg-seamless-transition {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(255, 255, 255, 0.02) 20%,
-      rgba(255, 255, 255, 0.05) 40%,
-      rgba(255, 255, 255, 0.1) 60%,
-      rgba(255, 255, 255, 0.3) 80%,
-      rgba(255, 255, 255, 1) 100%
-    );
-  }
-
-  .bg-ambient-warmth {
-    background: linear-gradient(
-      135deg,
-      rgba(217, 119, 6, 0.12) 0%,
-      rgba(251, 146, 60, 0.08) 30%,
-      rgba(252, 211, 77, 0.04) 60%,
-      transparent 100%
-    );
-  }
-
-  .bg-cinematic-vignette {
-    background: radial-gradient(
-      ellipse 120% 80% at 50% 100%,
-      rgba(0, 0, 0, 0.35) 0%,
-      rgba(0, 0, 0, 0.2) 30%,
-      rgba(0, 0, 0, 0.1) 50%,
-      transparent 70%
-    );
-  }
-
-  .bg-edge-softening {
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.04) 0%,
-      transparent 10%,
-      transparent 90%,
-      rgba(255, 255, 255, 0.04) 100%
-    );
   }
 
   /* Smooth theme transitions */
