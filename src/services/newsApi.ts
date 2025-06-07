@@ -9,7 +9,7 @@ const getBaseUrl = () => {
   return import.meta.env.VITE_NEWS_API_URL || 'https://newsapi.org/v2';
 };
 
-export interface NewsArticle {
+interface NewsArticle {
   title: string;
   description: string;
   url: string;
@@ -21,7 +21,7 @@ export interface NewsArticle {
   author: string;
 }
 
-export interface NewsResponse {
+interface NewsResponse {
   articles: NewsArticle[];
   totalResults: number;
   status: string;
@@ -159,7 +159,7 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
 };
 
 // Function to fetch news by specific sources
-export const fetchNewsBySources = async (sources: string[]): Promise<NewsResponse> => {
+const fetchNewsBySources = async (sources: string[]): Promise<NewsResponse> => {
   try {
     const baseUrl = getBaseUrl();
     const endpoint = `${baseUrl}/top-headlines`;
@@ -188,7 +188,7 @@ export const fetchNewsBySources = async (sources: string[]): Promise<NewsRespons
 };
 
 // Function to get available news sources
-export const fetchNewsSources = async (category?: string, country?: string): Promise<any> => {
+const fetchNewsSources = async (category?: string, country?: string): Promise<any> => {
   try {
     const baseUrl = getBaseUrl();
     const endpoint = `${baseUrl}/sources`;
@@ -231,7 +231,7 @@ export const validateNewsApiConfig = (): boolean => {
 };
 
 // Export configuration for debugging
-export const getNewsApiConfig = () => ({
+const getNewsApiConfig = () => ({
   apiKey: API_KEY ? `${API_KEY.substring(0, 8)}...` : 'Not configured',
   baseUrl: getBaseUrl(),
   isDevelopment,

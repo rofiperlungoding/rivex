@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchTopHeadlines, validateNewsApiConfig } from '../services/newsApi';
 
-export interface NewsArticle {
+interface NewsArticle {
   id: string;
   title: string;
   description: string;
@@ -157,7 +157,7 @@ export const useSearchNews = (query: string): UseNewsReturn => {
 };
 
 // Hook for getting multiple news categories
-export const useMultiCategoryNews = (categories: string[]) => {
+const useMultiCategoryNews = (categories: string[]) => {
   const [newsData, setNewsData] = useState<Record<string, NewsArticle[]>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

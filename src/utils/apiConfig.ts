@@ -70,7 +70,7 @@ export const handleApiError = (error: any, context: string) => {
 };
 
 // Utility to validate environment configuration
-export const validateEnvironment = () => {
+const validateEnvironment = () => {
   const config = getApiConfig();
   const issues: string[] = [];
   
@@ -94,7 +94,7 @@ export const validateEnvironment = () => {
 };
 
 // Debug utility for API configuration
-export const debugApiConfig = () => {
+const debugApiConfig = () => {
   const config = getApiConfig();
   const validation = validateEnvironment();
   
