@@ -16,119 +16,20 @@ const Timeline: React.FC = () => {
 
   const timelineItems: TimelineItem[] = [
     {
-      id: 1,
-      title: "Born",
-      organization: "Jakarta, Indonesia",
-      date: "2007",
-      description: "Born in Jakarta, Indonesia, beginning my journey of learning and discovery.",
-      category: "Education",
-      icon: <GraduationCap className="h-5 w-5" />
-    },
-    {
-      id: 2,
-      title: "Elementary School",
-      organization: "MI Pembangunan Jakarta",
-      date: "2014 - 2019",
-      description: "Started elementary education at MI Pembangunan Jakarta. Developed early interest in mathematics and participated in academic competitions.",
-      category: "Education",
-      icon: <GraduationCap className="h-5 w-5" />
-    },
-    {
-      id: 3,
-      title: "Mathematics Competition (KMNR)",
-      organization: "National Level Competition",
-      date: "2019 (Grade 6)",
-      description: "Participated in the National Mathematics Competition (KMNR) during my final year of elementary school, showcasing early mathematical talents.",
-      category: "Competitions",
-      icon: <Trophy className="h-5 w-5" />
-    },
-    {
-      id: 4,
-      title: "Junior High School",
-      organization: "MTs Pembangunan Jakarta",
-      date: "2019 - 2022",
-      description: "Continued education at MTs Pembangunan Jakarta, expanding knowledge in various subjects and developing language skills.",
-      category: "Education",
-      icon: <GraduationCap className="h-5 w-5" />
-    },
-    {
-      id: 5,
-      title: "Spelling Bee Competition - 3rd Place",
-      organization: "MTs Pembangunan Jakarta",
-      date: "2020-2021",
-      description: "Achieved 3rd place in the school-level Spelling Bee competition, demonstrating strong English language proficiency.",
-      category: "Competitions",
-      icon: <Award className="h-5 w-5" />
-    },
-    {
-      id: 6,
-      title: "Senior High School",
+      id: 16,
+      title: "High School Graduation",
       organization: "MA Pembangunan Jakarta",
-      date: "2022 - 2025",
-      description: "Currently pursuing senior high school education at MA Pembangunan Jakarta, focusing on science and technology while exploring creative fields.",
+      date: "2025",
+      description: "Expected to graduate from MA Pembangunan Jakarta, completing senior high school education with a strong foundation in academics and creative achievements.",
       category: "Education",
       icon: <GraduationCap className="h-5 w-5" />
     },
     {
-      id: 7,
-      title: "National Robotics Competition - 3rd Place",
-      organization: "National Competition, Sukabumi",
-      date: "2023",
-      description: "Secured 3rd place in the National Robotics Competition held in Sukabumi, demonstrating technical skills and innovation in robotics.",
-      category: "Competitions",
-      icon: <Trophy className="h-5 w-5" />
-    },
-    {
-      id: 8,
-      title: "Provincial Robotics Competition - 1st Place",
-      organization: "Jakarta Provincial Level",
-      date: "2023",
-      description: "Won 1st place in the Provincial Robotics Competition in Jakarta, showcasing excellence in robotics and engineering.",
-      category: "Competitions",
-      icon: <Trophy className="h-5 w-5" />
-    },
-    {
-      id: 9,
-      title: "Photography Competition - 2nd Place (First)",
-      organization: "Regional Competition",
-      date: "2023",
-      description: "Achieved 2nd place in a photography competition, demonstrating artistic vision and technical photography skills.",
-      category: "Achievements",
-      icon: <Camera className="h-5 w-5" />
-    },
-    {
-      id: 10,
-      title: "Photography Competition - 2nd Place (Second)",
-      organization: "Regional Competition",
-      date: "2023",
-      description: "Secured another 2nd place in a photography competition, consistently showing excellence in visual arts and composition.",
-      category: "Achievements",
-      icon: <Camera className="h-5 w-5" />
-    },
-    {
-      id: 11,
-      title: "Creative Video Competition - 1st Place",
-      organization: "National Level",
-      date: "2023",
-      description: "Won 1st place in the National Creative Video Competition, showcasing storytelling abilities and video production skills.",
-      category: "Achievements",
-      icon: <Clapperboard className="h-5 w-5" />
-    },
-    {
-      id: 12,
-      title: "Short Movie Competition - 1st Place",
-      organization: "National Level",
-      date: "2023",
-      description: "Achieved 1st place in the National Short Movie Competition, demonstrating excellence in filmmaking and narrative creation.",
-      category: "Achievements",
-      icon: <Clapperboard className="h-5 w-5" />
-    },
-    {
-      id: 13,
+      id: 15,
       title: "School Short Movie Competition - Overall Champion",
       organization: "MA Pembangunan Jakarta",
-      date: "2023",
-      description: "Won the overall championship in the school-level short movie competition, establishing leadership in creative media production.",
+      date: "2024",
+      description: "Won the overall championship in the school-level short movie competition for the second consecutive year, maintaining excellence in filmmaking.",
       category: "Achievements",
       icon: <Clapperboard className="h-5 w-5" />
     },
@@ -142,20 +43,119 @@ const Timeline: React.FC = () => {
       icon: <Search className="h-5 w-5" />
     },
     {
-      id: 15,
+      id: 13,
       title: "School Short Movie Competition - Overall Champion",
       organization: "MA Pembangunan Jakarta",
-      date: "2024",
-      description: "Won the overall championship in the school-level short movie competition for the second consecutive year, maintaining excellence in filmmaking.",
+      date: "2023",
+      description: "Won the overall championship in the school-level short movie competition, establishing leadership in creative media production.",
       category: "Achievements",
       icon: <Clapperboard className="h-5 w-5" />
     },
     {
-      id: 16,
-      title: "High School Graduation",
+      id: 12,
+      title: "Short Movie Competition - 1st Place",
+      organization: "National Level",
+      date: "2023",
+      description: "Achieved 1st place in the National Short Movie Competition, demonstrating excellence in filmmaking and narrative creation.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 11,
+      title: "Creative Video Competition - 1st Place",
+      organization: "National Level",
+      date: "2023",
+      description: "Won 1st place in the National Creative Video Competition, showcasing storytelling abilities and video production skills.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 10,
+      title: "Photography Competition - 2nd Place (Second)",
+      organization: "Regional Competition",
+      date: "2023",
+      description: "Secured another 2nd place in a photography competition, consistently showing excellence in visual arts and composition.",
+      category: "Achievements",
+      icon: <Camera className="h-5 w-5" />
+    },
+    {
+      id: 9,
+      title: "Photography Competition - 2nd Place (First)",
+      organization: "Regional Competition",
+      date: "2023",
+      description: "Achieved 2nd place in a photography competition, demonstrating artistic vision and technical photography skills.",
+      category: "Achievements",
+      icon: <Camera className="h-5 w-5" />
+    },
+    {
+      id: 8,
+      title: "Provincial Robotics Competition - 1st Place",
+      organization: "Jakarta Provincial Level",
+      date: "2023",
+      description: "Won 1st place in the Provincial Robotics Competition in Jakarta, showcasing excellence in robotics and engineering.",
+      category: "Competitions",
+      icon: <Trophy className="h-5 w-5" />
+    },
+    {
+      id: 7,
+      title: "National Robotics Competition - 3rd Place",
+      organization: "National Competition, Sukabumi",
+      date: "2023",
+      description: "Secured 3rd place in the National Robotics Competition held in Sukabumi, demonstrating technical skills and innovation in robotics.",
+      category: "Competitions",
+      icon: <Trophy className="h-5 w-5" />
+    },
+    {
+      id: 6,
+      title: "Senior High School",
       organization: "MA Pembangunan Jakarta",
-      date: "2025",
-      description: "Expected to graduate from MA Pembangunan Jakarta, completing senior high school education with a strong foundation in academics and creative achievements.",
+      date: "2022 - 2025",
+      description: "Currently pursuing senior high school education at MA Pembangunan Jakarta, focusing on science and technology while exploring creative fields.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    {
+      id: 5,
+      title: "Spelling Bee Competition - 3rd Place",
+      organization: "MTs Pembangunan Jakarta",
+      date: "2020-2021",
+      description: "Achieved 3rd place in the school-level Spelling Bee competition, demonstrating strong English language proficiency.",
+      category: "Competitions",
+      icon: <Award className="h-5 w-5" />
+    },
+    {
+      id: 4,
+      title: "Junior High School",
+      organization: "MTs Pembangunan Jakarta",
+      date: "2019 - 2022",
+      description: "Continued education at MTs Pembangunan Jakarta, expanding knowledge in various subjects and developing language skills.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    {
+      id: 3,
+      title: "Mathematics Competition (KMNR)",
+      organization: "National Level Competition",
+      date: "2019 (Grade 6)",
+      description: "Participated in the National Mathematics Competition (KMNR) during my final year of elementary school, showcasing early mathematical talents.",
+      category: "Competitions",
+      icon: <Trophy className="h-5 w-5" />
+    },
+    {
+      id: 2,
+      title: "Elementary School",
+      organization: "MI Pembangunan Jakarta",
+      date: "2014 - 2019",
+      description: "Started elementary education at MI Pembangunan Jakarta. Developed early interest in mathematics and participated in academic competitions.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    {
+      id: 1,
+      title: "Born",
+      organization: "Jakarta, Indonesia",
+      date: "2007",
+      description: "Born in Jakarta, Indonesia, beginning my journey of learning and discovery.",
       category: "Education",
       icon: <GraduationCap className="h-5 w-5" />
     }
