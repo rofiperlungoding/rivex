@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white">
+      <header className="bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -59,55 +59,92 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Localized Gradient */}
-      <section className="bg-white pt-8 pb-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="rounded-3xl overflow-hidden relative h-80">
-            {/* Full Background Image */}
-            <div className="absolute inset-0">
-              <img
-                src="/image copy copy.png"
-                alt="Team achievement"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            {/* Content Overlay */}
-            <div className="relative z-10 flex items-center justify-between h-full p-8">
-              {/* Top right logo - Clean area, no gradient needed */}
-              <div className="absolute top-8 right-8">
-                <img 
-                  src="/Untitled design (2).png" 
-                  alt="rivex" 
-                  className="h-6 w-auto drop-shadow-lg"
+      {/* Hero Section with Seamless Gradient Transition */}
+      <section className="relative">
+        {/* Background container with seamless transition */}
+        <div className="relative">
+          {/* Main hero container */}
+          <div className="max-w-7xl mx-auto px-6 pt-8 pb-12">
+            <div className="rounded-3xl overflow-hidden relative h-80">
+              {/* Full Background Image */}
+              <div className="absolute inset-0">
+                <img
+                  src="/image copy copy.png"
+                  alt="Team achievement"
+                  className="w-full h-full object-cover"
                 />
               </div>
               
-              {/* Bottom right text with localized gradient */}
-              <div className="absolute bottom-8 right-8 text-right">
-                {/* Localized gradient overlay only behind text */}
-                <div className="absolute inset-0 -inset-x-8 -inset-y-4 bg-gradient-to-l from-black/60 via-black/40 to-transparent rounded-2xl"></div>
-                <div className="absolute inset-0 -inset-x-8 -inset-y-4 bg-gradient-to-t from-black/50 via-black/20 to-transparent rounded-2xl"></div>
+              {/* Multi-layer Gradient System for Seamless Transition */}
+              {/* Base ambient gradient matching image warmth */}
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-orange-800/15 to-yellow-700/10"></div>
+              
+              {/* Cinematic vignette for depth */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/30"></div>
+              
+              {/* Text readability gradient - localized to bottom-right */}
+              <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-gradient-to-tl from-black/70 via-black/40 to-transparent"></div>
+              
+              {/* Subtle top fade for logo area */}
+              <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-black/30 via-black/10 to-transparent"></div>
+              
+              {/* Edge softening gradients */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-white/3 via-transparent to-white/8"></div>
+              
+              {/* Content Overlay */}
+              <div className="relative z-10 flex items-center justify-between h-full p-8">
+                {/* Top right logo - Enhanced visibility */}
+                <div className="absolute top-8 right-8">
+                  <div className="relative">
+                    {/* Logo backdrop for better contrast */}
+                    <div className="absolute inset-0 -inset-2 bg-black/20 rounded-lg blur-sm"></div>
+                    <img 
+                      src="/Untitled design (2).png" 
+                      alt="rivex" 
+                      className="relative h-6 w-auto drop-shadow-2xl filter brightness-110"
+                    />
+                  </div>
+                </div>
                 
-                {/* Text content */}
-                <div className="relative z-10">
-                  <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
-                    grow anywhere,
-                    <br />
-                    <span className="italic">anytime,</span>
-                    <br />
-                    <span className="italic">anyone.</span>
-                  </h1>
+                {/* Bottom right text with enhanced gradient */}
+                <div className="absolute bottom-8 right-8 text-right">
+                  {/* Enhanced text backdrop with multiple layers */}
+                  <div className="absolute inset-0 -inset-x-12 -inset-y-6">
+                    {/* Primary text background */}
+                    <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 to-transparent rounded-2xl"></div>
+                    {/* Secondary depth layer */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent rounded-2xl"></div>
+                    {/* Subtle warm tint matching image */}
+                    <div className="absolute inset-0 bg-gradient-to-tl from-amber-900/20 via-orange-800/10 to-transparent rounded-2xl"></div>
+                  </div>
+                  
+                  {/* Text content with enhanced styling */}
+                  <div className="relative z-10">
+                    <h1 className="text-white text-4xl font-light leading-tight drop-shadow-2xl filter brightness-110">
+                      grow anywhere,
+                      <br />
+                      <span className="italic">anytime,</span>
+                      <br />
+                      <span className="italic">anyone.</span>
+                    </h1>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          
+          {/* Seamless transition to background */}
+          <div className="absolute -bottom-12 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white pointer-events-none"></div>
         </div>
       </section>
 
-      {/* Featured Stories Section */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Featured Stories Section with Enhanced Transition */}
+      <section className="bg-white relative z-10">
+        {/* Subtle top gradient for seamless blend */}
+        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-gray-50/50 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto px-6 pt-8">
           <div className="grid grid-cols-4 gap-8">
             {/* Left Column - Featured Stories Header */}
             <div className="col-span-1">
