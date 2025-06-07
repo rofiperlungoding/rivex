@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 import DebugOverlay from './DebugOverlay';
 import RightNavigation from './RightNavigation';
+import ModernClock from './ModernClock';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -56,6 +57,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-themed-secondary transition-theme">
       {/* Debug Overlay */}
       <DebugOverlay />
+
+      {/* Modern Clock - Always visible */}
+      <ModernClock />
 
       {/* Right Navigation */}
       <RightNavigation />
