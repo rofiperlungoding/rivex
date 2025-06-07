@@ -1,4 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* SF Pro Font Declarations */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SFPRODISPLAYMEDIUM.OTF') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SFPRODISPLAYBOLD.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SFPRODISPLAYBLACKITALIC.OTF') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SFPRODISPLAYLIGHTITALIC.OTF') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('/fonts/SFPRODISPLAYSEMIBOLDITALIC.OTF') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,74 +49,76 @@
   }
   
   body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     line-height: 1.6;
-    font-weight: 400;
+    font-weight: 500;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 16px;
     letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
-  /* Typography Hierarchy */
+  /* Typography Hierarchy using SF Pro Display */
   h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 600;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     font-size: clamp(2rem, 5vw, 3.5rem);
   }
 
   h2 {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 600;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     line-height: 1.2;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     font-size: clamp(1.5rem, 4vw, 2.25rem);
   }
 
   h3 {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
     line-height: 1.25;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     font-size: clamp(1.25rem, 3vw, 1.875rem);
   }
 
   h4 {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 500;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
     line-height: 1.3;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     font-size: clamp(1.125rem, 2.5vw, 1.5rem);
   }
 
   h5 {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
     line-height: 1.35;
-    letter-spacing: 0;
+    letter-spacing: -0.005em;
     font-size: clamp(1rem, 2vw, 1.25rem);
   }
 
   h6 {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
     line-height: 1.4;
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
     font-size: clamp(0.875rem, 1.5vw, 1.125rem);
   }
 
   p {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 400;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
     line-height: 1.6;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     font-size: clamp(0.875rem, 2vw, 1rem);
   }
 
   /* Navigation Typography */
   nav a, .nav-link {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
     letter-spacing: -0.01em;
     font-size: 0.9rem;
@@ -84,32 +126,32 @@
 
   /* Button Typography */
   button, .btn {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
   }
 
   /* Form Elements */
   input, textarea, select, label {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 400;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
     letter-spacing: -0.005em;
   }
 
   /* Small Text */
   small, .text-small {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.005em;
     font-size: 0.875rem;
     line-height: 1.5;
   }
 
   /* Caption Text */
   .caption {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.01em;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0;
     font-size: 0.75rem;
     line-height: 1.4;
   }
@@ -117,8 +159,8 @@
   /* Theme Variables */
   :root {
     --transition-theme: all 0.3s ease;
-    --font-primary: 'Playfair Display', Georgia, serif;
-    --font-secondary: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-primary: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-secondary: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   /* Light Theme (Default) */
@@ -195,14 +237,17 @@
     
     h1 {
       font-size: clamp(1.75rem, 8vw, 2.5rem);
+      font-weight: 700;
     }
     
     h2 {
       font-size: clamp(1.375rem, 6vw, 1.875rem);
+      font-weight: 700;
     }
     
     nav a, .nav-link {
       font-size: 0.875rem;
+      font-weight: 500;
     }
   }
 
@@ -242,23 +287,23 @@
   /* Typography Component Classes */
   .heading-primary {
     font-family: var(--font-primary);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 
   .heading-secondary {
     font-family: var(--font-secondary);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
   }
 
   .body-text {
     font-family: var(--font-secondary);
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.6;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
   }
 
   .nav-text {
@@ -270,13 +315,13 @@
   .btn-text {
     font-family: var(--font-secondary);
     font-weight: 500;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
   }
 
   .caption-text {
     font-family: var(--font-secondary);
-    font-weight: 400;
-    letter-spacing: 0.01em;
+    font-weight: 500;
+    letter-spacing: 0;
     font-size: 0.75rem;
     line-height: 1.4;
   }
@@ -316,20 +361,23 @@
   }
 
   .theme-reader body {
-    font-family: var(--reader-font-family, 'Playfair Display', Georgia, serif);
+    font-family: var(--reader-font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
     font-size: var(--reader-font-size, 18px);
     line-height: var(--reader-line-height, 1.8);
+    font-weight: 500;
   }
 
   .theme-reader h1, .theme-reader h2, .theme-reader h3, 
   .theme-reader h4, .theme-reader h5, .theme-reader h6 {
-    font-family: var(--reader-font-family, 'Playfair Display', Georgia, serif);
+    font-family: var(--reader-font-family, 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif);
     margin-bottom: 1.5rem;
+    font-weight: 700;
   }
 
   .theme-reader p {
     margin-bottom: 1.5rem;
     text-align: justify;
+    font-weight: 500;
   }
 
   /* Hide non-essential elements in reader mode */
@@ -433,6 +481,32 @@
 
   .font-secondary {
     font-family: var(--font-secondary);
+  }
+
+  /* SF Pro Display specific utilities */
+  .font-sf-light {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+  }
+
+  .font-sf-medium {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+  }
+
+  .font-sf-semibold {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+  }
+
+  .font-sf-bold {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+  }
+
+  .font-sf-black {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 900;
   }
 
   /* Smooth theme transitions */
