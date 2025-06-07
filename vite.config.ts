@@ -7,8 +7,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  // Remove proxy configuration for production builds
   server: {
-    proxy: {
+    proxy: import.meta.env.DEV ? {
       '/api/news': {
         target: 'https://newsapi.org/v2',
         changeOrigin: true,
@@ -23,6 +24,17 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/weather/, ''),
         headers: {
           'User-Agent': 'Portfolio-Website/1.0'
+        }
+      }
+    } : undefined
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          icons: ['lucide-react']
         }
       }
     }

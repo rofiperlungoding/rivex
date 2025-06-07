@@ -18,9 +18,9 @@ const ModernClock: React.FC = () => {
   const { mode } = useTheme();
   const location = useLocation();
 
-  // Weather API configuration
-  const WEATHER_API_KEY = '2434caae723b409ca2b10726250706';
-  const WEATHER_BASE_URL = '/api/weather';
+  // Weather API configuration with environment variables
+  const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY || '2434caae723b409ca2b10726250706';
+  const WEATHER_BASE_URL = import.meta.env.VITE_WEATHER_API_URL || 'https://api.weatherapi.com/v1';
 
   // Update time every minute
   useEffect(() => {
@@ -37,7 +37,14 @@ const ModernClock: React.FC = () => {
     const fetchWeatherByCoords = async (lat: number, lon: number) => {
       try {
         const response = await fetch(
-          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${lat},${lon}&aqi=no`
+          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${lat},${lon}&aqi=no`,
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
         );
         
         if (!response.ok) {
@@ -61,7 +68,14 @@ const ModernClock: React.FC = () => {
     const fetchWeatherByCity = async (city: string) => {
       try {
         const response = await fetch(
-          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${city}&aqi=no`
+          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${city}&aqi=no`,
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
         );
         
         if (!response.ok) {
@@ -141,11 +155,17 @@ const ModernClock: React.FC = () => {
       }
     };
 
-    initializeWeather();
-    const weatherTimer = setInterval(initializeWeather, 10 * 60 * 1000);
-    
-    return () => clearInterval(weatherTimer);
-  }, []);
+    // Only fetch weather if API key is available
+    if (WEATHER_API_KEY && WEATHER_API_KEY !== 'your_weather_api_key_here') {
+      initializeWeather();
+      const weatherTimer = setInterval(initializeWeather, 10 * 60 * 1000);
+      
+      return () => clearInterval(weatherTimer);
+    } else {
+      setWeatherLoading(false);
+      setWeatherError(true);
+    }
+  }, [WEATHER_API_KEY, WEATHER_BASE_URL]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
