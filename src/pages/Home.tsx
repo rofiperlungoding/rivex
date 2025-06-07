@@ -36,7 +36,11 @@ const Home: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <h1 className="text-xl font-bold text-black">rivex</h1>
+              <img 
+                src="/Untitled design (1).png" 
+                alt="rivex" 
+                className="h-8 w-auto"
+              />
             </div>
 
             {/* Navigation */}
@@ -79,8 +83,12 @@ const Home: React.FC = () => {
             {/* Content Overlay */}
             <div className="relative z-10 flex items-center justify-between h-full p-8">
               {/* Top right logo */}
-              <div className="absolute top-8 right-8 text-white font-bold text-lg drop-shadow-lg">
-                rivex
+              <div className="absolute top-8 right-8">
+                <img 
+                  src="/Untitled design (1).png" 
+                  alt="rivex" 
+                  className="h-6 w-auto filter brightness-0 invert drop-shadow-lg"
+                />
               </div>
               
               {/* Bottom right text */}
