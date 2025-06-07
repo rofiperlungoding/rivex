@@ -6,32 +6,7 @@ import RightNavigation from '../components/RightNavigation';
 
 const Home: React.FC = () => {
   const { articles, loading, error } = useNews();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const { mode } = useTheme();
-
-  // Hero images array
-  const heroImages = [
-    "/image copy copy.png",
-    "/image.png", 
-    "/image copy.png",
-    "/image copy copy copy.png",
-    "/20230105_145528.jpg",
-    "/image copy copy copy copy.png"
-  ];
-
-  // Auto-advance slideshow
-  useEffect(() => {
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => 
-          prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 5000); // Change image every 5 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [isHovered, heroImages.length]);
 
   // Filter and limit articles for featured stories
   const featuredArticles = articles
@@ -55,10 +30,6 @@ const Home: React.FC = () => {
     if (diffInDays < 7) return `${diffInDays}d ago`;
     
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentImageIndex(index);
   };
 
   // Theme-aware classes
@@ -150,26 +121,17 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Image Slideshow */}
+      {/* Hero Section with Single Image */}
       <section className={`${themeClasses.background} pt-8 pb-12 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6">
-          <div 
-            className="rounded-3xl overflow-hidden relative h-80"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {/* Image Container */}
+          <div className="rounded-3xl overflow-hidden relative h-80">
+            {/* Single Hero Image */}
             <div className="absolute inset-0">
-              {heroImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Hero slide ${index + 1}`}
-                  className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ${
-                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-              ))}
+              <img
+                src="/image copy copy.png"
+                alt="Hero image"
+                className="w-full h-full object-cover"
+              />
             </div>
             
             {/* Simple gradient overlay - only where text appears */}
@@ -196,22 +158,6 @@ const Home: React.FC = () => {
                   <span className="italic">anyone.</span>
                 </h1>
               </div>
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {heroImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentImageIndex 
-                      ? 'bg-white scale-110' 
-                      : 'bg-white/50 hover:bg-white/75'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
             </div>
           </div>
         </div>
