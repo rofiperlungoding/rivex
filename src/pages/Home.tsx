@@ -1,190 +1,353 @@
-import React from 'react';
-import { ArrowRight, Mail, Github, Instagram } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, Mail, Github, Instagram, ArrowRight, Clock, TrendingUp } from 'lucide-react';
+import { useNews } from '../hooks/useNews';
 
 const Home: React.FC = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { articles, loading, error } = useNews();
+
+  // Curated background images with consistent mood and desaturated tones
+  const backgroundImages = [
+    "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+    "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+    "https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+    "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+    "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080"
+  ];
+
+  // Auto-rotate background images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 8000); // Change every 8 seconds
+
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
+
+  const scrollToContent = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  };
+
+  const getTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+    
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  // Filter and limit articles for home page display
+  const featuredArticles = articles
+    .filter(article => 
+      article.title && 
+      article.description && 
+      article.title !== '[Removed]' &&
+      article.description !== '[Removed]'
+    )
+    .slice(0, 3);
+
   return (
     <>
-      {/* Hero Section - Clean and Minimal */}
+      {/* Hero Section with Background Carousel */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+        {/* Background Images */}
         <div className="absolute inset-0">
-          <img
-            src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
-            alt="Rivex Team"
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
-          {/* Subtle overlay for text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+          {backgroundImages.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover filter grayscale-[30%] brightness-75"
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))}
+          
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
 
-        {/* Rivex Logo - Top Right */}
-        <div className="absolute top-8 right-8 z-20">
-          <h1 className="text-white text-2xl font-light tracking-wider">
-            rivex
-          </h1>
-        </div>
+        {/* Content */}
+        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
+          <div className="animate-fade-in">
+            {/* Profile Image */}
+            <div className="w-32 h-32 mx-auto mb-8 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl">
+              <img
+                src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
+                alt="Rofi Darmawan"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+            </div>
 
-        {/* Main Content - Right Aligned */}
-        <div className="relative z-10 text-right text-white px-8 max-w-7xl mx-auto w-full">
-          <div className="ml-auto max-w-2xl">
-            <h2 className="text-6xl md:text-8xl font-light mb-8 leading-tight italic">
-              grow anywhere,<br />
-              anytime,<br />
-              anyone.
-            </h2>
+            {/* Name and Title */}
+            <h1 className="text-5xl md:text-7xl font-light mb-4 tracking-wide">
+              Rofi Darmawan
+            </h1>
+            <p className="text-xl md:text-2xl font-light mb-12 text-white/90 tracking-wide">
+              Computer Science Student
+            </p>
+
+            {/* Minimal CTA */}
+            <div className="flex justify-center space-x-8">
+              <a
+                href="mailto:opikopi32@gmail.com"
+                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
+                aria-label="Email"
+              >
+                <Mail className="h-6 w-6" />
+                <span className="hidden sm:inline font-light">Contact</span>
+              </a>
+              <a
+                href="https://github.com/rofiperlungoding"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
+                aria-label="GitHub"
+              >
+                <Github className="h-6 w-6" />
+                <span className="hidden sm:inline font-light">Work</span>
+              </a>
+              <a
+                href="https://www.instagram.com/rofidoesthings"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-6 w-6" />
+                <span className="hidden sm:inline font-light">Life</span>
+              </a>
+            </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
-          </div>
+        <button
+          onClick={scrollToContent}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 hover:text-white transition-all duration-300 animate-bounce"
+          aria-label="Scroll to content"
+        >
+          <ChevronDown className="h-8 w-8" />
+        </button>
+
+        {/* Image Indicators */}
+        <div className="absolute bottom-8 right-8 flex space-x-2">
+          {backgroundImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentImageIndex 
+                  ? 'bg-white' 
+                  : 'bg-white/40 hover:bg-white/60'
+              }`}
+              aria-label={`View image ${index + 1}`}
+            />
+          ))}
         </div>
       </section>
 
-      {/* About Section - Clean and Minimal */}
-      <section className="py-32 bg-white">
-        <div className="container mx-auto px-8 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h3 className="text-4xl md:text-5xl font-light text-gray-900 mb-8 leading-tight">
-                Innovation through
-                <span className="block text-gray-500">technology</span>
-              </h3>
-              <p className="text-lg text-gray-600 leading-relaxed font-light mb-8">
-                We believe in the power of technology to transform ideas into reality. 
-                Our mission is to create solutions that empower growth, foster innovation, 
-                and connect people across the globe.
-              </p>
-              <div className="flex items-center space-x-6">
-                <a
-                  href="mailto:contact@rivex.com"
-                  className="group flex items-center space-x-2 text-gray-900 hover:text-gray-600 transition-colors duration-300"
-                >
-                  <Mail className="h-5 w-5" />
-                  <span className="font-light">Get in touch</span>
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </a>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden">
-                <img
-                  src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Innovation workspace"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-32 bg-gray-50">
-        <div className="container mx-auto px-8 max-w-6xl">
-          <div className="text-center mb-20">
-            <h3 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
-              What we do
-            </h3>
-            <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
-              Comprehensive solutions for the digital age
+      {/* Brief Introduction Section */}
+      <section className="py-24 bg-white">
+        <div className="container-custom">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-8 tracking-wide">
+              Creating at the intersection of
+              <br />
+              <span className="text-primary-600">technology and art</span>
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed font-light">
+              Passionate about the intersection of computation and visual arts, with a deep interest in 
+              cinema, photography, and design. Constantly exploring new technologies while pursuing 
+              personal growth and development.
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center group">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:shadow-md transition-shadow duration-300">
+      {/* News Section with Modern Cards */}
+      <section className="py-20 bg-gray-50">
+        <div className="container-custom">
+          <div className="max-w-6xl mx-auto">
+            {/* Section Header */}
+            <div className="flex items-center justify-between mb-12">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-primary-100 rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-primary-600" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    Latest News
+                  </h2>
+                  <p className="text-gray-600">Stay updated with current events</p>
+                </div>
+              </div>
+              <a
+                href="/news"
+                className="group flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <span className="font-medium">View all</span>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+
+            {/* News Articles */}
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl p-6 shadow-sm animate-pulse">
+                    <div className="w-full h-48 bg-gray-200 rounded-xl mb-6"></div>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 h-5 bg-gray-200 rounded-full"></div>
+                        <div className="w-20 h-4 bg-gray-200 rounded"></div>
+                      </div>
+                      <div className="h-6 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-red-500" />
+                </div>
+                <p className="text-gray-500 font-light">Unable to load news at the moment</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredArticles.map((article, index) => (
+                  <a
+                    key={article.id}
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-gray-100"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    {/* Article Image */}
+                    {article.urlToImage ? (
+                      <div className="relative overflow-hidden h-48">
+                        <img
+                          src={article.urlToImage}
+                          alt=""
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center"><div class="w-12 h-12 bg-primary-400 rounded-lg"></div></div>';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        
+                        {/* Source Badge */}
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-xs font-semibold">
+                            {article.source.name}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-primary-400 rounded-lg"></div>
+                      </div>
+                    )}
+                    
+                    {/* Article Content */}
+                    <div className="p-6">
+                      {/* Meta Information */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center text-gray-400 text-xs">
+                          <Clock className="h-3 w-3 mr-1" />
+                          <span>{getTimeAgo(article.publishedAt)}</span>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                      </div>
+                      
+                      <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 leading-tight">
+                        {article.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 font-light">
+                        {article.description}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!loading && !error && featuredArticles.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-gray-400" />
+                </div>
+                <p className="text-gray-500 font-light">No news articles available</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Minimal Navigation to Other Sections */}
+      <section className="py-16 bg-white">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <a
+              href="/projects"
+              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
+            >
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
                 <span className="text-2xl">💻</span>
               </div>
-              <h4 className="text-xl font-light text-gray-900 mb-4">Development</h4>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Custom software solutions built with cutting-edge technologies and best practices.
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:shadow-md transition-shadow duration-300">
-                <span className="text-2xl">🚀</span>
-              </div>
-              <h4 className="text-xl font-light text-gray-900 mb-4">Innovation</h4>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Pushing boundaries with AI, machine learning, and emerging technologies.
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:shadow-md transition-shadow duration-300">
-                <span className="text-2xl">🌐</span>
-              </div>
-              <h4 className="text-xl font-light text-gray-900 mb-4">Global Reach</h4>
-              <p className="text-gray-600 font-light leading-relaxed">
-                Connecting businesses and individuals across borders through technology.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-32 bg-white">
-        <div className="container mx-auto px-8 max-w-4xl text-center">
-          <h3 className="text-4xl md:text-5xl font-light text-gray-900 mb-8">
-            Ready to grow?
-          </h3>
-          <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl mx-auto">
-            Let's discuss how we can help you achieve your goals through innovative technology solutions.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8">
-            <a
-              href="mailto:contact@rivex.com"
-              className="group flex items-center space-x-3 px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105"
-            >
-              <Mail className="h-5 w-5" />
-              <span className="font-light">Start a conversation</span>
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+              <h3 className="text-xl font-light text-gray-900 mb-2">Projects</h3>
+              <p className="text-gray-600 font-light">Explore my work</p>
             </a>
-            
-            <div className="flex items-center space-x-6">
-              <a
-                href="https://github.com/rivex"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-gray-600 transition-colors duration-300"
-              >
-                <Github className="h-6 w-6" />
-              </a>
-              <a
-                href="https://www.instagram.com/rivex"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-gray-600 transition-colors duration-300"
-              >
-                <Instagram className="h-6 w-6" />
-              </a>
-            </div>
+
+            <a
+              href="/gallery"
+              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
+            >
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
+                <span className="text-2xl">📸</span>
+              </div>
+              <h3 className="text-xl font-light text-gray-900 mb-2">Gallery</h3>
+              <p className="text-gray-600 font-light">Visual journey</p>
+            </a>
+
+            <a
+              href="/about"
+              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
+            >
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
+                <span className="text-2xl">👋</span>
+              </div>
+              <h3 className="text-xl font-light text-gray-900 mb-2">About</h3>
+              <p className="text-gray-600 font-light">Get to know me</p>
+            </a>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-12 bg-gray-50 border-t border-gray-200">
-        <div className="container mx-auto px-8 max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <h4 className="text-xl font-light text-gray-900">rivex</h4>
-              <p className="text-gray-600 font-light text-sm">Innovation & Technology</p>
-            </div>
-            <div className="text-gray-500 font-light text-sm">
-              © 2024 Rivex. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };

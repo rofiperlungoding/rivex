@@ -58,11 +58,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Only show on non-home pages */}
-      {!isHomePage && <ModernClock />}
+      {/* Modern Clock - Always visible */}
+      <ModernClock />
 
-      {/* Right Navigation - Only show on non-home pages */}
-      {!isHomePage && <RightNavigation />}
+      {/* Right Navigation */}
+      <RightNavigation />
 
       {/* Navigation Header - Hidden on home page */}
       {!isHomePage && (
@@ -76,11 +76,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-primary-600">
                   <img
                     src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
-                    alt="Rivex"
+                    alt="Rofi Darmawan"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span>Rivex</span>
+                <span>Rofi Darmawan</span>
               </Link>
 
               {/* Desktop Navigation */}
@@ -139,6 +139,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
       )}
 
+      {/* Theme Toggle for Home Page */}
+      {isHomePage && (
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
+      )}
+
       {/* Breadcrumbs - Hidden on home page and in reader mode */}
       {!isHomePage && mode !== 'reader' && (
         <div className="pt-16 bg-themed-primary border-b border-themed-primary">
@@ -163,11 +170,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      {/* Back to Top Button - Only show on non-home pages */}
-      {showBackToTop && !isHomePage && (
+      {/* Back to Top Button */}
+      {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-6 right-6 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
+          className={`fixed bottom-8 right-8 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
           aria-label="Back to top"
         >
           <ChevronUp className="h-5 w-5" />
@@ -180,7 +187,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="container-custom py-12">
             <div className="text-center">
               <p className="text-themed-tertiary">
-                © 2024 Rivex. Built with React, TypeScript, and Tailwind CSS.
+                © 2024 Rofi Darmawan. Built with React, TypeScript, and Tailwind CSS.
               </p>
             </div>
           </div>
