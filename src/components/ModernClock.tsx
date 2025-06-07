@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
 import { Cloud, Sun, CloudRain, CloudSnow } from 'lucide-react';
+import { getApiConfig } from '../utils/apiConfig';
 
 interface WeatherData {
   temperature: number;
@@ -18,9 +19,10 @@ const ModernClock: React.FC = () => {
   const { mode } = useTheme();
   const location = useLocation();
 
-  // Weather API configuration with environment variables
-  const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY || '2434caae723b409ca2b10726250706';
-  const WEATHER_BASE_URL = import.meta.env.VITE_WEATHER_API_URL || 'https://api.weatherapi.com/v1';
+  // Weather API configuration using centralized config
+  const apiConfig = getApiConfig();
+  const WEATHER_API_KEY = apiConfig.weather.apiKey;
+  const WEATHER_BASE_URL = apiConfig.weather.baseUrl;
 
   // Update time every minute
   useEffect(() => {
@@ -155,8 +157,8 @@ const ModernClock: React.FC = () => {
       }
     };
 
-    // Only fetch weather if API key is available
-    if (WEATHER_API_KEY && WEATHER_API_KEY !== 'your_weather_api_key_here') {
+    // Only fetch weather if API is configured
+    if (apiConfig.weather.isConfigured) {
       initializeWeather();
       const weatherTimer = setInterval(initializeWeather, 10 * 60 * 1000);
       
@@ -165,7 +167,7 @@ const ModernClock: React.FC = () => {
       setWeatherLoading(false);
       setWeatherError(true);
     }
-  }, [WEATHER_API_KEY, WEATHER_BASE_URL]);
+  }, [WEATHER_API_KEY, WEATHER_BASE_URL, apiConfig.weather.isConfigured]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
