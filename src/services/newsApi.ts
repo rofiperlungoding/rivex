@@ -82,7 +82,6 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     let endpoint = `${baseUrl}/top-headlines`;
     
     const params = new URLSearchParams({
-      country: 'us',
       pageSize: '20'
     });
 
@@ -94,6 +93,9 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     // Handle category filtering
     if (category && category !== 'all') {
       params.append('category', category);
+      params.append('country', 'us'); // Use US for global categories
+    } else {
+      params.append('country', 'us'); // Default to US for general news
     }
 
     // Handle search queries
@@ -155,6 +157,74 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     
     // Fallback error message
     throw new Error('Failed to fetch news. Please try again later.');
+  }
+};
+
+// Function to fetch Indonesian news specifically
+export const fetchIndonesianNews = async (category?: string): Promise<NewsResponse> => {
+  try {
+    const baseUrl = getBaseUrl();
+    const endpoint = `${baseUrl}/top-headlines`;
+    
+    const params = new URLSearchParams({
+      country: 'id', // Indonesia country code
+      pageSize: '20'
+    });
+
+    // Add API key to params in development (for proxy)
+    if (isDevelopment) {
+      params.append('apiKey', API_KEY);
+    }
+
+    // Add category if specified
+    if (category && category !== 'general') {
+      params.append('category', category);
+    }
+
+    console.log('Fetching Indonesian news from:', `${endpoint}?${params.toString()}`);
+
+    const response = await fetch(`${endpoint}?${params.toString()}`, {
+      method: 'GET',
+      headers: getHeaders(),
+      signal: AbortSignal.timeout(10000)
+    });
+
+    const data = await handleResponse(response);
+    
+    // Filter out removed articles and articles without essential content
+    const filteredArticles = data.articles.filter(article => 
+      article.title && 
+      article.description && 
+      article.title !== '[Removed]' &&
+      article.description !== '[Removed]' &&
+      article.url &&
+      article.source?.name
+    );
+
+    return {
+      ...data,
+      articles: filteredArticles
+    };
+
+  } catch (error) {
+    console.error('Error fetching Indonesian news:', error);
+    
+    // Handle specific error types
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error('Network error: Unable to connect to news service. Please check your internet connection.');
+    }
+    
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timeout: News service is taking too long to respond.');
+    }
+    
+    // Re-throw the error if it's already a handled API error
+    if (error instanceof Error) {
+      throw error;
+    }
+    
+    // Fallback error message
+    throw new Error('Failed to fetch Indonesian news. Please try again later.');
   }
 };
 

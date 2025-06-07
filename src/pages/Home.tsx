@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNews, useSearchNews } from '../hooks/useNews';
+import { useNews, useIndonesianNews } from '../hooks/useNews';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 import RightNavigation from '../components/RightNavigation';
@@ -9,12 +9,12 @@ const Home: React.FC = () => {
   const { articles, loading, error } = useNews();
   const { mode } = useTheme();
   
-  // Search for Indonesian news
+  // Fetch Indonesian news specifically
   const { 
     articles: indonesianArticles, 
     loading: indonesianLoading, 
     error: indonesianError 
-  } = useSearchNews('Indonesia Indonesian Jakarta Bali economy politics government president');
+  } = useIndonesianNews();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -58,13 +58,7 @@ const Home: React.FC = () => {
       article.title && 
       article.description && 
       article.title !== '[Removed]' &&
-      article.description !== '[Removed]' &&
-      (article.title.toLowerCase().includes('indonesia') || 
-       article.title.toLowerCase().includes('indonesian') ||
-       article.description.toLowerCase().includes('indonesia') ||
-       article.title.toLowerCase().includes('jakarta') ||
-       article.title.toLowerCase().includes('bali') ||
-       article.description.toLowerCase().includes('jakarta'))
+      article.description !== '[Removed]'
     )
     .slice(0, 6);
 
@@ -300,6 +294,9 @@ const Home: React.FC = () => {
                 <Globe className="h-16 w-16 text-white/50 mx-auto mb-6" />
                 <h4 className="text-xl font-semibold text-white mb-2">No Indonesian News Available</h4>
                 <p className="text-white/80 text-lg">Unable to load Indonesian news at the moment</p>
+                {indonesianError && (
+                  <p className="text-white/60 text-sm mt-2">{indonesianError}</p>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -361,17 +358,17 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* News Section */}
+      {/* Global News Section */}
       <section className={`${themeClasses.background} py-12 transition-colors duration-300`}>
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold ${themeClasses.text} mb-2 transition-colors duration-300`}>
-              NEWS
+              GLOBAL NEWS
             </h2>
             <div className={`w-24 h-1 ${themeClasses.accent} mx-auto mb-6`}></div>
             <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
-              Stay updated with the latest news and developments
+              Stay updated with the latest global news and developments
             </p>
           </div>
 
@@ -393,6 +390,9 @@ const Home: React.FC = () => {
             <div className="text-center py-12">
               <div className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Unable to load news articles</div>
               <p className={`${themeClasses.secondaryText} opacity-70 mt-2 transition-colors duration-300`}>Please try again later</p>
+              {error && (
+                <p className={`${themeClasses.secondaryText} opacity-60 text-sm mt-2 transition-colors duration-300`}>{error}</p>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

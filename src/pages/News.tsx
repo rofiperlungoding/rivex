@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Calendar, Clock, ExternalLink, Filter, TrendingUp, Globe, Bookmark, Users, Gamepad2, Heart, Cpu, MapPin } from 'lucide-react';
-import { useNews, useSearchNews } from '../hooks/useNews';
+import { useNews, useIndonesianNews, useSearchNews } from '../hooks/useNews';
 import { useTheme } from '../contexts/ThemeContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -17,23 +17,23 @@ const News: React.FC = () => {
   // Global news categories
   const globalCategories = [
     { value: 'general', label: 'General', icon: <Globe className="h-4 w-4" />, color: 'bg-gray-100 text-gray-700' },
-    { value: 'politics', label: 'Politics', icon: <Users className="h-4 w-4" />, color: 'bg-blue-100 text-blue-700' },
-    { value: 'world', label: 'World', icon: <Globe className="h-4 w-4" />, color: 'bg-green-100 text-green-700' },
+    { value: 'business', label: 'Business', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-blue-100 text-blue-700' },
     { value: 'entertainment', label: 'Entertainment', icon: <Gamepad2 className="h-4 w-4" />, color: 'bg-purple-100 text-purple-700' },
-    { value: 'sports', label: 'Sports', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-orange-100 text-orange-700' },
     { value: 'health', label: 'Health', icon: <Heart className="h-4 w-4" />, color: 'bg-red-100 text-red-700' },
-    { value: 'technology', label: 'AI & Tech', icon: <Cpu className="h-4 w-4" />, color: 'bg-indigo-100 text-indigo-700' },
+    { value: 'science', label: 'Science', icon: <Cpu className="h-4 w-4" />, color: 'bg-indigo-100 text-indigo-700' },
+    { value: 'sports', label: 'Sports', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-orange-100 text-orange-700' },
+    { value: 'technology', label: 'Technology', icon: <Cpu className="h-4 w-4" />, color: 'bg-green-100 text-green-700' },
   ];
 
-  // Indonesian news categories (using search terms)
+  // Indonesian news categories
   const indonesianCategories = [
-    { value: 'general', label: 'General', searchTerm: 'Indonesia Indonesian Jakarta', icon: <Globe className="h-4 w-4" />, color: 'bg-gray-100 text-gray-700' },
-    { value: 'politics', label: 'Politics', searchTerm: 'Indonesia politics government president Jokowi', icon: <Users className="h-4 w-4" />, color: 'bg-blue-100 text-blue-700' },
-    { value: 'world', label: 'World', searchTerm: 'Indonesia international foreign relations ASEAN', icon: <Globe className="h-4 w-4" />, color: 'bg-green-100 text-green-700' },
-    { value: 'entertainment', label: 'Entertainment', searchTerm: 'Indonesia entertainment celebrity film music', icon: <Gamepad2 className="h-4 w-4" />, color: 'bg-purple-100 text-purple-700' },
-    { value: 'sports', label: 'Sports', searchTerm: 'Indonesia sports football badminton athlete', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-orange-100 text-orange-700' },
-    { value: 'health', label: 'Health', searchTerm: 'Indonesia health medical hospital COVID', icon: <Heart className="h-4 w-4" />, color: 'bg-red-100 text-red-700' },
-    { value: 'technology', label: 'AI & Tech', searchTerm: 'Indonesia technology startup digital AI', icon: <Cpu className="h-4 w-4" />, color: 'bg-indigo-100 text-indigo-700' },
+    { value: 'general', label: 'General', icon: <Globe className="h-4 w-4" />, color: 'bg-gray-100 text-gray-700' },
+    { value: 'business', label: 'Business', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-blue-100 text-blue-700' },
+    { value: 'entertainment', label: 'Entertainment', icon: <Gamepad2 className="h-4 w-4" />, color: 'bg-purple-100 text-purple-700' },
+    { value: 'health', label: 'Health', icon: <Heart className="h-4 w-4" />, color: 'bg-red-100 text-red-700' },
+    { value: 'science', label: 'Science', icon: <Cpu className="h-4 w-4" />, color: 'bg-indigo-100 text-indigo-700' },
+    { value: 'sports', label: 'Sports', icon: <TrendingUp className="h-4 w-4" />, color: 'bg-orange-100 text-orange-700' },
+    { value: 'technology', label: 'Technology', icon: <Cpu className="h-4 w-4" />, color: 'bg-green-100 text-green-700' },
   ];
 
   // Fetch global news based on category
@@ -44,14 +44,13 @@ const News: React.FC = () => {
     refetch: refetchGlobal 
   } = useNews(selectedGlobalCategory === 'general' ? undefined : selectedGlobalCategory);
 
-  // Fetch Indonesian news based on search terms
-  const currentIndonesianCategory = indonesianCategories.find(cat => cat.value === selectedIndonesianCategory);
+  // Fetch Indonesian news based on category
   const { 
     articles: indonesianArticles, 
     loading: indonesianLoading, 
     error: indonesianError, 
     refetch: refetchIndonesian 
-  } = useSearchNews(currentIndonesianCategory?.searchTerm || 'Indonesia');
+  } = useIndonesianNews(selectedIndonesianCategory === 'general' ? undefined : selectedIndonesianCategory);
 
   // Search news
   const { 
@@ -115,27 +114,13 @@ const News: React.FC = () => {
   };
 
   const filteredArticles = useMemo(() => {
-    let filtered = articles.filter(article => 
+    return articles.filter(article => 
       article.title && 
       article.description && 
       article.title !== '[Removed]' &&
       article.description !== '[Removed]'
     );
-
-    // For Indonesian tab, further filter to ensure Indonesian relevance
-    if (activeTab === 'indonesian' && !isSearchMode) {
-      filtered = filtered.filter(article => 
-        article.title.toLowerCase().includes('indonesia') || 
-        article.title.toLowerCase().includes('indonesian') ||
-        article.description.toLowerCase().includes('indonesia') ||
-        article.title.toLowerCase().includes('jakarta') ||
-        article.title.toLowerCase().includes('bali') ||
-        article.description.toLowerCase().includes('jakarta')
-      );
-    }
-
-    return filtered;
-  }, [articles, activeTab, isSearchMode]);
+  }, [articles]);
 
   const getCurrentCategory = () => {
     if (activeTab === 'global') {

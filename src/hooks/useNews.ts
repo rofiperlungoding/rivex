@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchTopHeadlines, validateNewsApiConfig } from '../services/newsApi';
+import { fetchTopHeadlines, fetchIndonesianNews, validateNewsApiConfig } from '../services/newsApi';
 
 interface NewsArticle {
   id: string;
@@ -58,6 +58,68 @@ export const useNews = (category?: string): UseNewsReturn => {
       
       // Log error for debugging
       console.error('News fetch error:', {
+        category,
+        error: errorMessage,
+        timestamp: new Date().toISOString()
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, [category]);
+
+  const refetch = () => {
+    fetchNews();
+  };
+
+  return {
+    articles,
+    loading,
+    error,
+    refetch,
+  };
+};
+
+export const useIndonesianNews = (category?: string): UseNewsReturn => {
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchNews = async () => {
+    // Check if API is properly configured
+    if (!validateNewsApiConfig()) {
+      setError('News API is not properly configured. Please check your API key.');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetchIndonesianNews(category);
+      
+      // Create articles with unique IDs
+      const articlesWithIds = response.articles.map((article, index) => ({
+        ...article,
+        id: `id-${article.url}-${index}-${Date.now()}` // More unique ID generation
+      }));
+      
+      setArticles(articlesWithIds);
+      
+      // Log success for debugging
+      console.log(`Successfully fetched ${articlesWithIds.length} Indonesian articles for category: ${category || 'all'}`);
+      
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Indonesian news';
+      setError(errorMessage);
+      setArticles([]);
+      
+      // Log error for debugging
+      console.error('Indonesian news fetch error:', {
         category,
         error: errorMessage,
         timestamp: new Date().toISOString()
