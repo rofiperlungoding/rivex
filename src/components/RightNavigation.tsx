@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { ChevronRight, ChevronLeft, Home, User, Briefcase, Newspaper, Camera, Clock } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Home, User, Newspaper, Clock } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface NavigationItem {
@@ -30,22 +30,10 @@ const RightNavigation: React.FC = () => {
       description: 'Learn about me'
     },
     { 
-      name: 'Projects', 
-      path: '/projects', 
-      icon: <Briefcase className="h-4 w-4" />,
-      description: 'View my work'
-    },
-    { 
       name: 'News', 
       path: '/news', 
       icon: <Newspaper className="h-4 w-4" />,
       description: 'Latest updates'
-    },
-    { 
-      name: 'Gallery', 
-      path: '/gallery', 
-      icon: <Camera className="h-4 w-4" />,
-      description: 'Visual journey'
     },
     { 
       name: 'Timeline', 

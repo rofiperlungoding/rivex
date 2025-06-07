@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNews } from '../hooks/useNews';
+import { useTheme } from '../contexts/ThemeContext';
+import ThemeToggle from '../components/ThemeToggle';
+import RightNavigation from '../components/RightNavigation';
 
 const Home: React.FC = () => {
   const { articles, loading, error } = useNews();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const { mode } = useTheme();
 
   // Hero images array
   const heroImages = [
@@ -59,6 +63,12 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Theme Toggle and Right Navigation for Home Page */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      <RightNavigation />
+
       {/* Header */}
       <header className="bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-6">
@@ -77,11 +87,11 @@ const Home: React.FC = () => {
               <a href="/about" className="text-gray-700 hover:text-black font-medium transition-colors">
                 About
               </a>
-              <a href="/projects" className="text-gray-700 hover:text-black font-medium transition-colors">
-                Project
-              </a>
               <a href="/news" className="text-gray-700 hover:text-black font-medium transition-colors">
                 News
+              </a>
+              <a href="/timeline" className="text-gray-700 hover:text-black font-medium transition-colors">
+                Timeline
               </a>
             </nav>
           </div>

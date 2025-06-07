@@ -21,9 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigationItems = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
-    { name: 'Projects', path: '/projects' },
     { name: 'News', path: '/news' },
-    { name: 'Gallery', path: '/gallery' },
     { name: 'Timeline', path: '/timeline' },
   ];
 
