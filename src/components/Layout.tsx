@@ -58,11 +58,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Always visible with improved positioning */}
-      <ModernClock />
+      {/* Modern Clock - Only show on non-home pages */}
+      {!isHomePage && <ModernClock />}
 
-      {/* Right Navigation */}
-      <RightNavigation />
+      {/* Right Navigation - Only show on non-home pages */}
+      {!isHomePage && <RightNavigation />}
 
       {/* Navigation Header - Hidden on home page */}
       {!isHomePage && (
@@ -139,13 +139,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
       )}
 
-      {/* Theme Toggle for Home Page - Positioned to avoid clock conflict */}
-      {isHomePage && (
-        <div className="fixed top-6 right-6 z-50">
-          <ThemeToggle />
-        </div>
-      )}
-
       {/* Breadcrumbs - Hidden on home page and in reader mode */}
       {!isHomePage && mode !== 'reader' && (
         <div className="pt-16 bg-themed-primary border-b border-themed-primary">
@@ -170,8 +163,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      {/* Back to Top Button - Positioned to avoid conflicts */}
-      {showBackToTop && (
+      {/* Back to Top Button - Only show on non-home pages */}
+      {showBackToTop && !isHomePage && (
         <button
           onClick={scrollToTop}
           className={`fixed bottom-6 right-6 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
