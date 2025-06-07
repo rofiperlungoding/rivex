@@ -1,6 +1,4 @@
-// Use environment variables for API configuration
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY || '13f426023f25454ba1d56c132ca2b120';
-const BASE_URL = import.meta.env.VITE_NEWS_API_URL || 'https://newsapi.org/v2';
+import { getApiConfig } from '../utils/apiConfig';
 
 export interface NewsArticle {
   title: string;
@@ -21,9 +19,11 @@ export interface NewsResponse {
 
 export const fetchTopHeadlines = async (category?: string, searchQuery?: string): Promise<NewsResponse> => {
   try {
-    let endpoint = `${BASE_URL}/top-headlines`;
+    const { apiKey, baseUrl } = getApiConfig();
+    
+    let endpoint = `${baseUrl}/top-headlines`;
     const params = new URLSearchParams({
-      apiKey: API_KEY,
+      apiKey: apiKey,
       country: 'us',
       pageSize: '20'
     });
@@ -33,7 +33,7 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
     }
 
     if (searchQuery && searchQuery.trim()) {
-      endpoint = `${BASE_URL}/everything`;
+      endpoint = `${baseUrl}/everything`;
       params.set('q', searchQuery.trim());
       params.set('sortBy', 'publishedAt');
       params.set('language', 'en');
