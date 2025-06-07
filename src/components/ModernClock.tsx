@@ -43,7 +43,7 @@ const ModernClock: React.FC = () => {
     const fetchWeatherByCoords = async (lat: number, lon: number) => {
       try {
         const response = await fetch(
-          `${WEATHER_BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
+          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${lat},${lon}&aqi=no`
         );
         
         if (!response.ok) {
@@ -53,14 +53,14 @@ const ModernClock: React.FC = () => {
         const data = await response.json();
         
         return {
-          temperature: Math.round(data.main.temp),
-          condition: data.weather[0].main,
-          description: data.weather[0].description,
-          humidity: data.main.humidity,
-          windSpeed: Math.round(data.wind.speed * 3.6), // Convert m/s to km/h
-          location: data.name,
-          icon: data.weather[0].icon,
-          feelsLike: Math.round(data.main.feels_like)
+          temperature: Math.round(data.current.temp_c),
+          condition: data.current.condition.text,
+          description: data.current.condition.text,
+          humidity: data.current.humidity,
+          windSpeed: Math.round(data.current.wind_kph),
+          location: data.location.name,
+          icon: data.current.condition.icon,
+          feelsLike: Math.round(data.current.feelslike_c)
         };
       } catch (error) {
         console.error('Weather fetch error:', error);
@@ -71,7 +71,7 @@ const ModernClock: React.FC = () => {
     const fetchWeatherByCity = async (city: string) => {
       try {
         const response = await fetch(
-          `${WEATHER_BASE_URL}/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`
+          `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${city}&aqi=no`
         );
         
         if (!response.ok) {
@@ -81,14 +81,14 @@ const ModernClock: React.FC = () => {
         const data = await response.json();
         
         return {
-          temperature: Math.round(data.main.temp),
-          condition: data.weather[0].main,
-          description: data.weather[0].description,
-          humidity: data.main.humidity,
-          windSpeed: Math.round(data.wind.speed * 3.6),
-          location: data.name,
-          icon: data.weather[0].icon,
-          feelsLike: Math.round(data.main.feels_like)
+          temperature: Math.round(data.current.temp_c),
+          condition: data.current.condition.text,
+          description: data.current.condition.text,
+          humidity: data.current.humidity,
+          windSpeed: Math.round(data.current.wind_kph),
+          location: data.location.name,
+          icon: data.current.condition.icon,
+          feelsLike: Math.round(data.current.feelslike_c)
         };
       } catch (error) {
         console.error('Weather fetch error:', error);
@@ -189,13 +189,23 @@ const ModernClock: React.FC = () => {
     // More comprehensive weather condition mapping
     switch (condition.toLowerCase()) {
       case 'clear':
+      case 'sunny':
         return <Sun {...iconProps} />;
       case 'clouds':
+      case 'cloudy':
+      case 'overcast':
+      case 'partly cloudy':
         return <Cloud {...iconProps} />;
       case 'rain':
       case 'drizzle':
+      case 'light rain':
+      case 'moderate rain':
+      case 'heavy rain':
         return <CloudRain {...iconProps} />;
       case 'snow':
+      case 'light snow':
+      case 'moderate snow':
+      case 'heavy snow':
         return <CloudSnow {...iconProps} />;
       case 'thunderstorm':
         return <CloudRain {...iconProps} />;
