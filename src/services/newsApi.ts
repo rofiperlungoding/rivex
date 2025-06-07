@@ -1,4 +1,5 @@
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY || '13f426023f25454ba1d56c132ca2b120';
+const NEWSDATA_API_KEY = import.meta.env.VITE_NEWSDATA_API_KEY || 'pub_e8f901ac11944d30814317cf83ae48e7';
 const isDevelopment = import.meta.env.DEV;
 
 // Use proxy in development, direct API in production
@@ -9,12 +10,12 @@ const getBaseUrl = () => {
   return import.meta.env.VITE_NEWS_API_URL || 'https://newsapi.org/v2';
 };
 
-// Indonesian News API base URL - use proxy in development
+// Newsdata.io API base URL - use proxy in development
 const getIndonesianBaseUrl = () => {
   if (isDevelopment) {
     return '/api/indonesian-news';
   }
-  return 'https://berita-indo-api-next.vercel.app/api';
+  return 'https://newsdata.io/api/1';
 };
 
 interface NewsArticle {
@@ -35,22 +36,19 @@ interface NewsResponse {
   status: string;
 }
 
-interface IndonesianNewsResponse {
-  success: boolean;
-  message: string;
-  data: {
-    link: string;
-    description: string;
+interface NewsdataResponse {
+  status: string;
+  totalResults: number;
+  results: Array<{
     title: string;
-    image: string;
-    posts: Array<{
-      link: string;
-      title: string;
-      pubDate: string;
-      description: string;
-      thumbnail: string;
-    }>;
-  };
+    description: string;
+    link: string;
+    image_url: string;
+    pubDate: string;
+    source_id: string;
+    creator: string[];
+  }>;
+  nextPage?: string;
 }
 
 // Helper function to create request headers
@@ -101,30 +99,32 @@ const handleResponse = async (response: Response): Promise<NewsResponse> => {
   return data;
 };
 
-// Helper function to handle Indonesian News API responses
-const handleIndonesianResponse = async (response: Response): Promise<IndonesianNewsResponse> => {
+// Helper function to handle Newsdata.io API responses
+const handleNewsdataResponse = async (response: Response): Promise<NewsdataResponse> => {
   if (!response.ok) {
     const errorText = await response.text();
-    console.error('Indonesian News API Response Error:', {
+    console.error('Newsdata.io API Response Error:', {
       status: response.status,
       statusText: response.statusText,
       body: errorText
     });
     
     switch (response.status) {
+      case 401:
+        throw new Error('Invalid Newsdata.io API key. Please check your configuration.');
       case 429:
         throw new Error('API rate limit exceeded. Please try again later.');
       case 500:
-        throw new Error('Indonesian News API server error. Please try again later.');
+        throw new Error('Newsdata.io server error. Please try again later.');
       default:
-        throw new Error(`Indonesian News API request failed with status ${response.status}: ${response.statusText}`);
+        throw new Error(`Newsdata.io API request failed with status ${response.status}: ${response.statusText}`);
     }
   }
 
   const data = await response.json();
   
-  if (!data.success) {
-    throw new Error(data.message || 'Indonesian News API returned an error');
+  if (data.status !== 'success') {
+    throw new Error(data.message || 'Newsdata.io API returned an error');
   }
 
   return data;
@@ -215,27 +215,40 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
   }
 };
 
-// Function to fetch Indonesian news specifically
+// Function to fetch Indonesian news using Newsdata.io API
 export const fetchIndonesianNews = async (category?: string): Promise<NewsResponse> => {
   try {
-    // Map categories to Indonesian news API endpoints based on berita.id structure
-    const categoryMap: Record<string, string> = {
-      'general': 'cnn-news',
-      'business': 'cnbc-news', 
-      'technology': 'antara-news/tekno',
-      'sports': 'antara-news/olahraga',
-      'entertainment': 'antara-news/hiburan',
-      'health': 'antara-news/lifestyle',
-      'science': 'antara-news/tekno',
-      'politics': 'antara-news/politik',
-      'economy': 'antara-news/ekonomi'
-    };
-
-    // Default to CNN news if category not found
-    const endpoint = categoryMap[category || 'general'] || 'cnn-news';
     const baseUrl = getIndonesianBaseUrl();
-    const url = `${baseUrl}/${endpoint}`;
+    const endpoint = `${baseUrl}/news`;
+    
+    const params = new URLSearchParams({
+      apikey: NEWSDATA_API_KEY,
+      country: 'id',
+      language: 'id',
+      size: '20'
+    });
 
+    // Map categories to Newsdata.io categories
+    if (category && category !== 'all') {
+      const categoryMap: Record<string, string> = {
+        'general': 'top',
+        'business': 'business',
+        'technology': 'technology',
+        'sports': 'sports',
+        'entertainment': 'entertainment',
+        'health': 'health',
+        'science': 'science',
+        'politics': 'politics',
+        'economy': 'business'
+      };
+      
+      const mappedCategory = categoryMap[category];
+      if (mappedCategory) {
+        params.append('category', mappedCategory);
+      }
+    }
+
+    const url = `${endpoint}?${params.toString()}`;
     console.log('Fetching Indonesian news from:', url);
 
     const response = await fetch(url, {
@@ -248,19 +261,19 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
       signal: AbortSignal.timeout(15000) // 15 second timeout
     });
 
-    const data = await handleIndonesianResponse(response);
+    const data = await handleNewsdataResponse(response);
     
-    // Transform Indonesian news data to match our NewsArticle interface
-    const transformedArticles: NewsArticle[] = data.data.posts.map((post, index) => ({
-      title: post.title || 'No Title',
-      description: post.description || post.title || 'No Description',
-      url: post.link || '#',
-      urlToImage: post.thumbnail || '',
-      publishedAt: post.pubDate || new Date().toISOString(),
+    // Transform Newsdata.io response to match our NewsArticle interface
+    const transformedArticles: NewsArticle[] = data.results.map((article) => ({
+      title: article.title || 'No Title',
+      description: article.description || article.title || 'No Description',
+      url: article.link || '#',
+      urlToImage: article.image_url || '',
+      publishedAt: article.pubDate || new Date().toISOString(),
       source: {
-        name: data.data.title || 'Indonesian News'
+        name: article.source_id || 'Indonesian News'
       },
-      author: data.data.title || 'Indonesian News'
+      author: article.creator?.join(', ') || article.source_id || 'Indonesian News'
     }));
 
     // Filter out articles without essential content
@@ -274,7 +287,7 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
 
     return {
       articles: filteredArticles,
-      totalResults: filteredArticles.length,
+      totalResults: data.totalResults || filteredArticles.length,
       status: 'ok'
     };
 
@@ -372,11 +385,22 @@ export const validateNewsApiConfig = (): boolean => {
   return true;
 };
 
+// Utility function to validate Newsdata.io API configuration
+export const validateNewsdataApiConfig = (): boolean => {
+  if (!NEWSDATA_API_KEY || NEWSDATA_API_KEY === 'your_newsdata_api_key_here') {
+    console.warn('Newsdata.io API key is not configured properly');
+    return false;
+  }
+  return true;
+};
+
 // Export configuration for debugging
 const getNewsApiConfig = () => ({
   apiKey: API_KEY ? `${API_KEY.substring(0, 8)}...` : 'Not configured',
+  newsdataApiKey: NEWSDATA_API_KEY ? `${NEWSDATA_API_KEY.substring(0, 8)}...` : 'Not configured',
   baseUrl: getBaseUrl(),
   indonesianNewsBaseUrl: getIndonesianBaseUrl(),
   isDevelopment,
-  isConfigured: validateNewsApiConfig()
+  isConfigured: validateNewsApiConfig(),
+  isNewsdataConfigured: validateNewsdataApiConfig()
 });

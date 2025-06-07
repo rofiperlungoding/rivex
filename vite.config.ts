@@ -30,9 +30,9 @@ export default defineConfig(({ mode }) => ({
         },
       },
       '/api/indonesian-news': {
-        target: 'https://berita-indo-api-next.vercel.app',
+        target: 'https://newsdata.io',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/indonesian-news/, '/api'),
+        rewrite: (path) => path.replace(/^\/api\/indonesian-news/, '/api/1'),
         headers: {
           'User-Agent': 'Portfolio-Website/1.0',
           'Accept': 'application/json',
@@ -40,13 +40,13 @@ export default defineConfig(({ mode }) => ({
         },
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
-            console.log('Indonesian News API proxy error:', err);
+            console.log('Newsdata.io API proxy error:', err);
           });
           proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Indonesian News API request:', req.method, req.url);
+            console.log('Newsdata.io API request:', req.method, req.url);
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Indonesian News API response:', proxyRes.statusCode, req.url);
+            console.log('Newsdata.io API response:', proxyRes.statusCode, req.url);
           });
         },
       },
@@ -85,6 +85,10 @@ export default defineConfig(({ mode }) => ({
     __WEATHER_API_CONFIGURED__: JSON.stringify(
       process.env.VITE_WEATHER_API_KEY && 
       process.env.VITE_WEATHER_API_KEY !== 'your_weather_api_key_here'
+    ),
+    __NEWSDATA_API_CONFIGURED__: JSON.stringify(
+      process.env.VITE_NEWSDATA_API_KEY && 
+      process.env.VITE_NEWSDATA_API_KEY !== 'your_newsdata_api_key_here'
     )
   }
 }));
