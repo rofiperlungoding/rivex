@@ -47,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return item?.name || 'Home';
   };
 
-  // Don't show header on home page
+  // Check if we're on the new home page
   const isHomePage = location.pathname === '/';
 
   // Hide certain elements in reader mode
@@ -58,13 +58,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Always visible */}
-      <ModernClock />
+      {/* Modern Clock - Only show on non-home pages */}
+      {!isHomePage && <ModernClock />}
 
-      {/* Right Navigation */}
-      <RightNavigation />
+      {/* Right Navigation - Only show on non-home pages */}
+      {!isHomePage && <RightNavigation />}
 
-      {/* Navigation Header - Hidden on home page */}
+      {/* Navigation Header - Only show on non-home pages */}
       {!isHomePage && (
         <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${readerHideClass} ${
           isScrolled ? 'bg-themed-primary/95 backdrop-blur-sm shadow-sm' : 'bg-themed-primary'
@@ -139,14 +139,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
       )}
 
-      {/* Theme Toggle for Home Page */}
-      {isHomePage && (
-        <div className="fixed top-4 right-4 z-50">
-          <ThemeToggle />
-        </div>
-      )}
-
-      {/* Breadcrumbs - Hidden on home page and in reader mode */}
+      {/* Breadcrumbs - Only show on non-home pages and not in reader mode */}
       {!isHomePage && mode !== 'reader' && (
         <div className="pt-16 bg-themed-primary border-b border-themed-primary">
           <div className="container-custom py-4">
@@ -166,12 +159,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Main Content */}
-      <main className={`${isHomePage ? '' : 'animate-fade-in'} ${mode === 'reader' ? 'reader-content' : ''}`}>
+      <main className={`${!isHomePage ? 'animate-fade-in' : ''} ${mode === 'reader' ? 'reader-content' : ''}`}>
         {children}
       </main>
 
-      {/* Back to Top Button */}
-      {showBackToTop && (
+      {/* Back to Top Button - Only show on non-home pages */}
+      {!isHomePage && showBackToTop && (
         <button
           onClick={scrollToTop}
           className={`fixed bottom-8 right-8 p-3 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-40 ${readerHideClass}`}
@@ -181,7 +174,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </button>
       )}
 
-      {/* Footer - Hidden on home page and in reader mode */}
+      {/* Footer - Only show on non-home pages and not in reader mode */}
       {!isHomePage && mode !== 'reader' && (
         <footer className="bg-themed-tertiary text-themed-primary">
           <div className="container-custom py-12">
