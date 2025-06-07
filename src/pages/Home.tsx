@@ -55,37 +55,37 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Rounded Card */}
+      {/* Hero Section with Full Screen Image */}
       <section className="bg-white pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-700 rounded-3xl overflow-hidden relative">
-            <div className="flex items-center justify-between p-8">
-              {/* Left side - Full Image */}
-              <div className="flex-1">
-                <img
-                  src="/image copy copy.png"
-                  alt="Team achievement"
-                  className="w-full h-64 object-cover rounded-2xl"
-                />
+          <div className="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-700 rounded-3xl overflow-hidden relative h-80">
+            {/* Full Background Image */}
+            <div className="absolute inset-0">
+              <img
+                src="/image copy copy.png"
+                alt="Team achievement"
+                className="w-full h-full object-cover"
+              />
+              {/* Gradient Overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/80 via-orange-500/60 to-amber-700/80"></div>
+            </div>
+            
+            {/* Content Overlay */}
+            <div className="relative z-10 flex items-center justify-between h-full p-8">
+              {/* Top right logo */}
+              <div className="absolute top-8 right-8 text-white font-bold text-lg">
+                rivex
               </div>
               
-              {/* Right side - Text and Logo */}
-              <div className="flex-1 flex flex-col items-end justify-between h-64 pl-8">
-                {/* Top right logo */}
-                <div className="text-white font-bold text-lg">
-                  rivex
-                </div>
-                
-                {/* Bottom right text */}
-                <div className="text-right">
-                  <h1 className="text-white text-4xl font-light leading-tight">
-                    grow anywhere,
-                    <br />
-                    <span className="italic">anytime,</span>
-                    <br />
-                    <span className="italic">anyone.</span>
-                  </h1>
-                </div>
+              {/* Bottom right text */}
+              <div className="absolute bottom-8 right-8 text-right">
+                <h1 className="text-white text-4xl font-light leading-tight">
+                  grow anywhere,
+                  <br />
+                  <span className="italic">anytime,</span>
+                  <br />
+                  <span className="italic">anyone.</span>
+                </h1>
               </div>
             </div>
           </div>
