@@ -86,8 +86,8 @@ const Home: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
-      {/* Theme Toggle and Right Navigation for Home Page */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Theme Toggle and Right Navigation for Home Page - Positioned lower */}
+      <div className="fixed top-20 right-4 z-50">
         <ThemeToggle />
       </div>
       <RightNavigation />
