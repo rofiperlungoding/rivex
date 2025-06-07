@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Mail, Github, Instagram, ArrowRight, Clock, TrendingUp } from 'lucide-react';
+import { ChevronDown, Mail, Github, Instagram, ArrowRight, ExternalLink, Code, Palette, Zap } from 'lucide-react';
 import { useNews } from '../hooks/useNews';
 
 const Home: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { articles, loading, error } = useNews();
 
-  // Curated background images with consistent mood and desaturated tones
+  // Dark, professional background images
   const backgroundImages = [
     "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
     "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-    "https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-    "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-    "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080"
+    "https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080"
   ];
 
   // Auto-rotate background images
@@ -21,7 +19,7 @@ const Home: React.FC = () => {
       setCurrentImageIndex((prevIndex) => 
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 8000); // Change every 8 seconds
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [backgroundImages.length]);
@@ -33,106 +31,100 @@ const Home: React.FC = () => {
     });
   };
 
-  const getTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays}d ago`;
-    
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  };
-
-  // Filter and limit articles for home page display
-  const featuredArticles = articles
-    .filter(article => 
-      article.title && 
-      article.description && 
-      article.title !== '[Removed]' &&
-      article.description !== '[Removed]'
-    )
-    .slice(0, 3);
+  // Featured projects data
+  const featuredProjects = [
+    {
+      id: 1,
+      title: "Convers-AI",
+      description: "Convers-AI is an advanced conversational AI platform offering a variety of tools for personalizing and optimizing customer interactions.",
+      image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+      tech: ["React", "Node.js", "OpenAI", "MongoDB"],
+      category: "AI Platform"
+    },
+    {
+      id: 2,
+      title: "AI SASS",
+      description: "A comprehensive Software-as-a-Service platform powered by artificial intelligence for business automation and analytics.",
+      image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800",
+      tech: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
+      category: "SaaS Platform"
+    },
+    {
+      id: 3,
+      title: "Pixel Perfect",
+      description: "Pixel Perfect is an image optimization and compression tool that converts and compresses images while maintaining quality.",
+      image: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
+      tech: ["Vue.js", "WebAssembly", "Canvas API", "PWA"],
+      category: "Image Tool"
+    }
+  ];
 
   return (
     <>
-      {/* Hero Section with Background Carousel */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Images */}
+      {/* Hero Section with Dark Background */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900">
+        {/* Background Images with Dark Overlay */}
         <div className="absolute inset-0">
           {backgroundImages.map((image, index) => (
             <div
               key={index}
               className={`absolute inset-0 transition-opacity duration-2000 ease-in-out ${
-                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                index === currentImageIndex ? 'opacity-30' : 'opacity-0'
               }`}
             >
               <img
                 src={image}
                 alt=""
-                className="w-full h-full object-cover filter grayscale-[30%] brightness-75"
+                className="w-full h-full object-cover filter grayscale"
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
             </div>
           ))}
           
-          {/* Overlay for text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-gray-900 bg-opacity-80"></div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-left text-white px-6 max-w-6xl mx-auto w-full">
           <div className="animate-fade-in">
-            {/* Profile Image */}
-            <div className="w-32 h-32 mx-auto mb-8 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl">
-              <img
-                src="/WhatsApp Image 2025-05-18 at 06.19.27_919beb6a.jpg"
-                alt="Rofi Darmawan"
-                className="w-full h-full object-cover"
-                loading="eager"
-              />
+            {/* Main Heading */}
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-8xl font-light mb-4 tracking-tight">
+                Hey, I'm <span className="text-white">Rivex</span>,
+              </h1>
+              <div className="flex items-center space-x-4 mb-8">
+                <h2 className="text-4xl md:text-6xl font-light">
+                  A Full-Stack
+                </h2>
+                <div className="relative">
+                  <span className="text-4xl md:text-6xl font-light text-blue-400 bg-blue-900/30 px-4 py-2 rounded-lg backdrop-blur-sm border border-blue-500/30">
+                    Developer.
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Name and Title */}
-            <h1 className="text-5xl md:text-7xl font-light mb-4 tracking-wide">
-              Rofi Darmawan
-            </h1>
-            <p className="text-xl md:text-2xl font-light mb-12 text-white/90 tracking-wide">
-              Computer Science Student
+            {/* Description */}
+            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mb-12 leading-relaxed font-light">
+              Passionate developer with a knack for creating dynamic web applications, 
+              exploring cutting-edge technologies, and engaging in outdoor adventures.
             </p>
 
-            {/* Minimal CTA */}
-            <div className="flex justify-center space-x-8">
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-4 mb-16">
               <a
-                href="mailto:opikopi32@gmail.com"
-                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="Email"
+                href="/about"
+                className="px-8 py-4 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-gray-600"
               >
-                <Mail className="h-6 w-6" />
-                <span className="hidden sm:inline font-light">Contact</span>
+                About
               </a>
               <a
-                href="https://github.com/rofiperlungoding"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="GitHub"
+                href="mailto:rivex@example.com"
+                className="flex items-center space-x-2 px-8 py-4 bg-transparent text-white rounded-lg font-medium hover:bg-white/10 transition-all duration-300 border border-gray-600 hover:border-gray-500"
               >
-                <Github className="h-6 w-6" />
-                <span className="hidden sm:inline font-light">Work</span>
-              </a>
-              <a
-                href="https://www.instagram.com/rofidoesthings"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-6 w-6" />
-                <span className="hidden sm:inline font-light">Life</span>
+                <Mail className="h-5 w-5" />
+                <span>Email</span>
               </a>
             </div>
           </div>
@@ -146,205 +138,201 @@ const Home: React.FC = () => {
         >
           <ChevronDown className="h-8 w-8" />
         </button>
-
-        {/* Image Indicators */}
-        <div className="absolute bottom-8 right-8 flex space-x-2">
-          {backgroundImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentImageIndex 
-                  ? 'bg-white' 
-                  : 'bg-white/40 hover:bg-white/60'
-              }`}
-              aria-label={`View image ${index + 1}`}
-            />
-          ))}
-        </div>
       </section>
 
-      {/* Brief Introduction Section */}
-      <section className="py-24 bg-white">
+      {/* New Drops Section */}
+      <section className="py-24 bg-gray-900 text-white">
         <div className="container-custom">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-8 tracking-wide">
-              Creating at the intersection of
-              <br />
-              <span className="text-primary-600">technology and art</span>
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-5xl font-light mb-4 text-white">
+              New Drops
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed font-light">
-              Passionate about the intersection of computation and visual arts, with a deep interest in 
-              cinema, photography, and design. Constantly exploring new technologies while pursuing 
-              personal growth and development.
-            </p>
           </div>
-        </div>
-      </section>
 
-      {/* News Section with Modern Cards */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-custom">
-          <div className="max-w-6xl mx-auto">
-            {/* Section Header */}
-            <div className="flex items-center justify-between mb-12">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary-100 rounded-xl">
-                  <TrendingUp className="h-6 w-6 text-primary-600" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-900">
-                    Latest News
-                  </h2>
-                  <p className="text-gray-600">Stay updated with current events</p>
-                </div>
-              </div>
-              <a
-                href="/news"
-                className="group flex items-center space-x-2 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+          {/* Featured Projects Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {featuredProjects.map((project, index) => (
+              <div
+                key={project.id}
+                className={`group cursor-pointer transition-all duration-500 hover:-translate-y-2 ${
+                  index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''
+                }`}
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
-                <span className="font-medium">View all</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-            </div>
+                <div className="bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-gray-600 transition-all duration-300 h-full">
+                  {/* Project Image */}
+                  <div className={`relative overflow-hidden ${index === 0 ? 'h-80' : 'h-48'}`}>
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white rounded-full text-sm font-medium">
+                        {project.category}
+                      </span>
+                    </div>
 
-            {/* News Articles */}
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 shadow-sm animate-pulse">
-                    <div className="w-full h-48 bg-gray-200 rounded-xl mb-6"></div>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-16 h-5 bg-gray-200 rounded-full"></div>
-                        <div className="w-20 h-4 bg-gray-200 rounded"></div>
-                      </div>
-                      <div className="h-6 bg-gray-200 rounded"></div>
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    {/* External Link Icon */}
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <ExternalLink className="h-6 w-6 text-white" />
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : error ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="h-8 w-8 text-red-500" />
-                </div>
-                <p className="text-gray-500 font-light">Unable to load news at the moment</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredArticles.map((article, index) => (
-                  <a
-                    key={article.id}
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-gray-100"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    {/* Article Image */}
-                    {article.urlToImage ? (
-                      <div className="relative overflow-hidden h-48">
-                        <img
-                          src={article.urlToImage}
-                          alt=""
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          loading="lazy"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center"><div class="w-12 h-12 bg-primary-400 rounded-lg"></div></div>';
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        
-                        {/* Source Badge */}
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-xs font-semibold">
-                            {article.source.name}
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                        <div className="w-12 h-12 bg-primary-400 rounded-lg"></div>
-                      </div>
-                    )}
+                  
+                  {/* Project Content */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-300">
+                      {project.title}
+                    </h3>
                     
-                    {/* Article Content */}
-                    <div className="p-6">
-                      {/* Meta Information */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center text-gray-400 text-xs">
-                          <Clock className="h-3 w-3 mr-1" />
-                          <span>{getTimeAgo(article.publishedAt)}</span>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
-                      </div>
-                      
-                      <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 leading-tight">
-                        {article.title}
-                      </h3>
-                      
-                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 font-light">
-                        {article.description}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
+                    <p className="text-gray-400 leading-relaxed mb-4 text-base">
+                      {project.description}
+                    </p>
 
-            {/* Empty State */}
-            {!loading && !error && featuredArticles.length === 0 && (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="h-8 w-8 text-gray-400" />
+                    {/* Tech Stack */}
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-gray-500 font-light">No news articles available</p>
               </div>
-            )}
+            ))}
+          </div>
+
+          {/* View All Projects Link */}
+          <div className="text-center mt-12">
+            <a
+              href="/projects"
+              className="inline-flex items-center space-x-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              <span>View All Projects</span>
+              <ArrowRight className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Minimal Navigation to Other Sections */}
-      <section className="py-16 bg-white">
+      {/* Skills & Expertise Section */}
+      <section className="py-20 bg-gray-800 text-white">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <a
-              href="/projects"
-              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
-            >
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
-                <span className="text-2xl">💻</span>
-              </div>
-              <h3 className="text-xl font-light text-gray-900 mb-2">Projects</h3>
-              <p className="text-gray-600 font-light">Explore my work</p>
-            </a>
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl font-light text-white mb-6">
+              What I Do Best
+            </h2>
+            <p className="text-xl text-gray-400 leading-relaxed">
+              Specialized in creating modern, scalable applications with cutting-edge technologies
+            </p>
+          </div>
 
-            <a
-              href="/gallery"
-              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
-            >
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
-                <span className="text-2xl">📸</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Frontend Development */}
+            <div className="text-center p-8 bg-gray-900 rounded-2xl border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Code className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-light text-gray-900 mb-2">Gallery</h3>
-              <p className="text-gray-600 font-light">Visual journey</p>
-            </a>
+              <h3 className="text-xl font-semibold text-white mb-4">Frontend Development</h3>
+              <p className="text-gray-400 leading-relaxed mb-6">
+                Creating responsive, interactive user interfaces with React, TypeScript, and modern CSS frameworks.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {['React', 'TypeScript', 'Tailwind', 'Next.js'].map((skill) => (
+                  <span key={skill} className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-            <a
-              href="/about"
-              className="group text-center p-8 hover:bg-gray-50 rounded-lg transition-all duration-300 hover:shadow-lg"
-            >
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-300">
-                <span className="text-2xl">👋</span>
+            {/* Backend Development */}
+            <div className="text-center p-8 bg-gray-900 rounded-2xl border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-light text-gray-900 mb-2">About</h3>
-              <p className="text-gray-600 font-light">Get to know me</p>
-            </a>
+              <h3 className="text-xl font-semibold text-white mb-4">Backend Development</h3>
+              <p className="text-gray-400 leading-relaxed mb-6">
+                Building robust APIs and server-side applications with Node.js, databases, and cloud services.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {['Node.js', 'MongoDB', 'PostgreSQL', 'AWS'].map((skill) => (
+                  <span key={skill} className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* UI/UX Design */}
+            <div className="text-center p-8 bg-gray-900 rounded-2xl border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Palette className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">UI/UX Design</h3>
+              <p className="text-gray-400 leading-relaxed mb-6">
+                Designing intuitive user experiences and beautiful interfaces that users love to interact with.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {['Figma', 'Adobe XD', 'Sketch', 'Prototyping'].map((skill) => (
+                  <span key={skill} className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-gray-900 text-white">
+        <div className="container-custom">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-light text-white mb-6">
+              Let's Work Together
+            </h2>
+            <p className="text-xl text-gray-400 leading-relaxed mb-12">
+              Ready to bring your ideas to life? Let's discuss your next project.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-6">
+              <a
+                href="mailto:rivex@example.com"
+                className="flex items-center space-x-3 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <Mail className="h-5 w-5" />
+                <span>Get In Touch</span>
+              </a>
+              
+              <a
+                href="https://github.com/rivex"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 px-8 py-4 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-gray-600"
+              >
+                <Github className="h-5 w-5" />
+                <span>View Work</span>
+              </a>
+              
+              <a
+                href="https://instagram.com/rivex"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 px-8 py-4 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-gray-600"
+              >
+                <Instagram className="h-5 w-5" />
+                <span>Follow</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
