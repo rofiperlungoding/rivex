@@ -82,12 +82,12 @@ const Home: React.FC = () => {
             
             {/* Content Overlay */}
             <div className="relative z-10 flex items-center justify-between h-full p-8">
-              {/* Top right logo */}
+              {/* Top right logo - Using white logo for dark overlay */}
               <div className="absolute top-8 right-8">
                 <img 
-                  src="/Untitled design (1).png" 
+                  src="/Untitled design (2).png" 
                   alt="rivex" 
-                  className="h-6 w-auto filter brightness-0 invert drop-shadow-lg"
+                  className="h-6 w-auto drop-shadow-lg"
                 />
               </div>
               
