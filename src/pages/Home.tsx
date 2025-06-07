@@ -61,8 +61,60 @@ const Home: React.FC = () => {
     setCurrentImageIndex(index);
   };
 
+  // Theme-aware classes
+  const getThemeClasses = () => {
+    switch (mode) {
+      case 'dark':
+        return {
+          background: 'bg-gray-900',
+          headerBg: 'bg-gray-900',
+          text: 'text-white',
+          secondaryText: 'text-gray-300',
+          cardBg: 'bg-gray-800',
+          cardHover: 'hover:bg-gray-700',
+          border: 'border-gray-700',
+          accent: 'text-orange-400'
+        };
+      case 'reader':
+        return {
+          background: 'bg-white',
+          headerBg: 'bg-white',
+          text: 'text-gray-900',
+          secondaryText: 'text-gray-600',
+          cardBg: 'bg-white',
+          cardHover: 'hover:bg-gray-50',
+          border: 'border-gray-200',
+          accent: 'text-orange-600'
+        };
+      case 'debug':
+        return {
+          background: 'bg-gray-900',
+          headerBg: 'bg-gray-900',
+          text: 'text-green-400',
+          secondaryText: 'text-cyan-400',
+          cardBg: 'bg-gray-800',
+          cardHover: 'hover:bg-gray-700',
+          border: 'border-green-500',
+          accent: 'text-yellow-400'
+        };
+      default: // light
+        return {
+          background: 'bg-white',
+          headerBg: 'bg-white',
+          text: 'text-black',
+          secondaryText: 'text-gray-600',
+          cardBg: 'bg-white',
+          cardHover: 'hover:bg-gray-50',
+          border: 'border-gray-100',
+          accent: 'text-orange-500'
+        };
+    }
+  };
+
+  const themeClasses = getThemeClasses();
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
       {/* Theme Toggle and Right Navigation for Home Page */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
@@ -70,7 +122,7 @@ const Home: React.FC = () => {
       <RightNavigation />
 
       {/* Header */}
-      <header className="bg-white relative z-20">
+      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -84,13 +136,13 @@ const Home: React.FC = () => {
 
             {/* Navigation */}
             <nav className="flex items-center space-x-8">
-              <a href="/about" className="text-gray-700 hover:text-black font-medium transition-colors">
+              <a href="/about" className={`${themeClasses.secondaryText} hover:${themeClasses.text} font-medium transition-colors`}>
                 About
               </a>
-              <a href="/news" className="text-gray-700 hover:text-black font-medium transition-colors">
+              <a href="/news" className={`${themeClasses.secondaryText} hover:${themeClasses.text} font-medium transition-colors`}>
                 News
               </a>
-              <a href="/timeline" className="text-gray-700 hover:text-black font-medium transition-colors">
+              <a href="/timeline" className={`${themeClasses.secondaryText} hover:${themeClasses.text} font-medium transition-colors`}>
                 Timeline
               </a>
             </nav>
@@ -99,7 +151,7 @@ const Home: React.FC = () => {
       </header>
 
       {/* Hero Section with Image Slideshow */}
-      <section className="bg-white pt-8 pb-12">
+      <section className={`${themeClasses.background} pt-8 pb-12 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6">
           <div 
             className="rounded-3xl overflow-hidden relative h-80"
@@ -166,15 +218,15 @@ const Home: React.FC = () => {
       </section>
 
       {/* Centered News Section */}
-      <section className="bg-white py-12">
+      <section className={`${themeClasses.background} py-12 transition-colors duration-300`}>
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-2">
+            <h2 className={`text-3xl font-bold ${themeClasses.text} mb-2 transition-colors duration-300`}>
               LATEST NEWS
             </h2>
-            <div className="w-24 h-1 bg-orange-500 mx-auto mb-6"></div>
-            <p className="text-gray-600 text-lg">
+            <div className={`w-24 h-1 ${themeClasses.accent} mx-auto mb-6`}></div>
+            <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
               Stay updated with the latest news and developments
             </p>
           </div>
@@ -183,20 +235,20 @@ const Home: React.FC = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((i) => (
-                <div key={i} className="bg-gray-100 rounded-lg overflow-hidden animate-pulse">
-                  <div className="h-40 bg-gray-200"></div>
+                <div key={i} className={`${themeClasses.cardBg} rounded-lg overflow-hidden animate-pulse transition-colors duration-300`}>
+                  <div className={`h-40 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
                   <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                    <div className={`h-4 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4`}></div>
+                    <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2`}></div>
+                    <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-2/3`}></div>
                   </div>
                 </div>
               ))}
             </div>
           ) : error ? (
             <div className="text-center py-12">
-              <div className="text-gray-500 text-lg">Unable to load news articles</div>
-              <p className="text-gray-400 mt-2">Please try again later</p>
+              <div className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Unable to load news articles</div>
+              <p className={`${themeClasses.secondaryText} opacity-70 mt-2 transition-colors duration-300`}>Please try again later</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -206,7 +258,7 @@ const Home: React.FC = () => {
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+                    className={`block ${themeClasses.cardBg} rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${themeClasses.border} border`}
                   >
                     <div className="relative h-40">
                       {article.urlToImage ? (
@@ -217,12 +269,12 @@ const Home: React.FC = () => {
                           loading="lazy"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center"><div class="w-12 h-12 bg-orange-400 rounded-lg"></div></div>';
+                            target.parentElement!.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center"><div class="w-12 h-12 ${themeClasses.accent} rounded-lg"></div></div>`;
                           }}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                          <div className="w-12 h-12 bg-orange-400 rounded-lg"></div>
+                          <div className={`w-12 h-12 ${themeClasses.accent} rounded-lg`}></div>
                         </div>
                       )}
                       
@@ -235,15 +287,15 @@ const Home: React.FC = () => {
                     </div>
                     
                     <div className="p-4">
-                      <h3 className="font-bold text-sm text-black leading-tight line-clamp-3 mb-3 group-hover:text-orange-600 transition-colors">
+                      <h3 className={`font-bold text-sm ${themeClasses.text} leading-tight line-clamp-3 mb-3 group-hover:${themeClasses.accent} transition-colors`}>
                         {article.title}
                       </h3>
                       
-                      <p className="text-gray-600 text-xs leading-relaxed line-clamp-2 mb-3">
+                      <p className={`${themeClasses.secondaryText} text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-300`}>
                         {article.description}
                       </p>
                       
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className={`flex items-center justify-between text-xs ${themeClasses.secondaryText} transition-colors duration-300`}>
                         <span className="font-medium">{article.source.name}</span>
                         <span>{getTimeAgo(article.publishedAt)}</span>
                       </div>
@@ -259,7 +311,7 @@ const Home: React.FC = () => {
             <div className="text-center mt-12">
               <a
                 href="/news"
-                className="inline-flex items-center px-8 py-3 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors duration-300"
+                className={`inline-flex items-center px-8 py-3 ${themeClasses.accent} ${mode === 'dark' ? 'bg-orange-600 hover:bg-orange-700' : 'bg-orange-500 hover:bg-orange-600'} text-white font-medium rounded-lg transition-colors duration-300`}
               >
                 View All News
                 <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
