@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    font-weight: 400;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    font-weight: 300;
+  }
+
+  /* Theme Variables */
+  :root {
+    --transition-theme: all 0.3s ease;
+  }
+
+  /* Light Theme (Default) */
+  .theme-light {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-tertiary: #6b7280;
+    --border-primary: #e5e7eb;
+    --border-secondary: #d1d5db;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  /* Dark Theme */
+  .theme-dark {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-tertiary: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #e5e7eb;
+    --text-tertiary: #9ca3af;
+    --border-primary: #374151;
+    --border-secondary: #4b5563;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  }
+
+  /* Reader Theme */
+  .theme-reader {
+    --bg-primary: #fefefe;
+    --bg-secondary: #fefefe;
+    --bg-tertiary: #f8f8f8;
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    --text-tertiary: #718096;
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e0;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+  }
+
+  /* Debug Theme */
+  .theme-debug {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #00ff00;
+    --text-secondary: #22d3ee;
+    --text-tertiary: #fbbf24;
+    --border-primary: #00ff00;
+    --border-secondary: #22d3ee;
+    --shadow-sm: 0 0 10px rgb(0 255 0 / 0.3);
+    --shadow-md: 0 0 20px rgb(0 255 0 / 0.4);
+    --shadow-lg: 0 0 30px rgb(0 255 0 / 0.5);
+  }
+
+  /* Apply theme variables */
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+  
+  .section-padding {
+    @apply py-16 sm:py-24;
+  }
+  
+  .card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-sm);
+    @apply rounded-lg transition-all duration-300;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    @apply px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--border-secondary);
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Reader Mode Specific Styles */
+  .theme-reader .container-custom {
+    max-width: var(--reader-max-width, 700px);
+  }
+
+  .theme-reader body {
+    font-family: var(--reader-font-family, Georgia, serif);
+    font-size: var(--reader-font-size, 18px);
+    line-height: var(--reader-line-height, 1.8);
+  }
+
+  .theme-reader h1, .theme-reader h2, .theme-reader h3, 
+  .theme-reader h4, .theme-reader h5, .theme-reader h6 {
+    font-family: var(--reader-font-family, Georgia, serif);
+    margin-bottom: 1.5rem;
+  }
+
+  .theme-reader p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+  }
+
+  /* Hide non-essential elements in reader mode */
+  .theme-reader .reader-hide {
+    display: none !important;
+  }
+
+  /* Debug Mode Specific Styles */
+  .theme-debug * {
+    transition: var(--transition-theme);
+  }
+
+  .theme-debug .debug-highlight {
+    outline: 2px solid var(--text-secondary) !important;
+    background-color: rgba(0, 255, 0, 0.1) !important;
+  }
+
+  /* Theme-aware text colors */
+  .text-themed-primary {
+    color: var(--text-primary);
+  }
+
+  .text-themed-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-themed-tertiary {
+    color: var(--text-tertiary);
+  }
+
+  /* Theme-aware backgrounds */
+  .bg-themed-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-themed-secondary {
+    background-color: var(--bg-secondary);
+  }
+
+  .bg-themed-tertiary {
+    background-color: var(--bg-tertiary);
+  }
+
+  /* Theme-aware borders */
+  .border-themed-primary {
+    border-color: var(--border-primary);
+  }
+
+  .border-themed-secondary {
+    border-color: var(--border-secondary);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Custom utilities for minimalist design */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+  
+  .filter {
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+  }
+  
+  .grayscale-30 {
+    --tw-grayscale: grayscale(30%);
+  }
+  
+  .brightness-75 {
+    --tw-brightness: brightness(0.75);
+  }
+
+  /* Theme transition utilities */
+  .transition-theme {
+    transition: var(--transition-theme);
+  }
+
+  /* Reader mode utilities */
+  .reader-content {
+    @apply max-w-none mx-auto px-8 py-12;
+  }
+
+  .theme-reader .reader-content {
+    max-width: var(--reader-max-width, 700px);
+    font-size: var(--reader-font-size, 18px);
+    line-height: var(--reader-line-height, 1.8);
+  }
+
+  /* Debug mode utilities */
+  .debug-info {
+    @apply fixed top-0 left-0 bg-black text-green-400 p-2 text-xs font-mono z-50;
+  }
+
+  /* Smooth theme transitions */
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+}
+
+/* Dark mode overrides for existing Tailwind classes */
+.theme-dark .bg-white {
+  background-color: var(--bg-primary) !important;
+}
+
+.theme-dark .bg-gray-50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.theme-dark .bg-gray-100 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.theme-dark .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.theme-dark .text-gray-600 {
+  color: var(--text-tertiary) !important;
+}
+
+.theme-dark .border-gray-200 {
+  border-color: var(--border-primary) !important;
+}
+
+.theme-dark .border-gray-300 {
+  border-color: var(--border-secondary) !important;
+}
+
+/* Reader mode overrides */
+.theme-reader .bg-gray-50,
+.theme-reader .bg-gray-100 {
+  background-color: var(--bg-primary) !important;
+}
+
+.theme-reader .shadow-sm,
+.theme-reader .shadow-md,
+.theme-reader .shadow-lg {
+  box-shadow: none !important;
+}
+
+.theme-reader .border {
+  border: none !important;
+}
+
+/* Debug mode overrides */
+.theme-debug .bg-white,
+.theme-debug .bg-gray-50,
+.theme-debug .bg-gray-100 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.theme-debug .text-gray-900,
+.theme-debug .text-gray-700,
+.theme-debug .text-gray-600 {
+  color: var(--text-primary) !important;
+}
