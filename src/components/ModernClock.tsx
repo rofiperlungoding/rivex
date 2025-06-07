@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
 import { Cloud, Sun, CloudRain, CloudSnow } from 'lucide-react';
-import { getApiConfig } from '../utils/apiConfig';
+import { getApiConfig, handleApiError } from '../utils/apiConfig';
 
 interface WeatherData {
   temperature: number;
@@ -16,6 +16,7 @@ const ModernClock: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [weatherError, setWeatherError] = useState(false);
+  const [weatherErrorMessage, setWeatherErrorMessage] = useState<string>('');
   const { mode } = useTheme();
   const location = useLocation();
 
@@ -38,6 +39,9 @@ const ModernClock: React.FC = () => {
   useEffect(() => {
     const fetchWeatherByCoords = async (lat: number, lon: number) => {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
         const response = await fetch(
           `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${lat},${lon}&aqi=no`,
           {
@@ -45,12 +49,16 @@ const ModernClock: React.FC = () => {
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
-            }
+            },
+            signal: controller.signal
           }
         );
         
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
-          throw new Error(`Weather API error: ${response.status}`);
+          const errorText = await response.text();
+          throw new Error(`Weather API error: ${response.status} - ${errorText}`);
         }
         
         const data = await response.json();
@@ -69,6 +77,9 @@ const ModernClock: React.FC = () => {
 
     const fetchWeatherByCity = async (city: string) => {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
         const response = await fetch(
           `${WEATHER_BASE_URL}/current.json?key=${WEATHER_API_KEY}&q=${city}&aqi=no`,
           {
@@ -76,12 +87,16 @@ const ModernClock: React.FC = () => {
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
-            }
+            },
+            signal: controller.signal
           }
         );
         
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
-          throw new Error(`Weather API error: ${response.status}`);
+          const errorText = await response.text();
+          throw new Error(`Weather API error: ${response.status} - ${errorText}`);
         }
         
         const data = await response.json();
@@ -101,6 +116,7 @@ const ModernClock: React.FC = () => {
     const initializeWeather = async () => {
       setWeatherLoading(true);
       setWeatherError(false);
+      setWeatherErrorMessage('');
 
       try {
         if ('geolocation' in navigator) {
@@ -113,12 +129,15 @@ const ModernClock: React.FC = () => {
                 setWeatherLoading(false);
               } catch (error) {
                 console.warn('Geolocation weather fetch failed, trying default city');
+                const errorMsg = handleApiError(error, 'Weather API (geolocation)');
                 try {
                   const weatherData = await fetchWeatherByCity('Jakarta');
                   setWeather(weatherData);
                 } catch (fallbackError) {
                   console.error('Fallback weather fetch failed:', fallbackError);
+                  const fallbackErrorMsg = handleApiError(fallbackError, 'Weather API (fallback)');
                   setWeatherError(true);
+                  setWeatherErrorMessage(fallbackErrorMsg);
                 }
                 setWeatherLoading(false);
               }
@@ -130,7 +149,9 @@ const ModernClock: React.FC = () => {
                 setWeather(weatherData);
               } catch (fallbackError) {
                 console.error('Fallback weather fetch failed:', fallbackError);
+                const errorMsg = handleApiError(fallbackError, 'Weather API (no geolocation)');
                 setWeatherError(true);
+                setWeatherErrorMessage(errorMsg);
               }
               setWeatherLoading(false);
             },
@@ -146,13 +167,17 @@ const ModernClock: React.FC = () => {
             setWeather(weatherData);
           } catch (error) {
             console.error('Default weather fetch failed:', error);
+            const errorMsg = handleApiError(error, 'Weather API (default)');
             setWeatherError(true);
+            setWeatherErrorMessage(errorMsg);
           }
           setWeatherLoading(false);
         }
       } catch (error) {
         console.error('Weather initialization failed:', error);
+        const errorMsg = handleApiError(error, 'Weather API (initialization)');
         setWeatherError(true);
+        setWeatherErrorMessage(errorMsg);
         setWeatherLoading(false);
       }
     };
@@ -166,6 +191,7 @@ const ModernClock: React.FC = () => {
     } else {
       setWeatherLoading(false);
       setWeatherError(true);
+      setWeatherErrorMessage('Weather API key not configured. Please add a valid VITE_WEATHER_API_KEY to your .env file.');
     }
   }, [WEATHER_API_KEY, WEATHER_BASE_URL, apiConfig.weather.isConfigured]);
 
@@ -273,7 +299,9 @@ const ModernClock: React.FC = () => {
             {weatherLoading ? (
               <div className={`w-5 h-5 rounded-full bg-blue-500 animate-pulse`} />
             ) : weatherError ? (
-              <div className={`${styles.textClasses} opacity-50 text-sm`}>--</div>
+              <div className={`${styles.textClasses} opacity-50 text-sm`} title={weatherErrorMessage}>
+                --
+              </div>
             ) : weather ? (
               <>
                 {getWeatherIcon(weather.condition)}
