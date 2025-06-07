@@ -4,7 +4,49 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        primary: ['Playfair Display', 'Georgia', 'serif'],
+        secondary: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        'xs': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0.01em' }],
+        'sm': ['0.875rem', { lineHeight: '1.5', letterSpacing: '0' }],
+        'base': ['1rem', { lineHeight: '1.6', letterSpacing: '-0.005em' }],
+        'lg': ['1.125rem', { lineHeight: '1.6', letterSpacing: '-0.005em' }],
+        'xl': ['1.25rem', { lineHeight: '1.5', letterSpacing: '-0.01em' }],
+        '2xl': ['1.5rem', { lineHeight: '1.4', letterSpacing: '-0.015em' }],
+        '3xl': ['1.875rem', { lineHeight: '1.3', letterSpacing: '-0.015em' }],
+        '4xl': ['2.25rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
+        '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        '6xl': ['3.75rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
+        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
+        '8xl': ['6rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
+        '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
+      },
+      fontWeight: {
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+        'extrabold': '800',
+      },
+      letterSpacing: {
+        'tighter': '-0.025em',
+        'tight': '-0.015em',
+        'normal': '0',
+        'wide': '0.01em',
+        'wider': '0.02em',
+        'widest': '0.05em',
+      },
+      lineHeight: {
+        'none': '1',
+        'tight': '1.1',
+        'snug': '1.2',
+        'normal': '1.4',
+        'relaxed': '1.6',
+        'loose': '1.8',
       },
       colors: {
         primary: {
