@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  // Remove proxy configuration for production builds
+  // Configure proxy for development
   server: {
     proxy: mode === 'development' ? {
       '/api/news': {
@@ -16,7 +16,18 @@ export default defineConfig(({ mode }) => ({
         rewrite: (path) => path.replace(/^\/api\/news/, ''),
         headers: {
           'User-Agent': 'Portfolio-Website/1.0'
-        }
+        },
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('News API proxy error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('News API request:', req.method, req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('News API response:', proxyRes.statusCode, req.url);
+          });
+        },
       },
       '/api/weather': {
         target: 'https://api.weatherapi.com/v1',
@@ -24,7 +35,12 @@ export default defineConfig(({ mode }) => ({
         rewrite: (path) => path.replace(/^\/api\/weather/, ''),
         headers: {
           'User-Agent': 'Portfolio-Website/1.0'
-        }
+        },
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('Weather API proxy error:', err);
+          });
+        },
       }
     } : undefined
   },
@@ -38,5 +54,16 @@ export default defineConfig(({ mode }) => ({
         }
       }
     }
+  },
+  // Environment variable validation
+  define: {
+    __NEWS_API_CONFIGURED__: JSON.stringify(
+      process.env.VITE_NEWS_API_KEY && 
+      process.env.VITE_NEWS_API_KEY !== 'your_news_api_key_here'
+    ),
+    __WEATHER_API_CONFIGURED__: JSON.stringify(
+      process.env.VITE_WEATHER_API_KEY && 
+      process.env.VITE_WEATHER_API_KEY !== 'your_weather_api_key_here'
+    )
   }
 }));
