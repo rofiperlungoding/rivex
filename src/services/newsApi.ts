@@ -218,19 +218,21 @@ export const fetchTopHeadlines = async (category?: string, searchQuery?: string)
 // Function to fetch Indonesian news specifically
 export const fetchIndonesianNews = async (category?: string): Promise<NewsResponse> => {
   try {
-    // Map categories to Indonesian news API endpoints
+    // Map categories to Indonesian news API endpoints based on berita.id structure
     const categoryMap: Record<string, string> = {
-      'general': 'tempo-news/nasional',
-      'business': 'tempo-news/bisnis',
-      'technology': 'tempo-news/tekno',
-      'sports': 'tempo-news/bola',
-      'entertainment': 'tempo-news/seleb',
-      'health': 'tempo-news/gaya',
-      'science': 'tempo-news/sains'
+      'general': 'cnn-news',
+      'business': 'cnbc-news', 
+      'technology': 'antara-news/tekno',
+      'sports': 'antara-news/olahraga',
+      'entertainment': 'antara-news/hiburan',
+      'health': 'antara-news/lifestyle',
+      'science': 'antara-news/tekno',
+      'politics': 'antara-news/politik',
+      'economy': 'antara-news/ekonomi'
     };
 
-    // Default to national news if category not found
-    const endpoint = categoryMap[category || 'general'] || 'tempo-news/nasional';
+    // Default to CNN news if category not found
+    const endpoint = categoryMap[category || 'general'] || 'cnn-news';
     const baseUrl = getIndonesianBaseUrl();
     const url = `${baseUrl}/${endpoint}`;
 
@@ -240,7 +242,8 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; NewsApp/1.0)'
       },
       signal: AbortSignal.timeout(15000) // 15 second timeout
     });
@@ -255,9 +258,9 @@ export const fetchIndonesianNews = async (category?: string): Promise<NewsRespon
       urlToImage: post.thumbnail || '',
       publishedAt: post.pubDate || new Date().toISOString(),
       source: {
-        name: 'Tempo.co'
+        name: data.data.title || 'Indonesian News'
       },
-      author: 'Tempo.co'
+      author: data.data.title || 'Indonesian News'
     }));
 
     // Filter out articles without essential content

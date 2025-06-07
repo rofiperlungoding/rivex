@@ -34,7 +34,9 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/indonesian-news/, '/api'),
         headers: {
-          'User-Agent': 'Portfolio-Website/1.0'
+          'User-Agent': 'Portfolio-Website/1.0',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
