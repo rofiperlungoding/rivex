@@ -58,8 +58,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Debug Overlay */}
       <DebugOverlay />
 
-      {/* Modern Clock - Only show on non-home pages */}
-      {!isHomePage && <ModernClock />}
+      {/* Modern Clock - Now shows on ALL pages */}
+      <ModernClock />
 
       {/* Right Navigation - Only show on non-home pages */}
       {!isHomePage && <RightNavigation />}
