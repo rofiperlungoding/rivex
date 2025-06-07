@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, Trophy, Award, Calendar } from 'lucide-react';
+import { GraduationCap, Trophy, Award, Calendar, Camera, Clapperboard, Search } from 'lucide-react';
 
 interface TimelineItem {
   id: number;
@@ -7,7 +7,7 @@ interface TimelineItem {
   organization: string;
   date: string;
   description: string;
-  category: 'Education' | 'Competitions' | 'Certifications';
+  category: 'Education' | 'Competitions' | 'Achievements';
   icon: React.ReactNode;
 }
 
@@ -17,79 +17,151 @@ const Timeline: React.FC = () => {
   const timelineItems: TimelineItem[] = [
     {
       id: 1,
-      title: "Master of Computer Science",
-      organization: "Stanford University",
-      date: "2020 - 2022",
-      description: "Specialized in Human-Computer Interaction and Software Engineering. Graduated with honors, GPA 3.8/4.0. Thesis: 'Improving User Experience in Web Applications through AI-Driven Personalization'.",
+      title: "Born",
+      organization: "Jakarta, Indonesia",
+      date: "2007",
+      description: "Born in Jakarta, Indonesia, beginning my journey of learning and discovery.",
       category: "Education",
       icon: <GraduationCap className="h-5 w-5" />
     },
     {
       id: 2,
-      title: "AWS Solutions Architect Professional",
-      organization: "Amazon Web Services",
-      date: "2023",
-      description: "Advanced certification demonstrating deep understanding of designing distributed applications and systems on the AWS platform, including complex multi-tier architectures.",
-      category: "Certifications",
-      icon: <Award className="h-5 w-5" />
+      title: "Elementary School",
+      organization: "MI Pembangunan Jakarta",
+      date: "2014 - 2019",
+      description: "Started elementary education at MI Pembangunan Jakarta. Developed early interest in mathematics and participated in academic competitions.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
     },
     {
       id: 3,
-      title: "International Coding Olympiad - Gold Medal",
-      organization: "ACM ICPC",
-      date: "2021",
-      description: "Achieved first place in the regional programming contest, solving 8 out of 10 complex algorithmic problems within the time limit. Advanced to world finals.",
+      title: "Mathematics Competition (KMNR)",
+      organization: "National Level Competition",
+      date: "2019 (Grade 6)",
+      description: "Participated in the National Mathematics Competition (KMNR) during my final year of elementary school, showcasing early mathematical talents.",
       category: "Competitions",
       icon: <Trophy className="h-5 w-5" />
     },
     {
       id: 4,
-      title: "Bachelor of Software Engineering",
-      organization: "University of California, Berkeley",
-      date: "2016 - 2020",
-      description: "Comprehensive study of software development lifecycle, algorithms, data structures, and system design. Dean's List all four years. Capstone project: Real-time collaboration platform.",
+      title: "Junior High School",
+      organization: "MTs Pembangunan Jakarta",
+      date: "2019 - 2022",
+      description: "Continued education at MTs Pembangunan Jakarta, expanding knowledge in various subjects and developing language skills.",
       category: "Education",
       icon: <GraduationCap className="h-5 w-5" />
     },
     {
       id: 5,
-      title: "Google Cloud Professional Developer",
-      organization: "Google Cloud",
-      date: "2022",
-      description: "Certification validating skills in designing, building, and deploying applications on Google Cloud Platform using best practices for scalability and security.",
-      category: "Certifications",
+      title: "Spelling Bee Competition - 3rd Place",
+      organization: "MTs Pembangunan Jakarta",
+      date: "2020-2021",
+      description: "Achieved 3rd place in the school-level Spelling Bee competition, demonstrating strong English language proficiency.",
+      category: "Competitions",
       icon: <Award className="h-5 w-5" />
     },
     {
       id: 6,
-      title: "Hackathon Winner - Best Innovation",
-      organization: "TechCrunch Disrupt",
-      date: "2022",
-      description: "Led a team of 4 developers to create an AI-powered accessibility tool in 48 hours. Solution helped visually impaired users navigate websites more effectively.",
-      category: "Competitions",
-      icon: <Trophy className="h-5 w-5" />
+      title: "Senior High School",
+      organization: "MA Pembangunan Jakarta",
+      date: "2022 - 2025",
+      description: "Currently pursuing senior high school education at MA Pembangunan Jakarta, focusing on science and technology while exploring creative fields.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
     },
     {
       id: 7,
-      title: "React Developer Certification",
-      organization: "Meta",
-      date: "2021",
-      description: "Advanced certification covering React ecosystem, including hooks, context, performance optimization, and testing strategies. Demonstrated proficiency in building scalable React applications.",
-      category: "Certifications",
-      icon: <Award className="h-5 w-5" />
+      title: "National Robotics Competition - 3rd Place",
+      organization: "National Competition, Sukabumi",
+      date: "2023",
+      description: "Secured 3rd place in the National Robotics Competition held in Sukabumi, demonstrating technical skills and innovation in robotics.",
+      category: "Competitions",
+      icon: <Trophy className="h-5 w-5" />
     },
     {
       id: 8,
-      title: "Global Programming Contest - Silver Medal",
-      organization: "IEEE Programming Contest",
-      date: "2020",
-      description: "Second place finish in international programming competition with participants from 50+ countries. Specialized in algorithms optimization and competitive programming.",
+      title: "Provincial Robotics Competition - 1st Place",
+      organization: "Jakarta Provincial Level",
+      date: "2023",
+      description: "Won 1st place in the Provincial Robotics Competition in Jakarta, showcasing excellence in robotics and engineering.",
       category: "Competitions",
       icon: <Trophy className="h-5 w-5" />
+    },
+    {
+      id: 9,
+      title: "Photography Competition - 2nd Place (First)",
+      organization: "Regional Competition",
+      date: "2023",
+      description: "Achieved 2nd place in a photography competition, demonstrating artistic vision and technical photography skills.",
+      category: "Achievements",
+      icon: <Camera className="h-5 w-5" />
+    },
+    {
+      id: 10,
+      title: "Photography Competition - 2nd Place (Second)",
+      organization: "Regional Competition",
+      date: "2023",
+      description: "Secured another 2nd place in a photography competition, consistently showing excellence in visual arts and composition.",
+      category: "Achievements",
+      icon: <Camera className="h-5 w-5" />
+    },
+    {
+      id: 11,
+      title: "Creative Video Competition - 1st Place",
+      organization: "National Level",
+      date: "2023",
+      description: "Won 1st place in the National Creative Video Competition, showcasing storytelling abilities and video production skills.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 12,
+      title: "Short Movie Competition - 1st Place",
+      organization: "National Level",
+      date: "2023",
+      description: "Achieved 1st place in the National Short Movie Competition, demonstrating excellence in filmmaking and narrative creation.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 13,
+      title: "School Short Movie Competition - Overall Champion",
+      organization: "MA Pembangunan Jakarta",
+      date: "2023",
+      description: "Won the overall championship in the school-level short movie competition, establishing leadership in creative media production.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 14,
+      title: "National Research Competition - 1st Place",
+      organization: "National Level",
+      date: "2024",
+      description: "Secured 1st place in the National Research Competition, demonstrating strong analytical and research capabilities.",
+      category: "Competitions",
+      icon: <Search className="h-5 w-5" />
+    },
+    {
+      id: 15,
+      title: "School Short Movie Competition - Overall Champion",
+      organization: "MA Pembangunan Jakarta",
+      date: "2024",
+      description: "Won the overall championship in the school-level short movie competition for the second consecutive year, maintaining excellence in filmmaking.",
+      category: "Achievements",
+      icon: <Clapperboard className="h-5 w-5" />
+    },
+    {
+      id: 16,
+      title: "High School Graduation",
+      organization: "MA Pembangunan Jakarta",
+      date: "2025",
+      description: "Expected to graduate from MA Pembangunan Jakarta, completing senior high school education with a strong foundation in academics and creative achievements.",
+      category: "Education",
+      icon: <GraduationCap className="h-5 w-5" />
     }
   ];
 
-  const categories = ['All', 'Education', 'Competitions', 'Certifications'];
+  const categories = ['All', 'Education', 'Competitions', 'Achievements'];
 
   const filteredItems = selectedCategory === 'All' 
     ? timelineItems 
@@ -101,7 +173,7 @@ const Timeline: React.FC = () => {
         return 'bg-blue-500';
       case 'Competitions':
         return 'bg-yellow-500';
-      case 'Certifications':
+      case 'Achievements':
         return 'bg-green-500';
       default:
         return 'bg-primary-500';
@@ -114,7 +186,7 @@ const Timeline: React.FC = () => {
         return 'bg-blue-100 text-blue-700';
       case 'Competitions':
         return 'bg-yellow-100 text-yellow-700';
-      case 'Certifications':
+      case 'Achievements':
         return 'bg-green-100 text-green-700';
       default:
         return 'bg-primary-100 text-primary-700';
@@ -126,9 +198,9 @@ const Timeline: React.FC = () => {
       <div className="container-custom">
         {/* Header */}
         <section data-section="header" className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-themed-primary mb-4">Timeline</h1>
+          <h1 className="text-4xl font-bold text-themed-primary mb-4">My Journey</h1>
           <p className="text-xl text-themed-secondary max-w-3xl mx-auto">
-            My journey through education, professional development, and competitive achievements.
+            From early education to academic achievements, competitions, and creative pursuits - here's my educational and personal development timeline.
           </p>
         </section>
 
@@ -205,6 +277,28 @@ const Timeline: React.FC = () => {
             <p className="text-themed-tertiary text-lg">No timeline items found in this category.</p>
           </div>
         )}
+
+        {/* Summary Stats */}
+        <section data-section="stats" className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="text-center p-6 card">
+            <div className="text-3xl font-bold text-primary-600 mb-2">
+              {timelineItems.filter(item => item.category === 'Education').length}
+            </div>
+            <div className="text-themed-secondary">Educational Milestones</div>
+          </div>
+          <div className="text-center p-6 card">
+            <div className="text-3xl font-bold text-yellow-600 mb-2">
+              {timelineItems.filter(item => item.category === 'Competitions').length}
+            </div>
+            <div className="text-themed-secondary">Competition Participations</div>
+          </div>
+          <div className="text-center p-6 card">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {timelineItems.filter(item => item.category === 'Achievements').length}
+            </div>
+            <div className="text-themed-secondary">Creative Achievements</div>
+          </div>
+        </section>
       </div>
     </div>
   );
