@@ -195,15 +195,15 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Breaking News Section - Indonesian Economic & Political Focus */}
+      {/* Latest News Section - Indonesian Economic & Political Focus */}
       <section className={`${themeClasses.background} py-16 transition-colors duration-300`}>
         <div className="max-w-4xl mx-auto px-6">
-          {/* Breaking News Header */}
+          {/* Latest News Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <AlertTriangle className="h-6 w-6 text-red-500 animate-pulse" />
               <h2 className={`text-2xl font-bold ${themeClasses.text} transition-colors duration-300`}>
-                BREAKING NEWS
+                LATEST NEWS
               </h2>
               <AlertTriangle className="h-6 w-6 text-red-500 animate-pulse" />
             </div>
@@ -212,7 +212,7 @@ const Home: React.FC = () => {
             </p>
           </div>
 
-          {/* Breaking News Card */}
+          {/* Latest News Card */}
           {breakingLoading ? (
             <div className={`${themeClasses.breakingBg} rounded-2xl p-8 ${themeClasses.breakingBorder} border-2 animate-pulse transition-colors duration-300`}>
               <div className="flex items-start space-x-6">
@@ -229,7 +229,7 @@ const Home: React.FC = () => {
             <div className={`${themeClasses.breakingBg} rounded-2xl p-8 ${themeClasses.breakingBorder} border-2 text-center transition-colors duration-300`}>
               <TrendingUp className={`h-12 w-12 ${themeClasses.breakingText} mx-auto mb-4 opacity-70`} />
               <h3 className={`text-xl font-semibold ${themeClasses.breakingText} mb-2`}>
-                Stay Tuned for Breaking News
+                Stay Tuned for Latest News
               </h3>
               <p className={`${themeClasses.breakingText} opacity-80`}>
                 We're monitoring Indonesian economic and political developments
@@ -301,13 +301,13 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Latest News Section */}
+      {/* News Section */}
       <section className={`${themeClasses.background} py-12 transition-colors duration-300`}>
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold ${themeClasses.text} mb-2 transition-colors duration-300`}>
-              LATEST NEWS
+              NEWS
             </h2>
             <div className={`w-24 h-1 ${themeClasses.accent} mx-auto mb-6`}></div>
             <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
