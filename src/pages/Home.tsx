@@ -50,9 +50,6 @@ const Home: React.FC = () => {
               <a href="/news" className="text-gray-700 hover:text-black font-medium transition-colors">
                 News
               </a>
-              <a href="/gallery" className="text-gray-700 hover:text-black font-medium transition-colors">
-                Gallery
-              </a>
             </nav>
           </div>
         </div>
@@ -99,7 +96,7 @@ const Home: React.FC = () => {
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-4 gap-8">
-            {/* Left Column - Featured Stories Header and Timeline */}
+            {/* Left Column - Featured Stories Header */}
             <div className="col-span-1">
               <div className="mb-8">
                 <h2 className="text-lg font-bold text-black mb-1">
@@ -109,36 +106,6 @@ const Home: React.FC = () => {
                 
                 <div className="text-sm text-orange-600 font-medium mb-6">
                   MORE NFL NEWS →
-                </div>
-                
-                {/* Timeline */}
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <div className="font-bold text-black">2023</div>
-                    <div className="text-gray-600">dfbsaorsabvouarfbvuiar</div>
-                    <div className="text-gray-600">bsvoarsjfvsarv</div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-black">2023</div>
-                    <div className="text-gray-600">dfbsaorsabvouarfbvuiar</div>
-                    <div className="text-gray-600">bsvoarsjfvsarv</div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-black">2023</div>
-                    <div className="text-gray-600">dfbsaorsabvouarfbvuiar</div>
-                    <div className="text-gray-600">bsvoarsjfvsarv</div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-black">2023</div>
-                    <div className="text-gray-600">dfbsaorsabvouarfbvuiar</div>
-                    <div className="text-gray-600">bsvoarsjfvsarv</div>
-                  </div>
-                </div>
-                
-                <div className="mt-6">
-                  <a href="/timeline" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                    Timeline
-                  </a>
                 </div>
               </div>
             </div>
