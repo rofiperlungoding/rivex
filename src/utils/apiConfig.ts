@@ -4,6 +4,7 @@ export const getApiConfig = () => {
   
   const newsApiKey = import.meta.env.VITE_NEWS_API_KEY || '13f426023f25454ba1d56c132ca2b120';
   const weatherApiKey = import.meta.env.VITE_WEATHER_API_KEY || '2434caae723b409ca2b10726250706';
+  const finnhubApiKey = import.meta.env.VITE_FINNHUB_API_KEY;
   
   return {
     news: {
@@ -19,6 +20,12 @@ export const getApiConfig = () => {
         ? '/api/weather' 
         : import.meta.env.VITE_WEATHER_API_URL || 'https://api.weatherapi.com/v1',
       isConfigured: weatherApiKey && weatherApiKey !== 'your_weather_api_key_here'
+    },
+    finnhub: {
+      apiKey: finnhubApiKey,
+      wsUrl: 'wss://ws.finnhub.io',
+      restUrl: 'https://finnhub.io/api/v1',
+      isConfigured: finnhubApiKey && finnhubApiKey.length > 0
     },
     isDev
   };
@@ -82,12 +89,17 @@ const validateEnvironment = () => {
     issues.push('Weather API key is not configured or invalid');
   }
   
+  if (!config.finnhub.isConfigured) {
+    issues.push('Finnhub API key is not configured or invalid');
+  }
+  
   return {
     isValid: issues.length === 0,
     issues,
     config: {
       newsConfigured: config.news.isConfigured,
       weatherConfigured: config.weather.isConfigured,
+      finnhubConfigured: config.finnhub.isConfigured,
       environment: config.isDev ? 'development' : 'production'
     }
   };
@@ -109,6 +121,12 @@ const debugApiConfig = () => {
     baseUrl: config.weather.baseUrl,
     keyConfigured: config.weather.isConfigured,
     keyPreview: config.weather.apiKey ? `${config.weather.apiKey.substring(0, 8)}...` : 'Not set'
+  });
+  console.log('Finnhub API:', {
+    wsUrl: config.finnhub.wsUrl,
+    restUrl: config.finnhub.restUrl,
+    keyConfigured: config.finnhub.isConfigured,
+    keyPreview: config.finnhub.apiKey ? `${config.finnhub.apiKey.substring(0, 8)}...` : 'Not set'
   });
   console.log('Validation:', validation);
   console.groupEnd();
