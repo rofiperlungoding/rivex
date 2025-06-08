@@ -36,6 +36,7 @@ A modern, responsive portfolio website built with React, TypeScript, and Tailwin
 4. Add your API keys to the `.env` file:
    - Get a News API key from [newsapi.org](https://newsapi.org)
    - Get a Weather API key from [weatherapi.com](https://weatherapi.com)
+   - Get a Finnhub API key from [finnhub.io](https://finnhub.io) for stock data
 
 5. Start the development server:
    ```bash
@@ -58,6 +59,7 @@ npm run build
 4. Add environment variables in Netlify dashboard:
    - `VITE_NEWS_API_KEY`
    - `VITE_WEATHER_API_KEY`
+   - `VITE_FINNHUB_API_KEY`
    - `VITE_NEWS_API_URL` (optional)
    - `VITE_WEATHER_API_URL` (optional)
 
@@ -67,6 +69,7 @@ npm run build
 |----------|-------------|----------|
 | `VITE_NEWS_API_KEY` | News API key from newsapi.org | Yes |
 | `VITE_WEATHER_API_KEY` | Weather API key from weatherapi.com | Yes |
+| `VITE_FINNHUB_API_KEY` | Finnhub API key from finnhub.io | Yes |
 | `VITE_NEWS_API_URL` | News API base URL | No |
 | `VITE_WEATHER_API_URL` | Weather API base URL | No |
 | `VITE_APP_URL` | Your deployed app URL | No |
@@ -84,6 +87,12 @@ npm run build
 - Provider: [WeatherAPI.com](https://weatherapi.com)
 - Free tier: 1 million calls/month
 - Used for: Weather widget in clock component
+
+### Finnhub API
+
+- Provider: [Finnhub.io](https://finnhub.io)
+- Free tier: 60 API calls/minute
+- Used for: Real-time stock data in ticker component
 
 ## Troubleshooting
 

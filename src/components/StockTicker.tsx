@@ -24,7 +24,7 @@ const StockTicker: React.FC<TickerProps> = ({ className = '' }) => {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const updateIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const API_KEY = 'd12dmo1r01qmhi3i0vh0d12dmo1r01qmhi3i0vhg';
+  const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY;
   const SYMBOLS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'NFLX', 'BTC-USD', 'ETH-USD'];
 
   // Fallback data for when WebSocket is not available
@@ -46,6 +46,12 @@ const StockTicker: React.FC<TickerProps> = ({ className = '' }) => {
 
   // Initialize WebSocket connection
   const connectWebSocket = () => {
+    // Check if API key is available
+    if (!API_KEY) {
+      console.warn('Finnhub API key not found. Using mock data.');
+      setStockData(generateMockData());
+      return;
+    }
     try {
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.close();
@@ -143,6 +149,11 @@ const StockTicker: React.FC<TickerProps> = ({ className = '' }) => {
 
   // Fetch initial data using REST API
   const fetchInitialData = async () => {
+    // Check if API key is available
+    if (!API_KEY) {
+      setStockData(generateMockData());
+      return;
+    }
     try {
       const promises = SYMBOLS.map(async (symbol) => {
         const response = await fetch(
