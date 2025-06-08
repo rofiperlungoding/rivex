@@ -25,7 +25,7 @@ export const getApiConfig = () => {
       apiKey: finnhubApiKey,
       wsUrl: 'wss://ws.finnhub.io',
       restUrl: 'https://finnhub.io/api/v1',
-      isConfigured: finnhubApiKey && finnhubApiKey.length > 0
+      isConfigured: finnhubApiKey && finnhubApiKey.length > 0 && finnhubApiKey !== 'your_finnhub_api_key_here'
     },
     isDev
   };

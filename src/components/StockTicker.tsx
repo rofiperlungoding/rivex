@@ -399,7 +399,7 @@ const StockTicker: React.FC<TickerProps> = ({ className = '', isBreakingNews = f
   if (isBreakingNews) {
     return (
       <div className={`relative ${className}`}>
-        <div className="bg-gray-900 border border-gray-700 rounded-lg overflow-hidden">
+        <div className="bg-gray-900 border border-gray-700 rounded-2xl overflow-hidden">
           {/* Status Section - Fixed on the left */}
           <div className="absolute left-0 top-0 bottom-0 z-20 bg-gray-800 border-r border-gray-600">
             <div className="flex flex-col items-center justify-center h-full px-4 min-w-[120px]">

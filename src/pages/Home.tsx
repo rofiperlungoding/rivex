@@ -5,7 +5,6 @@ import ThemeToggle from '../components/ThemeToggle';
 import RightNavigation from '../components/RightNavigation';
 import StockTicker from '../components/StockTicker';
 import { 
-  AlertTriangle, 
   TrendingUp, 
   Calendar, 
   ExternalLink, 
@@ -194,17 +193,14 @@ const Home: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
-      {/* Stock Ticker Bar */}
-      <StockTicker />
-      
       {/* Theme Toggle and Right Navigation for Home Page */}
-      <div className="fixed top-24 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
       <RightNavigation />
 
       {/* Header */}
-      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 mt-10`}>
+      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 pt-4`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -232,19 +228,9 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Breaking News Banner */}
+      {/* Hero Section */}
       <section className={`${themeClasses.background} pt-8 pb-12 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6">
-          {/* Breaking News Banner with Stock Ticker */}
-          <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-6 flex items-center justify-between">
-            <AlertTriangle className="h-5 w-5 mr-3 animate-pulse" />
-            <div className="flex items-center">
-              <span className="font-bold text-sm uppercase tracking-wide">Breaking News</span>
-              <span className="mx-3">•</span>
-              <span className="text-sm">Stay updated with the latest political and economic developments</span>
-            </div>
-          </div>
-
           {/* Stock Ticker in Breaking News Style */}
           <div className="mb-6">
             <StockTicker isBreakingNews={true} />
