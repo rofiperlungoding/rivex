@@ -36,32 +36,6 @@ const Home: React.FC = () => {
 
   const { mode } = useTheme();
   
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Hero images array
-  const heroImages = [
-    "/image copy copy.png",
-    "/image.png", 
-    "/image copy.png",
-    "/image copy copy copy.png",
-    "/20230105_145528.jpg",
-    "/image copy copy copy copy.png"
-  ];
-
-  // Auto-advance slideshow
-  useEffect(() => {
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => 
-          prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 5000);
-
-      return () => clearInterval(interval);
-    }
-  }, [isHovered, heroImages.length]);
-
   // Filter and prioritize articles
   const filteredPoliticalArticles = politicalArticles
     .filter(article => 
@@ -109,10 +83,6 @@ const Home: React.FC = () => {
     const words = text.split(' ');
     if (words.length <= maxWords) return text;
     return words.slice(0, maxWords).join(' ') + '...';
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentImageIndex(index);
   };
 
   // Theme-aware classes
@@ -237,28 +207,7 @@ const Home: React.FC = () => {
           </div>
 
           {/* Hero Image Slideshow */}
-          <div 
-            className="rounded-3xl overflow-hidden relative h-80"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {/* Image Container */}
-            <div className="absolute inset-0">
-              {heroImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Hero slide ${index + 1}`}
-                  className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ${
-                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-              ))}
-            </div>
-            
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/60"></div>
-            
+          <div className={`rounded-3xl relative h-80 ${themeClasses.cardBg} ${themeClasses.border} border transition-colors duration-300`}>
             {/* Content */}
             <div className="relative z-10 flex items-center justify-between h-full p-8">
               {/* Top right logo */}
@@ -266,13 +215,13 @@ const Home: React.FC = () => {
                 <img 
                   src="/Untitled design (2).png" 
                   alt="rivex" 
-                  className="h-6 w-auto drop-shadow-lg"
+                  className="h-6 w-auto"
                 />
               </div>
               
               {/* Bottom right text */}
               <div className="absolute bottom-8 right-8 text-right">
-                <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
+                <h1 className={`${themeClasses.text} text-4xl font-light leading-tight transition-colors duration-300`}>
                   stay informed,
                   <br />
                   <span className="italic">stay ahead,</span>
@@ -280,22 +229,6 @@ const Home: React.FC = () => {
                   <span className="italic">stay connected.</span>
                 </h1>
               </div>
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {heroImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentImageIndex 
-                      ? 'bg-white scale-110' 
-                      : 'bg-white/50 hover:bg-white/75'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
             </div>
           </div>
         </div>
