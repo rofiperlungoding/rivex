@@ -29,27 +29,6 @@ export default defineConfig(({ mode }) => ({
           });
         },
       },
-      '/api/indonesian-news': {
-        target: 'https://newsdata.io',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/indonesian-news/, '/api/1'),
-        headers: {
-          'User-Agent': 'Portfolio-Website/1.0',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('Newsdata.io API proxy error:', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Newsdata.io API request:', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Newsdata.io API response:', proxyRes.statusCode, req.url);
-          });
-        },
-      },
       '/api/weather': {
         target: 'https://api.weatherapi.com/v1',
         changeOrigin: true,
@@ -85,10 +64,6 @@ export default defineConfig(({ mode }) => ({
     __WEATHER_API_CONFIGURED__: JSON.stringify(
       process.env.VITE_WEATHER_API_KEY && 
       process.env.VITE_WEATHER_API_KEY !== 'your_weather_api_key_here'
-    ),
-    __NEWSDATA_API_CONFIGURED__: JSON.stringify(
-      process.env.VITE_NEWSDATA_API_KEY && 
-      process.env.VITE_NEWSDATA_API_KEY !== 'your_newsdata_api_key_here'
     )
   }
 }));

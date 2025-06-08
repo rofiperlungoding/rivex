@@ -4,7 +4,6 @@ export const getApiConfig = () => {
   
   const newsApiKey = import.meta.env.VITE_NEWS_API_KEY || '13f426023f25454ba1d56c132ca2b120';
   const weatherApiKey = import.meta.env.VITE_WEATHER_API_KEY || '2434caae723b409ca2b10726250706';
-  const newsdataApiKey = import.meta.env.VITE_NEWSDATA_API_KEY || 'pub_e8f901ac11944d30814317cf83ae48e7';
   
   return {
     news: {
@@ -20,13 +19,6 @@ export const getApiConfig = () => {
         ? '/api/weather' 
         : import.meta.env.VITE_WEATHER_API_URL || 'https://api.weatherapi.com/v1',
       isConfigured: weatherApiKey && weatherApiKey !== 'your_weather_api_key_here'
-    },
-    indonesianNews: {
-      apiKey: newsdataApiKey,
-      baseUrl: isDev 
-        ? '/api/indonesian-news' 
-        : 'https://newsdata.io/api/1',
-      isConfigured: newsdataApiKey && newsdataApiKey !== 'your_newsdata_api_key_here'
     },
     isDev
   };
@@ -90,17 +82,12 @@ const validateEnvironment = () => {
     issues.push('Weather API key is not configured or invalid');
   }
   
-  if (!config.indonesianNews.isConfigured) {
-    issues.push('Newsdata.io API key is not configured or invalid');
-  }
-  
   return {
     isValid: issues.length === 0,
     issues,
     config: {
       newsConfigured: config.news.isConfigured,
       weatherConfigured: config.weather.isConfigured,
-      indonesianNewsConfigured: config.indonesianNews.isConfigured,
       environment: config.isDev ? 'development' : 'production'
     }
   };
@@ -122,11 +109,6 @@ const debugApiConfig = () => {
     baseUrl: config.weather.baseUrl,
     keyConfigured: config.weather.isConfigured,
     keyPreview: config.weather.apiKey ? `${config.weather.apiKey.substring(0, 8)}...` : 'Not set'
-  });
-  console.log('Indonesian News API (Newsdata.io):', {
-    baseUrl: config.indonesianNews.baseUrl,
-    keyConfigured: config.indonesianNews.isConfigured,
-    keyPreview: config.indonesianNews.apiKey ? `${config.indonesianNews.apiKey.substring(0, 8)}...` : 'Not set'
   });
   console.log('Validation:', validation);
   console.groupEnd();
