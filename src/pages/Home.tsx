@@ -3,6 +3,7 @@ import { useNews } from '../hooks/useNews';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 import RightNavigation from '../components/RightNavigation';
+import StockTicker from '../components/StockTicker';
 import { 
   AlertTriangle, 
   TrendingUp, 
@@ -193,14 +194,17 @@ const Home: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
+      {/* Stock Ticker Bar */}
+      <StockTicker />
+      
       {/* Theme Toggle and Right Navigation for Home Page */}
-      <div className="fixed top-20 right-4 z-50">
+      <div className="fixed top-24 right-4 z-50">
         <ThemeToggle />
       </div>
       <RightNavigation />
 
       {/* Header */}
-      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300`}>
+      <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 mt-10`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}

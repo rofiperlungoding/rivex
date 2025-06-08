@@ -268,7 +268,7 @@ const ModernClock: React.FC = () => {
       position = "bottom-6 left-6";
     } else {
       // On other pages, position at top left but below header and with proper spacing
-      position = "top-24 left-6";
+      position = "top-28 left-6";
     }
 
     return {

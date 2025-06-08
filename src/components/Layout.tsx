@@ -6,6 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import DebugOverlay from './DebugOverlay';
 import RightNavigation from './RightNavigation';
 import ModernClock from './ModernClock';
+import StockTicker from './StockTicker';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -100,6 +101,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
+      {/* Stock Ticker Bar - Only show on non-home pages */}
+      {!isHomePage && <StockTicker />}
+      
       {/* Debug Overlay */}
       <DebugOverlay />
 
@@ -119,7 +123,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Navigation Header - Only show on NON-HOME pages */}
       {!isHomePage && (
         <>
-          <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 ${
+          <header className={`${themeClasses.headerBg} relative z-20 transition-colors duration-300 ${!isHomePage ? 'mt-10' : ''} ${
             isScrolled ? 'shadow-sm' : ''
           }`}>
             <div className="max-w-7xl mx-auto px-6">
