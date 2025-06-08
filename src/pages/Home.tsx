@@ -80,7 +80,7 @@ const Home: React.FC = () => {
        article.title.toLowerCase().includes('law') ||
        article.title.toLowerCase().includes('court'))
     )
-    .slice(0, 8);
+    .slice(0, 3);
 
   const filteredEconomicArticles = economicArticles
     .filter(article => 
@@ -89,7 +89,7 @@ const Home: React.FC = () => {
       article.title !== '[Removed]' &&
       article.description !== '[Removed]'
     )
-    .slice(0, 8);
+    .slice(0, 3);
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -340,7 +340,7 @@ const Home: React.FC = () => {
 
                 {politicalLoading ? (
                   <div className="space-y-4">
-                    {[1, 2, 3, 4].map((i) => (
+                    {[1, 2, 3].map((i) => (
                       <div key={i} className="bg-white/10 rounded-lg p-4 animate-pulse">
                         <div className="h-4 bg-white/20 rounded w-3/4 mb-2"></div>
                         <div className="h-3 bg-white/20 rounded w-1/2 mb-2"></div>
@@ -442,7 +442,7 @@ const Home: React.FC = () => {
 
                 {economicLoading ? (
                   <div className="space-y-4">
-                    {[1, 2, 3, 4].map((i) => (
+                    {[1, 2, 3].map((i) => (
                       <div key={i} className="bg-white/10 rounded-lg p-4 animate-pulse">
                         <div className="h-4 bg-white/20 rounded w-3/4 mb-2"></div>
                         <div className="h-3 bg-white/20 rounded w-1/2 mb-2"></div>
