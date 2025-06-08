@@ -12,11 +12,12 @@ interface StockData {
 
 interface TickerProps {
   className?: string;
+  isBreakingNews?: boolean;
 }
 
 type ConnectionStatus = 'connecting' | 'live' | 'demo' | 'error' | 'reconnecting';
 
-const StockTicker: React.FC<TickerProps> = ({ className = '' }) => {
+const StockTicker: React.FC<TickerProps> = ({ className = '', isBreakingNews = false }) => {
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [status, setStatus] = useState<ConnectionStatus>('demo');
   const [isPaused, setIsPaused] = useState(false);
@@ -394,6 +395,130 @@ const StockTicker: React.FC<TickerProps> = ({ className = '' }) => {
 
   const statusInfo = getStatusInfo();
 
+  // Breaking news layout
+  if (isBreakingNews) {
+    return (
+      <div className={`relative ${className}`}>
+        <div className="bg-gray-900 border border-gray-700 rounded-lg overflow-hidden">
+          {/* Status Section - Fixed on the left */}
+          <div className="absolute left-0 top-0 bottom-0 z-20 bg-gray-800 border-r border-gray-600">
+            <div className="flex flex-col items-center justify-center h-full px-4 min-w-[120px]">
+              <div className={`w-3 h-3 rounded-full mb-2 ${statusInfo.color} ${
+                status === 'connecting' || status === 'reconnecting' ? 'animate-pulse' : ''
+              }`} />
+              <span className={`${statusInfo.textColor} font-bold text-xs tracking-wider`}>
+                {statusInfo.text}
+              </span>
+              {reconnectAttempts > 0 && status === 'reconnecting' && (
+                <span className="text-gray-400 text-xs mt-1">
+                  {reconnectAttempts}/{MAX_RECONNECT_ATTEMPTS}
+                </span>
+              )}
+              <div className="text-gray-400 text-xs mt-2 text-center">
+                MARKET
+              </div>
+            </div>
+          </div>
+
+          {/* Scrolling Stock Data with Gradient Effect */}
+          <div className="relative h-16 ml-[120px]">
+            {/* Left gradient overlay */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
+            
+            {/* Right gradient overlay */}
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
+            
+            <div
+              ref={tickerRef}
+              className={`flex items-center h-full whitespace-nowrap ${
+                isPaused ? '' : 'animate-scroll-breaking'
+              }`}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              {/* Stock Data */}
+              {stockData.map((stock, index) => (
+                <div
+                  key={`${stock.symbol}-${index}`}
+                  className="flex items-center px-6 text-sm font-medium border-r border-gray-700 last:border-r-0 transition-all duration-300 hover:bg-gray-800"
+                >
+                  <span className="text-white font-bold mr-3">
+                    {stock.symbol}
+                  </span>
+                  <span className="text-gray-200 mr-3">
+                    {formatPrice(stock.symbol, stock.price)}
+                  </span>
+                  <div className={`flex items-center space-x-1 ${getColorClasses(stock.change)}`}>
+                    {getTrendIcon(stock.change)}
+                    <span className="text-xs">
+                      {formatChange(stock.change)}
+                    </span>
+                    <span className="text-xs">
+                      ({formatPercent(stock.changePercent)})
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {/* Duplicate for seamless scrolling */}
+              {stockData.map((stock, index) => (
+                <div
+                  key={`${stock.symbol}-duplicate-${index}`}
+                  className="flex items-center px-6 text-sm font-medium border-r border-gray-700 last:border-r-0 transition-all duration-300 hover:bg-gray-800"
+                >
+                  <span className="text-white font-bold mr-3">
+                    {stock.symbol}
+                  </span>
+                  <span className="text-gray-200 mr-3">
+                    {formatPrice(stock.symbol, stock.price)}
+                  </span>
+                  <div className={`flex items-center space-x-1 ${getColorClasses(stock.change)}`}>
+                    {getTrendIcon(stock.change)}
+                    <span className="text-xs">
+                      {formatChange(stock.change)}
+                    </span>
+                    <span className="text-xs">
+                      ({formatPercent(stock.changePercent)})
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-600 text-white text-xs px-4 py-1 text-center">
+              {error}
+            </div>
+          )}
+        </div>
+
+        <style jsx>{`
+          @keyframes scroll-breaking {
+            0% {
+              transform: translateX(100%);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+          
+          .animate-scroll-breaking {
+            animation: scroll-breaking 45s linear infinite;
+          }
+          
+          @media (max-width: 768px) {
+            .animate-scroll-breaking {
+              animation: scroll-breaking 30s linear infinite;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Original layout for non-breaking news
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 ${className}`}>
       <div className="bg-gray-900 border-b border-gray-700 h-10 overflow-hidden">
