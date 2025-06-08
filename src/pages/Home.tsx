@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useIndonesianNews, useNews } from '../hooks/useNews';
+import { useNews } from '../hooks/useNews';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 import RightNavigation from '../components/RightNavigation';
-import { AlertTriangle, TrendingUp, Calendar, ExternalLink, Globe, MapPin, Clock } from 'lucide-react';
+import { 
+  AlertTriangle, 
+  TrendingUp, 
+  Calendar, 
+  ExternalLink, 
+  Globe, 
+  MapPin, 
+  Clock,
+  Users,
+  DollarSign,
+  Building,
+  Briefcase,
+  Vote,
+  Landmark
+} from 'lucide-react';
 
 const Home: React.FC = () => {
-  // Indonesian news is now the primary focus
+  // Fetch political news (general category often includes political stories)
   const { 
-    articles: indonesianArticles, 
-    loading: indonesianLoading, 
-    error: indonesianError 
-  } = useIndonesianNews();
+    articles: politicalArticles, 
+    loading: politicalLoading, 
+    error: politicalError 
+  } = useNews('general');
 
-  // Global news for the world news column
+  // Fetch business/economic news
   const { 
-    articles: globalArticles, 
-    loading: globalLoading, 
-    error: globalError 
-  } = useNews();
+    articles: economicArticles, 
+    loading: economicLoading, 
+    error: economicError 
+  } = useNews('business');
 
   const { mode } = useTheme();
   
@@ -48,25 +62,34 @@ const Home: React.FC = () => {
     }
   }, [isHovered, heroImages.length]);
 
-  // Filter Indonesian articles (main content)
-  const filteredIndonesianArticles = indonesianArticles
+  // Filter and prioritize articles
+  const filteredPoliticalArticles = politicalArticles
     .filter(article => 
       article.title && 
       article.description && 
       article.title !== '[Removed]' &&
-      article.description !== '[Removed]'
+      article.description !== '[Removed]' &&
+      (article.title.toLowerCase().includes('government') ||
+       article.title.toLowerCase().includes('election') ||
+       article.title.toLowerCase().includes('policy') ||
+       article.title.toLowerCase().includes('congress') ||
+       article.title.toLowerCase().includes('senate') ||
+       article.title.toLowerCase().includes('president') ||
+       article.title.toLowerCase().includes('political') ||
+       article.title.toLowerCase().includes('vote') ||
+       article.title.toLowerCase().includes('law') ||
+       article.title.toLowerCase().includes('court'))
     )
-    .slice(0, 12); // Show more Indonesian articles
+    .slice(0, 8);
 
-  // Filter global articles for world news column
-  const filteredGlobalArticles = globalArticles
+  const filteredEconomicArticles = economicArticles
     .filter(article => 
       article.title && 
       article.description && 
       article.title !== '[Removed]' &&
       article.description !== '[Removed]'
     )
-    .slice(0, 6); // Fewer global articles in sidebar
+    .slice(0, 8);
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -80,6 +103,12 @@ const Home: React.FC = () => {
     if (diffInDays < 7) return `${diffInDays}d ago`;
     
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const truncateSummary = (text: string, maxWords: number = 75) => {
+    const words = text.split(' ');
+    if (words.length <= maxWords) return text;
+    return words.slice(0, maxWords).join(' ') + '...';
   };
 
   const goToSlide = (index: number) => {
@@ -99,9 +128,12 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-700',
           border: 'border-gray-700',
           accent: 'text-orange-400',
-          worldNewsBg: 'bg-gradient-to-br from-blue-900 to-indigo-900',
-          worldNewsBorder: 'border-blue-600',
-          worldNewsText: 'text-blue-200'
+          politicalBg: 'bg-gradient-to-br from-blue-900 to-indigo-900',
+          politicalBorder: 'border-blue-600',
+          politicalText: 'text-blue-200',
+          economicBg: 'bg-gradient-to-br from-green-900 to-emerald-900',
+          economicBorder: 'border-green-600',
+          economicText: 'text-green-200'
         };
       case 'reader':
         return {
@@ -113,9 +145,12 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-50',
           border: 'border-gray-200',
           accent: 'text-orange-600',
-          worldNewsBg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
-          worldNewsBorder: 'border-blue-200',
-          worldNewsText: 'text-blue-800'
+          politicalBg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
+          politicalBorder: 'border-blue-200',
+          politicalText: 'text-blue-800',
+          economicBg: 'bg-gradient-to-br from-green-50 to-emerald-100',
+          economicBorder: 'border-green-200',
+          economicText: 'text-green-800'
         };
       case 'debug':
         return {
@@ -127,9 +162,12 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-700',
           border: 'border-green-500',
           accent: 'text-yellow-400',
-          worldNewsBg: 'bg-gradient-to-br from-blue-900 to-cyan-900',
-          worldNewsBorder: 'border-blue-500',
-          worldNewsText: 'text-blue-300'
+          politicalBg: 'bg-gradient-to-br from-blue-900 to-cyan-900',
+          politicalBorder: 'border-blue-500',
+          politicalText: 'text-blue-300',
+          economicBg: 'bg-gradient-to-br from-green-900 to-cyan-900',
+          economicBorder: 'border-green-500',
+          economicText: 'text-green-300'
         };
       default: // light
         return {
@@ -141,9 +179,12 @@ const Home: React.FC = () => {
           cardHover: 'hover:bg-gray-50',
           border: 'border-gray-100',
           accent: 'text-orange-500',
-          worldNewsBg: 'bg-gradient-to-br from-blue-600 to-indigo-700',
-          worldNewsBorder: 'border-blue-500',
-          worldNewsText: 'text-white'
+          politicalBg: 'bg-gradient-to-br from-blue-600 to-indigo-700',
+          politicalBorder: 'border-blue-500',
+          politicalText: 'text-white',
+          economicBg: 'bg-gradient-to-br from-green-600 to-emerald-700',
+          economicBorder: 'border-green-500',
+          economicText: 'text-white'
         };
     }
   };
@@ -152,7 +193,7 @@ const Home: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} transition-colors duration-300`}>
-      {/* Theme Toggle and Right Navigation for Home Page - Positioned lower */}
+      {/* Theme Toggle and Right Navigation for Home Page */}
       <div className="fixed top-20 right-4 z-50">
         <ThemeToggle />
       </div>
@@ -187,9 +228,18 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section with Image Slideshow */}
+      {/* Hero Section with Breaking News Banner */}
       <section className={`${themeClasses.background} pt-8 pb-12 transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-6">
+          {/* Breaking News Banner */}
+          <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-6 flex items-center">
+            <AlertTriangle className="h-5 w-5 mr-3 animate-pulse" />
+            <span className="font-bold text-sm uppercase tracking-wide">Breaking News</span>
+            <span className="mx-3">•</span>
+            <span className="text-sm">Stay updated with the latest political and economic developments</span>
+          </div>
+
+          {/* Hero Image Slideshow */}
           <div 
             className="rounded-3xl overflow-hidden relative h-80"
             onMouseEnter={() => setIsHovered(true)}
@@ -209,7 +259,7 @@ const Home: React.FC = () => {
               ))}
             </div>
             
-            {/* Simple gradient overlay - only where text appears */}
+            {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/60"></div>
             
             {/* Content */}
@@ -226,11 +276,11 @@ const Home: React.FC = () => {
               {/* Bottom right text */}
               <div className="absolute bottom-8 right-8 text-right">
                 <h1 className="text-white text-4xl font-light leading-tight drop-shadow-lg">
-                  grow anywhere,
+                  stay informed,
                   <br />
-                  <span className="italic">anytime,</span>
+                  <span className="italic">stay ahead,</span>
                   <br />
-                  <span className="italic">anyone.</span>
+                  <span className="italic">stay connected.</span>
                 </h1>
               </div>
             </div>
@@ -260,192 +310,245 @@ const Home: React.FC = () => {
           {/* Section Header */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <AlertTriangle className="h-6 w-6 text-red-500 animate-pulse" />
+              <Globe className="h-6 w-6 text-blue-500" />
               <h2 className={`text-3xl font-bold ${themeClasses.text} transition-colors duration-300`}>
-                LATEST NEWS
+                TODAY'S TOP STORIES
               </h2>
-              <AlertTriangle className="h-6 w-6 text-red-500 animate-pulse" />
+              <TrendingUp className="h-6 w-6 text-green-500" />
             </div>
-            <div className={`w-24 h-1 bg-red-500 mx-auto mb-6`}></div>
+            <div className={`w-24 h-1 bg-gradient-to-r from-blue-500 to-green-500 mx-auto mb-6`}></div>
             <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>
-              Indonesian News & Global Updates
+              Political Developments & Economic Updates
             </p>
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
-            {/* Main Content - Indonesian News (3/4 width) */}
-            <div className="lg:col-span-3">
-              <div className="flex items-center space-x-3 mb-8">
-                <div className="p-3 bg-red-600 rounded-lg">
-                  <MapPin className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <h3 className={`text-2xl font-bold ${themeClasses.text} transition-colors duration-300`}>Indonesia</h3>
-                  <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Latest News from Indonesia</p>
-                </div>
-              </div>
-
-              {indonesianLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
-                    <div key={i} className={`${themeClasses.cardBg} rounded-lg p-6 animate-pulse transition-colors duration-300`}>
-                      <div className={`h-32 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded mb-4`}></div>
-                      <div className={`h-4 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4 mb-2`}></div>
-                      <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2 mb-2`}></div>
-                      <div className={`h-3 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-200'} rounded w-2/3`}></div>
-                    </div>
-                  ))}
-                </div>
-              ) : indonesianError || filteredIndonesianArticles.length === 0 ? (
-                <div className="text-center py-12">
-                  <Globe className={`h-16 w-16 ${themeClasses.secondaryText} mx-auto mb-6 transition-colors duration-300`} />
-                  <h4 className={`text-xl font-semibold ${themeClasses.text} mb-2 transition-colors duration-300`}>No Indonesian News Available</h4>
-                  <p className={`${themeClasses.secondaryText} text-lg transition-colors duration-300`}>Unable to load Indonesian news at the moment</p>
-                  {indonesianError && (
-                    <p className={`${themeClasses.secondaryText} opacity-60 text-sm mt-2 transition-colors duration-300`}>{indonesianError}</p>
-                  )}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredIndonesianArticles.map((article, index) => (
-                    <a
-                      key={article.id}
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`block ${themeClasses.cardBg} rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${themeClasses.border} border group`}
-                    >
-                      {/* Article Image */}
-                      {article.urlToImage && (
-                        <div className="relative h-40">
-                          <img
-                            src={article.urlToImage}
-                            alt={article.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            loading="lazy"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
-                          />
-                          
-                          {/* Category Badge */}
-                          <div className="absolute top-3 left-3">
-                            <span className="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-full backdrop-blur-sm">
-                              {article.source.name}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Article Content */}
-                      <div className="p-4">
-                        <h4 className={`font-bold text-sm ${themeClasses.text} leading-tight line-clamp-3 mb-3 group-hover:${themeClasses.accent} transition-colors`}>
-                          {article.title}
-                        </h4>
-                        
-                        <p className={`${themeClasses.secondaryText} text-xs leading-relaxed line-clamp-2 mb-3 transition-colors duration-300`}>
-                          {article.description}
-                        </p>
-                        
-                        <div className={`flex items-center justify-between text-xs ${themeClasses.secondaryText} transition-colors duration-300`}>
-                          <span className="font-medium">{article.source.name}</span>
-                          <span>{getTimeAgo(article.publishedAt)}</span>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              )}
-
-              {/* View More Indonesian News */}
-              {!indonesianLoading && !indonesianError && filteredIndonesianArticles.length > 0 && (
-                <div className="text-center mt-8">
-                  <a
-                    href="/news"
-                    className={`inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-300`}
-                  >
-                    View More Indonesian News
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </a>
-                </div>
-              )}
-            </div>
-
-            {/* Sidebar - World News Column (1/4 width) */}
-            <div className="lg:col-span-1">
-              <div className={`${themeClasses.worldNewsBg} rounded-2xl p-6 ${themeClasses.worldNewsBorder} border-2 shadow-2xl transition-colors duration-300 sticky top-8`}>
+            {/* Political News Column */}
+            <div className="space-y-6">
+              <div className={`${themeClasses.politicalBg} rounded-2xl p-6 ${themeClasses.politicalBorder} border-2 shadow-2xl transition-colors duration-300`}>
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                    <Globe className="h-6 w-6 text-white" />
+                  <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                    <Vote className="h-8 w-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white">World News</h3>
-                    <p className="text-white/80">Global Updates</p>
+                    <h3 className="text-2xl font-bold text-white">Political News</h3>
+                    <p className="text-white/80">Government & Policy Updates</p>
                   </div>
                 </div>
 
-                {globalLoading ? (
+                {politicalLoading ? (
                   <div className="space-y-4">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                    {[1, 2, 3, 4].map((i) => (
                       <div key={i} className="bg-white/10 rounded-lg p-4 animate-pulse">
-                        <div className="h-3 bg-white/20 rounded w-3/4 mb-2"></div>
-                        <div className="h-2 bg-white/20 rounded w-1/2 mb-2"></div>
-                        <div className="h-2 bg-white/20 rounded w-2/3"></div>
+                        <div className="h-4 bg-white/20 rounded w-3/4 mb-2"></div>
+                        <div className="h-3 bg-white/20 rounded w-1/2 mb-2"></div>
+                        <div className="h-3 bg-white/20 rounded w-2/3"></div>
                       </div>
                     ))}
                   </div>
-                ) : globalError || filteredGlobalArticles.length === 0 ? (
+                ) : politicalError || filteredPoliticalArticles.length === 0 ? (
                   <div className="text-center py-8">
-                    <Globe className="h-12 w-12 text-white/50 mx-auto mb-4" />
-                    <h4 className="text-lg font-semibold text-white mb-2">No Global News Available</h4>
-                    <p className="text-white/80 text-sm">Unable to load global news at the moment</p>
+                    <Landmark className="h-12 w-12 text-white/50 mx-auto mb-4" />
+                    <h4 className="text-lg font-semibold text-white mb-2">No Political News Available</h4>
+                    <p className="text-white/80 text-sm">Unable to load political news at the moment</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {filteredGlobalArticles.map((article, index) => (
-                      <a
+                    {filteredPoliticalArticles.map((article, index) => (
+                      <article
                         key={article.id}
-                        href={article.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block bg-white/10 hover:bg-white/20 rounded-lg p-4 transition-all duration-300 hover:scale-105 backdrop-blur-sm group"
+                        className="bg-white/10 hover:bg-white/20 rounded-lg p-4 transition-all duration-300 hover:scale-105 backdrop-blur-sm group border border-white/20"
                       >
-                        <h4 className="font-bold text-white text-sm leading-tight mb-2 line-clamp-2 group-hover:text-white/90 transition-colors duration-300">
-                          {article.title}
-                        </h4>
-                        
-                        <p className="text-white/80 text-xs leading-relaxed mb-3 line-clamp-2">
-                          {article.description}
-                        </p>
-                        
-                        <div className="flex items-center justify-between text-xs text-white/70">
-                          <span className="font-medium">{article.source.name}</span>
-                          <div className="flex items-center space-x-1">
-                            <Clock className="h-3 w-3" />
-                            <span>{getTimeAgo(article.publishedAt)}</span>
+                        <div className="flex space-x-4">
+                          {/* Article Image */}
+                          {article.urlToImage && (
+                            <div className="flex-shrink-0 w-20 h-20">
+                              <img
+                                src={article.urlToImage}
+                                alt={article.title}
+                                className="w-full h-full object-cover rounded-lg group-hover:scale-110 transition-transform duration-300"
+                                loading="lazy"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                          
+                          {/* Article Content */}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-white text-sm leading-tight mb-2 line-clamp-2 group-hover:text-blue-200 transition-colors duration-300">
+                              {article.title}
+                            </h4>
+                            
+                            <p className="text-white/80 text-xs leading-relaxed mb-3 line-clamp-3">
+                              {truncateSummary(article.description, 50)}
+                            </p>
+                            
+                            <div className="flex items-center justify-between text-xs text-white/70 mb-2">
+                              <span className="font-medium">{article.source.name}</span>
+                              <div className="flex items-center space-x-1">
+                                <Clock className="h-3 w-3" />
+                                <span>{getTimeAgo(article.publishedAt)}</span>
+                              </div>
+                            </div>
+
+                            <a
+                              href={article.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-xs text-blue-200 hover:text-blue-100 font-medium transition-colors duration-200"
+                            >
+                              Read More
+                              <ExternalLink className="ml-1 h-3 w-3" />
+                            </a>
                           </div>
                         </div>
-                      </a>
+                      </article>
                     ))}
                   </div>
                 )}
 
-                {/* View More Global News */}
-                {!globalLoading && !globalError && filteredGlobalArticles.length > 0 && (
+                {/* View More Political News */}
+                {!politicalLoading && !politicalError && filteredPoliticalArticles.length > 0 && (
                   <div className="text-center mt-6">
                     <a
                       href="/news"
                       className="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors duration-300 backdrop-blur-sm text-sm"
                     >
-                      View More Global News
+                      View All Political News
                       <ExternalLink className="ml-2 h-3 w-3" />
                     </a>
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Economic News Column */}
+            <div className="space-y-6">
+              <div className={`${themeClasses.economicBg} rounded-2xl p-6 ${themeClasses.economicBorder} border-2 shadow-2xl transition-colors duration-300`}>
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                    <DollarSign className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Economic News</h3>
+                    <p className="text-white/80">Business & Market Updates</p>
+                  </div>
+                </div>
+
+                {economicLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="bg-white/10 rounded-lg p-4 animate-pulse">
+                        <div className="h-4 bg-white/20 rounded w-3/4 mb-2"></div>
+                        <div className="h-3 bg-white/20 rounded w-1/2 mb-2"></div>
+                        <div className="h-3 bg-white/20 rounded w-2/3"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : economicError || filteredEconomicArticles.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Building className="h-12 w-12 text-white/50 mx-auto mb-4" />
+                    <h4 className="text-lg font-semibold text-white mb-2">No Economic News Available</h4>
+                    <p className="text-white/80 text-sm">Unable to load economic news at the moment</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {filteredEconomicArticles.map((article, index) => (
+                      <article
+                        key={article.id}
+                        className="bg-white/10 hover:bg-white/20 rounded-lg p-4 transition-all duration-300 hover:scale-105 backdrop-blur-sm group border border-white/20"
+                      >
+                        <div className="flex space-x-4">
+                          {/* Article Image */}
+                          {article.urlToImage && (
+                            <div className="flex-shrink-0 w-20 h-20">
+                              <img
+                                src={article.urlToImage}
+                                alt={article.title}
+                                className="w-full h-full object-cover rounded-lg group-hover:scale-110 transition-transform duration-300"
+                                loading="lazy"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                          
+                          {/* Article Content */}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-white text-sm leading-tight mb-2 line-clamp-2 group-hover:text-green-200 transition-colors duration-300">
+                              {article.title}
+                            </h4>
+                            
+                            <p className="text-white/80 text-xs leading-relaxed mb-3 line-clamp-3">
+                              {truncateSummary(article.description, 50)}
+                            </p>
+                            
+                            <div className="flex items-center justify-between text-xs text-white/70 mb-2">
+                              <span className="font-medium">{article.source.name}</span>
+                              <div className="flex items-center space-x-1">
+                                <Clock className="h-3 w-3" />
+                                <span>{getTimeAgo(article.publishedAt)}</span>
+                              </div>
+                            </div>
+
+                            <a
+                              href={article.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-xs text-green-200 hover:text-green-100 font-medium transition-colors duration-200"
+                            >
+                              Read More
+                              <ExternalLink className="ml-1 h-3 w-3" />
+                            </a>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
+
+                {/* View More Economic News */}
+                {!economicLoading && !economicError && filteredEconomicArticles.length > 0 && (
+                  <div className="text-center mt-6">
+                    <a
+                      href="/news"
+                      className="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors duration-300 backdrop-blur-sm text-sm"
+                    >
+                      View All Economic News
+                      <ExternalLink className="ml-2 h-3 w-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* News Summary Stats */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className={`text-center p-6 ${themeClasses.cardBg} rounded-lg shadow-lg transition-colors duration-300`}>
+              <div className="text-3xl font-bold text-blue-600 mb-2">
+                {filteredPoliticalArticles.length}
+              </div>
+              <div className={`${themeClasses.secondaryText} transition-colors duration-300`}>Political Stories Today</div>
+            </div>
+            <div className={`text-center p-6 ${themeClasses.cardBg} rounded-lg shadow-lg transition-colors duration-300`}>
+              <div className="text-3xl font-bold text-green-600 mb-2">
+                {filteredEconomicArticles.length}
+              </div>
+              <div className={`${themeClasses.secondaryText} transition-colors duration-300`}>Economic Updates</div>
+            </div>
+            <div className={`text-center p-6 ${themeClasses.cardBg} rounded-lg shadow-lg transition-colors duration-300`}>
+              <div className="text-3xl font-bold text-orange-600 mb-2">
+                {filteredPoliticalArticles.length + filteredEconomicArticles.length}
+              </div>
+              <div className={`${themeClasses.secondaryText} transition-colors duration-300`}>Total Stories</div>
             </div>
           </div>
         </div>
